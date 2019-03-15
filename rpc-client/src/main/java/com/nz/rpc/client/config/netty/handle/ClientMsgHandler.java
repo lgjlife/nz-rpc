@@ -1,13 +1,13 @@
 package com.nz.rpc.client.config.netty.handle;
 
 import com.nz.rpc.rpcsupport.utils.RpcRequest;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public class ClientMsgHandler extends ChannelHandlerAdapter {
+public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 
     public ClientMsgHandler() {
 
@@ -20,6 +20,7 @@ public class ClientMsgHandler extends ChannelHandlerAdapter {
         log.info("TimeClientHandler   exceptionCaught ");
         ctx.close();
     }
+
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
