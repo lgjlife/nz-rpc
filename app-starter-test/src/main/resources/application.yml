@@ -1,0 +1,7 @@
+
+example:
+  service:
+    enabled: true
+    config: abc-des-dde,SSS-DRS-RE,SDR-SDFR-XXX
+server:
+  port: 8600

@@ -14,19 +14,18 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-@Service
 
 @Slf4j
-
-
 @Component
 public class NettyServerConfig implements ApplicationContextAware {
 
     public void bind(int port) throws Exception {
 
         log.info("service bind port = " + port);
+        //reactor 主从模式 EventLoopGroup 线程池
+        //bossGroup 用于安全认证，登录，握手，一但3链路建立成功，就将链路注册到workerGroup线程上
+        //后续有其处理IO操作
         //bossGroup接受传入的连接
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         //一旦bossGroup接受连接并注册到workerGroup，workerGroup则处理连接相关的流量

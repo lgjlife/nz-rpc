@@ -11,9 +11,15 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+/**
+ *功能描述
+ * @author lgj
+ * @Description   netty 主配置
+ * @date 3/16/19
+*/
+@Component
 public class NettyClientConfig implements ApplicationContextAware {
 
     public void connect(String host, int port) throws Exception {

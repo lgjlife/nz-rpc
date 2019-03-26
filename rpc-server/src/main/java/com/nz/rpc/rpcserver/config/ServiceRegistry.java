@@ -12,6 +12,7 @@ import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.CuratorWatcher;
+import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.WatchedEvent;
 import org.springframework.beans.BeansException;
@@ -62,7 +63,26 @@ public class ServiceRegistry implements ApplicationContextAware {
                 = new ExponentialBackoffRetry(1000, 3);
         client = CuratorFrameworkFactory.newClient(zookeeperConfig.address(),
                 retryPolicy);
+
+        //设置监听器
+      //  client.getCuratorListenable().addListener(new ZkListener());
+
         client.start();
+        setListener(client);
+
+
+
+    }
+
+    public  void setListener(CuratorFramework client ){
+        try{
+            TreeCache treeCache = new TreeCache(client,"/app");
+            treeCache.getListenable().addListener(new ZkListener());
+            treeCache.start();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -189,7 +209,7 @@ public class ServiceRegistry implements ApplicationContextAware {
             byte[] regData = serialize.serialize(configs);
             log.info("regData len = " + regData.length);
             //注册
-            log.info("path = " + regPath);
+            log.info("regPath = " + regPath);
             client.setData().forPath(regPath, regData);
 
             //client.setData().forPath(createPath,);

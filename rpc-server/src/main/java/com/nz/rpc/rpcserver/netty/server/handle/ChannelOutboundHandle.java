@@ -2,10 +2,8 @@ package com.nz.rpc.rpcserver.netty.server.handle;
 
 import com.nz.rpc.rpcserver.handle.requret.ClientRequestHandler;
 import com.nz.rpc.rpcserver.netty.server.utils.NettyClientConnectUtil;
-import com.nz.rpc.rpcsupport.utils.RpcRequest;
-import com.nz.rpc.rpcsupport.utils.RpcResponse;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @Slf4j
-public class MsgServerHandler extends ChannelHandlerAdapter {
+public class ChannelOutboundHandle extends ChannelOutboundHandlerAdapter {
 
     private AtomicInteger counter = new AtomicInteger(0);
 
@@ -31,20 +29,9 @@ public class MsgServerHandler extends ChannelHandlerAdapter {
     }
 
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
 
 
-        log.info("连接成功！");
-    }
 
-    @Override
-    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
-        super.channelRegistered(ctx);
-        log.info("channelRegistered...");
-        NettyClientConnectUtil.addConnectCounter();
-    }
 
     @Override
     public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
@@ -76,23 +63,7 @@ public class MsgServerHandler extends ChannelHandlerAdapter {
         log.info("disconnect...");
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        log.info("正在读取来自客户端的数据.........");
-        //TestUser user1 = (TestUser) msg;
-        log.info("客户端的数据：" + msg);
-        log.debug("clientRequestHandler is null ? " + (clientRequestHandler == null));
-        RpcResponse response = clientRequestHandler.handler((RpcRequest) msg);
-        log.debug("response = " + response);
 
-        // TestUser user = new TestUser("我来自服务端",18,222);
-        ctx.write(response);
-    }
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        //123456super.channelReadComplete(ctx);
-        log.info("TimeServerHandler  channelReadComplete");
-        ctx.flush();
-    }
+
 }
