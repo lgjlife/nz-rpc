@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+
 @Configuration
 @ConditionalOnClass(StarterService.class)
 @EnableConfigurationProperties(StarterServiceProperties.class)
@@ -23,4 +25,9 @@ public class StarterAutoConfigure {
         return new StarterService(properties.getConfig());
     }
 
+
+    @PostConstruct
+    public  void init(){
+        System.out.println("init................................");
+    }
 }
