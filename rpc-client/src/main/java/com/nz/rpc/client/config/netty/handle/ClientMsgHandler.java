@@ -28,10 +28,12 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
         log.info("连接成功！");
 
         RpcRequest request = new RpcRequest();
-        request.setClassName("com.nz.rpc.rpcserver.service.impl.IDemo1Service");
-        request.setMethodName("func4");
-        String[] as = new String[1];
-        as[0] = "asaddsasad";
+        String  cla =  "app.provider.service.UserService";
+        //String  cla = "com.app.common.service.IUserService";
+        request.setClassName(cla);
+        request.setMethodName("queryName");
+        Long[] as = new Long[1];
+        as[0] = 123L;
         Class<?>[] types = new Class[1];
         types[0] = as[0].getClass();
         request.setParameterTypes(types);

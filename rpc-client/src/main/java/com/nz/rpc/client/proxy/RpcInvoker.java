@@ -3,7 +3,6 @@ package com.nz.rpc.client.proxy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -16,7 +15,7 @@ import java.lang.reflect.Method;
  * @Description 动态代理
  * @date 1/27/19
  */
-@Component
+
 @Slf4j
 public class RpcInvoker implements InvocationHandler, MethodInterceptor {
     {

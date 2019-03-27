@@ -8,10 +8,10 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 /**
  *功能描述
@@ -19,8 +19,9 @@ import org.springframework.stereotype.Component;
  * @Description   netty 主配置
  * @date 3/16/19
 */
-@Component
-public class NettyClientConfig implements ApplicationContextAware {
+@Configuration
+@Slf4j
+public class NettyClientConfig  {
 
     public void connect(String host, int port) throws Exception {
 
@@ -51,13 +52,14 @@ public class NettyClientConfig implements ApplicationContextAware {
 
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-
+    @PostConstruct
+    public  void init(){
         try {
             this.connect("127.0.0.1", 8112);
+            log.debug("client connect to 127.0.0.1:8112 ");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 }

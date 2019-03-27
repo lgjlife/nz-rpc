@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.ContextIdApplicationContextInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Method;
@@ -29,8 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-//@ConditionalOnBean(value = com.nz.rpc.rpcserver.config.zookeeper.ZookeeperConfig.class)
-@Component
+
 @Slf4j
 public class ServiceRegistry implements ApplicationContextAware {
 

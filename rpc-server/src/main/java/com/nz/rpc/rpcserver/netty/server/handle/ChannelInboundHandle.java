@@ -14,6 +14,12 @@ import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
+/**
+ *功能描述 
+ * @author lgj
+ * @Description  Io相关的handler
+ * @date 3/27/19
+*/
 @Component
 @Slf4j
 public class ChannelInboundHandle extends ChannelInboundHandlerAdapter {
@@ -34,7 +40,6 @@ public class ChannelInboundHandle extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-
         log.info("连接成功！");
     }
 
@@ -72,7 +77,10 @@ public class ChannelInboundHandle extends ChannelInboundHandlerAdapter {
         //TestUser user1 = (TestUser) msg;
         log.info("客户端的数据：" + msg);
         log.debug("clientRequestHandler is null ? " + (clientRequestHandler == null));
-        RpcResponse response = clientRequestHandler.handler((RpcRequest) msg);
+
+        RpcRequest request = (RpcRequest) msg;
+
+        RpcResponse response = clientRequestHandler.handler(request);
         log.debug("response = " + response);
 
         // TestUser user = new TestUser("我来自服务端",18,222);

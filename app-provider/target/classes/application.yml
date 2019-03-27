@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: rpc-provider
+
+# logger
+logging:
+  level:
+    com.nz.rpc: debug
+server:
+  port: 8465
+
+nzrpc:
+  server:
+    zhost: 127.0.0.1
+    zport: 2181
+
+
+

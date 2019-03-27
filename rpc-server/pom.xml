@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.nz.rpc</groupId>
-    <artifactId>rpc-server</artifactId>
+    <artifactId>rpc-server-spring-boot-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>rpc-server</name>
     <description>Demo project for Spring Boot</description>
@@ -35,6 +35,17 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+
+        <!-- starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
 
         <!--<dependency>
             <groupId>io.netty</groupId>
@@ -90,6 +101,12 @@
             <artifactId>rpc-support</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.utils</groupId>
+            <artifactId>serialization</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
 

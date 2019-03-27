@@ -2,21 +2,17 @@ package com.nz.rpc.client.proxy;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Proxy;
 
 @Slf4j
-@Component
 public class RpcProxyFactory {
 
-    {
-        log.debug("RpcProxyFactory 创建bean..............");
-    }
-
-
-   // @Autowired
     private RpcInvoker rpcInvoker = new RpcInvoker();
+
+    public void setRpcInvoker(RpcInvoker rpcInvoker) {
+       // this.rpcInvoker = rpcInvoker;
+    }
 
     public <T> T createInstance(Class<T> interfaceClass) {
         return createInstance(interfaceClass, false);

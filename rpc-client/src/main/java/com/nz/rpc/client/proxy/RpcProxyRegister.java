@@ -14,27 +14,26 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.util.Set;
 
 
 @Slf4j
-@Component
-
 public class RpcProxyRegister implements ApplicationContextAware, InitializingBean,
         BeanDefinitionRegistryPostProcessor
-        //, BeanFactoryPostProcessor
 {
 
     private ApplicationContext context;
 
     private DefaultListableBeanFactory listableBeanFactory;
 
-    @Resource
+
     private RpcProxyFactory proxyFactory;
+
+    public void setProxyFactory(RpcProxyFactory proxyFactory) {
+        this.proxyFactory = proxyFactory;
+    }
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
@@ -153,6 +152,5 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
 
 
     }
-
 
 }

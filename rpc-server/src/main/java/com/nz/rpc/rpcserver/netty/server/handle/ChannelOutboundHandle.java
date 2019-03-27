@@ -12,6 +12,12 @@ import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
+/**
+ *功能描述
+ * @author lgj
+ * @Description  连接相关的handle
+ * @date 3/27/19
+*/
 @Component
 @Slf4j
 public class ChannelOutboundHandle extends ChannelOutboundHandlerAdapter {

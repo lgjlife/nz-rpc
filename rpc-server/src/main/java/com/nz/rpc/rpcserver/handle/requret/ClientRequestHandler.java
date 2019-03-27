@@ -23,10 +23,11 @@ public class ClientRequestHandler {
         Object[] parameters = request.getParameters();   //方法参数
 
 
-        System.out.println("method = " + methodName);
+        log.debug("method = " + methodName);
         try {
             Class<?> clazz = Class.forName(className);
             Object target = clazz.newInstance();
+            log.debug("clazz = {},methodName  = {}, parameterTypes = {} ",clazz,methodName,parameterTypes[0]);
             Method method = target.getClass().getDeclaredMethod(methodName, parameterTypes);
 
             Object result = method.invoke(target, parameters);
@@ -44,14 +45,28 @@ public class ClientRequestHandler {
     public static void main(String args[]) {
         RpcRequest request = new RpcRequest();
 
-        request.setClassName("com.nz.rpc.rpcserver.service.impl.IDemo1Service");
-        request.setMethodName("func4");
+        /*request.setClassName("com.app.common.IUserService");
+        request.setMethodName("queryName");
         String[] as = new String[1];
         as[0] = "asaddsasad";
         Class<?>[] types = new Class[1];
         types[0] = as[0].getClass();
         request.setParameterTypes(types);
-        request.setParameters(as);
+        request.setParameters(as);*/
+
+
+        try{
+            Class<?> clazz = Class.forName("com.app.common.IUserService");
+            Object target = clazz.newInstance();
+            Method method = target.getClass().getDeclaredMethod("queryName", String.class);
+
+          //  Object result = method.invoke(target, parameters);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+
+
 
         //   RpcResponse response = handler(request);
 

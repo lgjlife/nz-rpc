@@ -10,15 +10,18 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 
 @Slf4j
-@Component
-public class NettyServerConfig implements ApplicationContextAware {
+@Configuration
+@EnableConfigurationProperties
+public class NettyServerConfig   {
+
+    private  static final int  port = 8112;
 
     public void bind(int port) throws Exception {
 
@@ -57,14 +60,24 @@ public class NettyServerConfig implements ApplicationContextAware {
         }
     }
 
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        try {
-            this.bind(8112);
-        } catch (Exception ex) {
+    @PostConstruct
+    public void  register(){
+        try{
+            bind(port);
+        }
+        catch(Exception ex){
             ex.printStackTrace();
         }
 
     }
+
+    /*@Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        try {
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }*/
 }

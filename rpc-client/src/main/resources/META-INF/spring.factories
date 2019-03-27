@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.nz.rpc.client.config.StarterAutoConfigure,\
+com.nz.rpc.client.config.netty.NettyClientConfig,\
+com.nz.rpc.client.proxy.RpcProxyConfiguration
