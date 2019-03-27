@@ -28,6 +28,6 @@ public class StarterAutoConfigure {
 
     @PostConstruct
     public  void init(){
-        System.out.println("init................................");
+        System.out.println(properties.getConfig());
     }
 }

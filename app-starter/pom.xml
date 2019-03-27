@@ -35,6 +35,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
