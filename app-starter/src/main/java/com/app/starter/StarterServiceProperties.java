@@ -3,7 +3,7 @@ package com.app.starter;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("example.service")
+@ConfigurationProperties("example.controller")
 public class StarterServiceProperties {
 
     private String config;

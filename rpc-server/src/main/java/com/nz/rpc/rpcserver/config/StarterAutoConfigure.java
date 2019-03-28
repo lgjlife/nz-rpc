@@ -32,7 +32,7 @@ public class StarterAutoConfigure {
 
     @Bean
     @ConditionalOnMissingBean
-   // @ConditionalOnProperty(prefix = "example.service", value = "enabled", havingValue = "true")
+   // @ConditionalOnProperty(prefix = "example.controller", value = "enabled", havingValue = "true")
   //  @ConditionalOnProperty(prefix = "nzrpc.server", value = "enabled", havingValue = "true")
     ZkService starterService (){
         ZkService zkService =  new ZkService(properties,context);

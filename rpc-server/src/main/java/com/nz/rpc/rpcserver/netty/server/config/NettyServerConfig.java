@@ -25,7 +25,7 @@ public class NettyServerConfig   {
 
     public void bind(int port) throws Exception {
 
-        log.info("service bind port = " + port);
+        log.info("controller bind port = " + port);
         //reactor 主从模式 EventLoopGroup 线程池
         //bossGroup 用于安全认证，登录，握手，一但3链路建立成功，就将链路注册到workerGroup线程上
         //后续有其处理IO操作

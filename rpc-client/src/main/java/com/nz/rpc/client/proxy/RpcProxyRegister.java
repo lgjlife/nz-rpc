@@ -1,5 +1,6 @@
 package com.nz.rpc.client.proxy;
 
+import com.nz.rpc.client.config.properties.RpcProperties;
 import com.nz.rpc.rpcsupport.annotation.RpcReference;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
@@ -16,6 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -28,6 +30,8 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
 
     private DefaultListableBeanFactory listableBeanFactory;
 
+    private RpcProperties properties;
+
 
     private RpcProxyFactory proxyFactory;
 
@@ -35,8 +39,13 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
         this.proxyFactory = proxyFactory;
     }
 
+    public void setProperties(RpcProperties properties) {
+        this.properties = properties;
+    }
+
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
+        if(true)return;
         log.debug("+++++++++++postProcessBeanDefinitionRegistry");
 
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(Demo.class);
@@ -45,8 +54,19 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
         listableBeanFactory = (DefaultListableBeanFactory) context.getAutowireCapableBeanFactory();
         listableBeanFactory.registerBeanDefinition("demo", definition);
 
-        Reflections reflections1 = new Reflections("com.*",new FieldAnnotationsScanner());
-        Set<Field> serviceNames = reflections1.getFieldsAnnotatedWith(RpcReference.class);
+        String[] scanPackages = properties.getScan().split(",");
+
+
+        Set<Field> serviceNames = new HashSet<>();
+
+        for(String s:scanPackages){
+
+            log.debug("scanPackages = " + s);
+            Reflections reflections1 = new Reflections(s,new FieldAnnotationsScanner());
+            Set<Field> fields = reflections1.getFieldsAnnotatedWith(RpcReference.class);
+            serviceNames.addAll(fields);
+        }
+
 
         for(Field serviceName:serviceNames){
             String className = serviceName.getType().getName();
@@ -65,18 +85,6 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
                         BeanDefinitionBuilder
                                 .genericBeanDefinition(new RpcProxyFactory().createInstance(clazz,false).getClass())
                                 .getBeanDefinition());
-                /*listableBeanFactory.registerBeanDefinition("RpcDemoService",
-                BeanDefinitionBuilder.genericBeanDefinition(Class.forName(proxyFactory.createInstance(clazz,false).getClass().getName()))
-                        .getBeanDefinition());*/
-
-              /*  RpcDemoService bean = context.getBean(RpcDemoService.class);
-                bean.func1("adsdd");
-                if(bean == null){
-                    log.debug("bean is null");
-                }
-                else{
-                    log.debug("bean info = " + bean.getClass());
-                }*/
 
             }
             catch(Exception ex){
@@ -148,7 +156,6 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
         log.debug("RpcProxyRegister setApplicationContext......");
         this.context = context;
        // listableBeanFactory =  (DefaultListableBeanFactory)context.getAutowireCapableBeanFactory();
-
 
 
     }

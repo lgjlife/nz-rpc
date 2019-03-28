@@ -28,9 +28,10 @@ public class StarterAutoConfigure {
 
 
 
+
     @PostConstruct
     public  void init(){
-        log.debug("init................................");
-        log.debug("zhost={},zport={}",properties.getZhost() , properties.getZport());
+        log.debug("StarterAutoConfigure init................................");
+        log.debug("StarterAutoConfigure zhost={},zport={}",properties.getZhost() , properties.getZport());
     }
 }

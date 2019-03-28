@@ -29,7 +29,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 
         RpcRequest request = new RpcRequest();
         String  cla =  "app.provider.service.UserService";
-        //String  cla = "com.app.common.service.IUserService";
+        //String  cla = "com.app.common.controller.IUserService";
         request.setClassName(cla);
         request.setMethodName("queryName");
         Long[] as = new Long[1];

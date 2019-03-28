@@ -15,8 +15,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class RpcProperties {
 
 
+    //zookeeper host
     private String zhost;
 
+    //zookeeper port
     private int zport;
+
+
+    //RpcReference  scan package
+    private String scan;
+
 
 }
