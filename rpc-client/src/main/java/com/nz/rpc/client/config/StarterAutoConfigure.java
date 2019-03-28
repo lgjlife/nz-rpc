@@ -29,8 +29,13 @@ public class StarterAutoConfigure {
 
 
 
+
+
     @Bean
     public  ServiceRecovery recovery(){
+
+        log.debug("ServiceRecovery bean...............");
+
         ServiceRecovery recovery = new ServiceRecovery();
         recovery.setProperties(properties);
         recovery.connect();

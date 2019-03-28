@@ -18,6 +18,8 @@ import javax.annotation.PostConstruct;
 public class NettyClientConfig  {
 
 
+
+
     @Bean
     public  NettyClient nettyClient(){
         NettyClient nettyClient = new NettyClient();

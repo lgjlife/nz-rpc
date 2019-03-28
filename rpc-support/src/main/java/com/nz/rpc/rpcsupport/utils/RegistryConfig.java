@@ -27,5 +27,7 @@ public class RegistryConfig implements Serializable {
 
     private String application;
 
+    private int weight;
+
 
 }

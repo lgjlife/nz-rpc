@@ -1,18 +1,18 @@
 # 基于netty和zookeeper的RPC框架
 
-## 使用技术
+## 1.使用技术
 * Spring  Boot: 2.1
 * Netty: 4.1.底层通信实现
 * Zookeeper：3.4.服务注册中心
-## 说明
+## 2.说明
 nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socket通信框架。使用Zookeeper作为注册中心。
 * 服务提供者启动时会向服务注册中心注册相关信息[注册信息](https://github.com/lgjlife/nz-rpc/blob/master/rpc-support%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Frpcsupport%2Futils%2FRegistryConfig.java)
 * 消费者启动时，会获取注册信息，并缓存在应用中
 * 消费者会监听注册信息的变化，比如服务提供者上线，并进行更新。
 * 服务调用不经过注册中心，运行过程中注册中心宕机不影响服务调用。
 
-目前仅支持SpringBoot应用，提供端和消费端只要引入注解[@RpcService]()和[@RpcReference]()，并在application.yml中进行端口和IP配置，即可轻易使用，详细可参见如下<a href="#use">使用说明</a>
-## 目标
+目前仅支持SpringBoot应用，提供端和消费端只要引入注解[@RpcService](https://github.com/lgjlife/nz-rpc/blob/master/rpc-support%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Frpcsupport%2Fannotation%2FRpcService.java)和[@RpcReference](https://github.com/lgjlife/nz-rpc/blob/master/rpc-support%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Frpcsupport%2Fannotation%2FRpcReference.java)，并在application.yml中进行端口和IP配置，即可轻易使用，详细可参见如下<a href="#use">使用说明</a>
+## 3.目标
 | 目标|备注|
 | ----| ---|
 | springboot+maven搭建项目|完成|
@@ -29,11 +29,14 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 | 服务分组路由|未完成|
 | 服务依赖关系分析|未完成|
 | 服务降级|未完成|
-## 使用说明 
 
 <h1 id="use"></h1>
 
-### 服务提供端
+## 4.使用说明 
+
+
+
+### 4.1 服务提供端
 * 依赖引入
 ```xml
 <!-- nzRpc 服务端starter -->
@@ -76,7 +79,7 @@ public class UserService  implements IUserService {
 }
 ```
 
-### 服务消费端
+### 4.2 服务消费端
 
 
 * 依赖引入

@@ -11,5 +11,6 @@ zookeeper:
 logging:
   level:
     com.nz.rpc: debug
+    org.apache.zookeeper: error
 server:
   port: 8223
