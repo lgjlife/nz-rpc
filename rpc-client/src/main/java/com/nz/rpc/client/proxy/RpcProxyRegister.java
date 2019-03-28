@@ -45,7 +45,7 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
-        if(true)return;
+
         log.debug("+++++++++++postProcessBeanDefinitionRegistry");
 
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(Demo.class);
@@ -53,7 +53,8 @@ public class RpcProxyRegister implements ApplicationContextAware, InitializingBe
 
         listableBeanFactory = (DefaultListableBeanFactory) context.getAutowireCapableBeanFactory();
         listableBeanFactory.registerBeanDefinition("demo", definition);
-
+        properties = new RpcProperties();
+        properties.setScan("com");
         String[] scanPackages = properties.getScan().split(",");
 
 

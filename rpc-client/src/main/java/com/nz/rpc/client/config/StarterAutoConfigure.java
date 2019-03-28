@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -28,6 +29,14 @@ public class StarterAutoConfigure {
 
 
 
+    @Bean
+    public  ServiceRecovery recovery(){
+        ServiceRecovery recovery = new ServiceRecovery();
+        recovery.setProperties(properties);
+        recovery.connect();
+        recovery.recoveryService();
+        return  recovery;
+    }
 
     @PostConstruct
     public  void init(){

@@ -1,19 +1,19 @@
 spring:
   application:
-    name: rpc-provider
+    name: rpc-provider-1
 
 # logger
 logging:
   level:
     com.nz.rpc: debug
 server:
-  port: 8465
+  port: 8466
 
 nzrpc:
   server:
     zhost: 127.0.0.1
     zport: 2181
-    nport: 8000
+    nport: 8001
 
 
 

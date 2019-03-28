@@ -20,6 +20,6 @@ public class NettyChannelHandler extends ChannelInitializer<SocketChannel> {
         CoderConfig.JdkCoder(socketChannel);
         ChannelPipeline pipeline = socketChannel.pipeline();
 
-        pipeline.addLast(new ClientMsgHandler());
+        pipeline.addLast(new ClientInboundHandler());
     }
 }

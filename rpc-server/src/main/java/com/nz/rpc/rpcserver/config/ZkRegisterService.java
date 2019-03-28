@@ -3,6 +3,7 @@ package com.nz.rpc.rpcserver.config;
 import com.nz.rpc.rpcserver.properties.RpcProperties;
 import com.nz.rpc.rpcsupport.annotation.RpcService;
 import com.nz.rpc.rpcsupport.utils.RegistryConfig;
+import com.nz.rpc.rpcsupport.utils.ZookeeperPath;
 import com.utils.serialization.AbstractSerialize;
 import com.utils.serialization.HessianSerializeUtil;
 import lombok.Data;
@@ -10,10 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.api.CuratorWatcher;
 import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.apache.zookeeper.WatchedEvent;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
@@ -34,21 +33,17 @@ import java.util.Map;
 
 @Slf4j
 @Data
-public class ZkService {
+public class ZkRegisterService {
 
     private CuratorFramework client;
     private RpcProperties properties;
-
-    //path =  rootPath/class name / providersPath
-    private String rootPath = "/nzRpc";
-    private String providersPath = "/providers";
 
     private AbstractSerialize serialize = HessianSerializeUtil.getSingleton();
     //应用上下文,用于获取注解
     ApplicationContext context;
 
 
-    public ZkService(RpcProperties properties,ApplicationContext context){
+    public ZkRegisterService(RpcProperties properties, ApplicationContext context){
         this.properties = properties;
         this.context = context;
     }
@@ -122,13 +117,7 @@ public class ZkService {
                 log.debug("目录{}已经存在,获取目录信息", regPath);
             }
             //   client.transaction();
-            byte[] data = client.getData().usingWatcher(new CuratorWatcher() {
-                @Override
-                public void process(WatchedEvent watchedEvent) throws Exception {
-                    // System.out.println("watchedEvent = " + watchedEvent );
-
-                }
-            }).forPath(regPath);
+            byte[] data = client.getData().forPath(regPath);
             log.info("data len  = " + data.length);
             List<RegistryConfig> configs = null;
             if (data.length > 9) {
@@ -146,7 +135,7 @@ public class ZkService {
             //获取注册信息
             RegistryConfig config = new RegistryConfig();
             config.setHost(properties.getZhost());
-            config.setPort(properties.getZport());
+            config.setPort(properties.getNport());
             config.setApplication(appName);
             config.setInterfaceName(serviceClass);
             Class clz = Class.forName(serviceClass);
@@ -198,7 +187,7 @@ public class ZkService {
     }
 
     private String getPath(String serviceClass) {
-        return rootPath + "/" + serviceClass + providersPath;
+        return ZookeeperPath.rootPath + "/" + serviceClass + ZookeeperPath.providersPath;
     }
 
 

@@ -25,5 +25,9 @@ public class RpcProperties {
     //RpcReference  scan package
     private String scan;
 
+    public  String getAddress(){
+        return zhost + ":" + zport;
+    }
+
 
 }

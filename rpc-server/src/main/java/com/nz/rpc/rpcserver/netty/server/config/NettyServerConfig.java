@@ -2,6 +2,7 @@ package com.nz.rpc.rpcserver.netty.server.config;
 
 
 import com.nz.rpc.rpcserver.netty.server.handle.ChildChannelHandler;
+import com.nz.rpc.rpcserver.properties.RpcProperties;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -10,6 +11,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +22,10 @@ import javax.annotation.PostConstruct;
 @Configuration
 @EnableConfigurationProperties
 public class NettyServerConfig   {
+
+
+    @Autowired
+    RpcProperties properties;
 
     private  static final int  port = 8112;
 
@@ -62,8 +68,10 @@ public class NettyServerConfig   {
 
     @PostConstruct
     public void  register(){
+
+        log.debug(properties.toString());
         try{
-            bind(port);
+            bind(properties.getNport());
         }
         catch(Exception ex){
             ex.printStackTrace();

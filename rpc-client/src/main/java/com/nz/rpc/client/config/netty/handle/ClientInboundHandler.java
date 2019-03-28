@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
+public class ClientInboundHandler extends ChannelInboundHandlerAdapter {
 
-    public ClientMsgHandler() {
+    public ClientInboundHandler() {
 
 
     }

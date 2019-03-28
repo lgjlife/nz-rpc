@@ -10,6 +10,12 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
 
+/**
+ *功能描述 
+ * @author lgj
+ * @Description  netty 初始配置，连接
+ * @date 3/28/19
+*/
 @Slf4j
 public class NettyClient {
 
@@ -33,8 +39,10 @@ public class NettyClient {
 
         try {
             ChannelFuture future = bootstrap.connect(host, port).sync();
+         //   Channel channel = future.channel();
+
             //  future.channel().closeFuture().sync();
-            //   future.channel().close().sync();
+            //  future.channel().close().sync();
 
 
         } catch (Exception ex) {

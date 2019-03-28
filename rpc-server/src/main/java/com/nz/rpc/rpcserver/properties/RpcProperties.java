@@ -19,4 +19,11 @@ public class RpcProperties {
 
     private int zport;
 
+    private int nport;
+
+
+    public  String getZkAddress(){
+        return  zhost + ":" + zport;
+    }
+
 }

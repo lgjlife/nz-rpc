@@ -34,12 +34,12 @@ public class StarterAutoConfigure {
     @ConditionalOnMissingBean
    // @ConditionalOnProperty(prefix = "example.controller", value = "enabled", havingValue = "true")
   //  @ConditionalOnProperty(prefix = "nzrpc.server", value = "enabled", havingValue = "true")
-    ZkService starterService (){
-        ZkService zkService =  new ZkService(properties,context);
+    ZkRegisterService starterService (){
+        ZkRegisterService zkRegisterService =  new ZkRegisterService(properties,context);
         log.debug(context.getDisplayName() + "  -- " + context.getApplicationName());
-        zkService.connect();
-        zkService.registerService();
-        return zkService;
+        zkRegisterService.connect();
+        zkRegisterService.registerService();
+        return zkRegisterService;
     }
 
 

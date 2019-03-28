@@ -1,4 +1,4 @@
-package app.provider.service;
+package app.provider1.service;
 
 import com.app.common.service.IUserService;
 import com.nz.rpc.rpcsupport.annotation.RpcService;

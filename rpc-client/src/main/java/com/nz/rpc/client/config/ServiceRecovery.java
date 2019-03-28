@@ -1,48 +1,50 @@
 package com.nz.rpc.client.config;
 
 
-import com.nz.rpc.client.config.zookeeper.ZookeeperConfig;
+import com.nz.rpc.client.config.properties.RpcProperties;
 import com.nz.rpc.client.utils.ZooKeeperConfig;
-import com.nz.rpc.rpcsupport.serialize.JdkSerialize;
-import com.nz.rpc.rpcsupport.serialize.Serialize;
 import com.nz.rpc.rpcsupport.utils.RegistryConfig;
+import com.nz.rpc.rpcsupport.utils.ZookeeperPath;
+import com.utils.serialization.AbstractSerialize;
+import com.utils.serialization.HessianSerializeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.CuratorWatcher;
+import org.apache.curator.framework.recipes.cache.TreeCache;
+import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
+import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.WatchedEvent;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.ContextIdApplicationContextInitializer;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-//@ConditionalOnBean(value = com.nz.rpc.rpcserver.config.zookeeper.ZookeeperConfig.class)
-@Component
+/**
+ *功能描述 
+ * @author lgj
+ * @Description 
+ * @date 3/28/19
+*/
+
 @Slf4j
-public class ServiceRecovery implements ApplicationContextAware {
+public class ServiceRecovery  {
 
     private CuratorFramework client;
-    //path =  rootPath/class name / providersPath
-    private String rootPath = "/nzRpc";
-    private String providersPath = "/providers";
-    private Serialize serialize = new JdkSerialize();
-    @Autowired
-    private ZookeeperConfig zookeeperConfig;
 
-    @Value("${spring.application.name}")
-    private String appName;
+    private AbstractSerialize serialize = HessianSerializeUtil.getSingleton();
 
 
-    ContextIdApplicationContextInitializer springApp = new ContextIdApplicationContextInitializer();
+    private RpcProperties properties;
+
+
+    public void setProperties(RpcProperties properties) {
+        this.properties = properties;
+    }
 
     /**
      * 功能描述
@@ -53,33 +55,53 @@ public class ServiceRecovery implements ApplicationContextAware {
      * @param:
      * @return:
      */
-    private void connect() {
+    public void connect() {
         //拒绝策略
         RetryPolicy retryPolicy
                 = new ExponentialBackoffRetry(1000, 3);
-        client = CuratorFrameworkFactory.newClient(zookeeperConfig.address(),
+        client = CuratorFrameworkFactory.newClient(properties.getAddress(),
                 retryPolicy);
         client.start();
+
+        try{
+            final TreeCache cached = new TreeCache(client,ZookeeperPath.rootPath);
+            cached.getListenable().addListener(new TreeCacheListener(){
+                @Override
+                public void childEvent(CuratorFramework curatorFramework, TreeCacheEvent treeCacheEvent) throws Exception {
+                    switch (treeCacheEvent.getType()) {
+
+                        case NODE_ADDED:
+                            ;
+                        case NODE_REMOVED:
+                            ;
+                        case NODE_UPDATED:
+                            recoveryService();
+                            break;
+
+                    }
+                }
+            });
+            cached.start();
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
+
     }
 
     public void recoveryService() {
 
         try {
-            List<String> childPath = client.getChildren().forPath(rootPath);
-            childPath.forEach((path) -> System.out.println(path));
+            List<String> childPath = client.getChildren().forPath(ZookeeperPath.rootPath);
+            childPath.forEach((path) -> log.debug(path));
 
             for (String classPath : childPath) {
                 String regPath = getPath(classPath);
-                byte[] data = client.getData().usingWatcher(new CuratorWatcher() {
-                    @Override
-                    public void process(WatchedEvent watchedEvent) throws Exception {
-                        System.out.println("watchedEvent = " + watchedEvent);
-                    }
-                }).forPath(regPath);
+                byte[] data = client.getData().forPath(regPath);
                 log.info("data len  = " + data.length);
                 List<RegistryConfig> configs = null;
                 if (data.length > 9) {
-                    configs = (List) serialize.deserialize(data);
+                    configs = (List) serialize.deserialize(data,ArrayList.class);
                     log.debug("读取的信息:size = {}, configs = {} ", configs.size(), configs);
                     ServiceConfig.setConfigs(configs);
                 }
@@ -88,7 +110,7 @@ public class ServiceRecovery implements ApplicationContextAware {
 
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage());
         }
     }
 
@@ -120,10 +142,10 @@ public class ServiceRecovery implements ApplicationContextAware {
     }
 
     private String getPath(String serviceClass) {
-        return rootPath + "/" + serviceClass + providersPath;
+        return ZookeeperPath.rootPath + "/" + serviceClass + ZookeeperPath.providersPath;
     }
 
-    @Override
+   // @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         log.debug("ServiceRegistry setApplicationContext..");
 
@@ -161,7 +183,7 @@ public class ServiceRecovery implements ApplicationContextAware {
             log.info("data len  = " + data.length);
             List<RegistryConfig> configs = null;
             if (data.length > 9) {
-                configs = (List) serialize.deserialize(data);
+                configs = (List) serialize.deserialize(data,ArrayList.class);
                 //  configs.removeIf((config)->config.getApplication().equals(appName));
                 log.debug("读取的信息 configs = " + configs);
             } else {

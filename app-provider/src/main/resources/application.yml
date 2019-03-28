@@ -13,6 +13,7 @@ nzrpc:
   server:
     zhost: 127.0.0.1
     zport: 2181
+    nport: 8000
 
 
 

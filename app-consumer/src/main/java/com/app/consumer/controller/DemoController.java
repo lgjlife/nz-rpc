@@ -15,7 +15,7 @@ import java.util.Set;
 @RestController
 public class DemoController {
 
-  //  @Autowired
+
     @RpcReference
     private IUserService userService;
 
