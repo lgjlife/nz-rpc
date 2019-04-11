@@ -15,23 +15,24 @@
 
         <dependency>
             <groupId>com.nz.rpc</groupId>
-            <artifactId>rpc-client-spring-boot-starter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>rpc-integration-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.nz.rpc</groupId>
             <artifactId>app-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
 
 

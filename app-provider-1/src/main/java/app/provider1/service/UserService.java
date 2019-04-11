@@ -1,14 +1,13 @@
 package app.provider1.service;
 
-import com.app.common.service.IUserService;
 import com.nz.rpc.rpcsupport.annotation.RpcService;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
 
 @Service
-@RpcService(interfaceClass=IUserService.class)
-public class UserService  implements IUserService {
+@RpcService(interfaceClass= com.app.common.service.UserService.class)
+public class UserService  implements com.app.common.service.UserService {
 
     @Override
     public String queryName(Long id) {

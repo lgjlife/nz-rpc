@@ -1,8 +1,9 @@
 package com.app.consumer.controller;
 
-import com.app.common.service.IDemoService;
-import com.app.common.service.IUserService;
-import com.nz.rpc.rpcsupport.annotation.RpcReference;
+
+import com.app.common.service.DemoService;
+import com.app.common.service.UserService;
+import com.nz.rpc.anno.RpcReference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +14,10 @@ public class DemoController {
 
 
     @RpcReference
-    private IUserService userService;
+    private UserService userService;
 
     @RpcReference
-    private IDemoService demoService;
+    private DemoService demoService;
 
 
 

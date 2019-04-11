@@ -1,14 +1,13 @@
 package app.provider1.service;
 
-import com.app.common.service.IDemoService;
 import com.nz.rpc.rpcsupport.annotation.RpcService;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
 
 @Service
-@RpcService(interfaceClass=IDemoService.class)
-public class DemoService implements IDemoService {
+@RpcService(interfaceClass= com.app.common.service.DemoService.class)
+public class DemoService implements com.app.common.service.DemoService {
 
     @Override
     public String setName(Long id) {

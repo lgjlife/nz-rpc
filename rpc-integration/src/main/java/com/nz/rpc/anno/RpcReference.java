@@ -1,4 +1,4 @@
-package com.nz.rpc.rpcsupport.annotation;
+package com.nz.rpc.anno;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @Indexed
-@Autowired(required = false)
+@Autowired
 public @interface RpcReference {
 
     Class<?> interfaceClass() default void.class;

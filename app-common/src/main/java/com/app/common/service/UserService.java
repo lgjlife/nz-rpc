@@ -1,9 +1,6 @@
 package com.app.common.service;
 
-public interface IUserService {
-
-
-
+public interface UserService {
 
     String queryName(Long id);
 

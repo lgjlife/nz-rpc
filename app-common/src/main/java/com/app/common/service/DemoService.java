@@ -1,6 +1,6 @@
 package com.app.common.service;
 
-public interface IDemoService {
+public interface DemoService {
 
     String setName(Long id);
 
