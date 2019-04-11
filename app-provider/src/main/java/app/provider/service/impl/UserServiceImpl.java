@@ -18,7 +18,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public String queryName(String name, Long id){
-        return  "UserServiceImpl  queryName :" + name +":"+id+ new Date().toString();
+
+        String str = "UserServiceImpl  queryName :" + name +":"+id+ new Date().toString();
+        System.out.println(str);
+        return  str;
     }
 
 }

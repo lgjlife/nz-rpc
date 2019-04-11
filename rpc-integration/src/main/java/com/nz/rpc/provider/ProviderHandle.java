@@ -16,6 +16,13 @@ public class ProviderHandle {
 
     }
 
+    public String get(String interfaceName){
+        return  clzMap.get(interfaceName);
+
+    }
+
+
+
     public void remove(String interfaceName){
         clzMap.remove(interfaceName);
 
