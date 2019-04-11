@@ -22,7 +22,7 @@ public class ProviderAutoConfiguration {
 
         ProviderDiscover providerDiscover = new ProviderDiscover(context);
         providerDiscover.discover(providerHandle);
-        test(providerHandle);
+
         return  providerDiscover;
     }
 
@@ -41,7 +41,7 @@ public class ProviderAutoConfiguration {
 
             try{
                 Class clz = Class.forName(clzName);
-               Object target = clz.newInstance();
+                Object target = clz.newInstance();
                 Method[] methods = clz.getDeclaredMethods();
                 String methodName = clz.getName()+"."+"queryName";
                 Method method = clz.getDeclaredMethod("queryName",String.class,Long.class);

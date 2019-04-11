@@ -1,15 +1,15 @@
-package com.nz.rpc.rpcserver.config;
+package com.nz.rpc.zk;
 
-import com.nz.rpc.rpcserver.properties.RpcProperties;
+
+import com.nz.rpc.properties.RpcProperties;
+import com.nz.rpc.provider.ProviderHandle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.PostConstruct;
 
@@ -17,26 +17,24 @@ import javax.annotation.PostConstruct;
 @ConditionalOnClass(RpcProperties.class)
 @EnableConfigurationProperties(RpcProperties.class)
 @Slf4j
-public class StarterAutoConfigure {
+public class ZookeeperAutoConfigure {
 
     @Autowired
-    private RpcProperties properties;
+    private  RpcProperties properties;
 
     @Autowired
-    ApplicationContext context;
+    private ApplicationContext context;
 
     @Autowired
-    WebApplicationContext webApplicationContext;
-
-
+    private ProviderHandle providerHandle;
 
     @Bean
-    @ConditionalOnMissingBean
-   // @ConditionalOnProperty(prefix = "example.controller", value = "enabled", havingValue = "true")
-  //  @ConditionalOnProperty(prefix = "nzrpc.server", value = "enabled", havingValue = "true")
-    ZkRegisterService starterService (){
+    public  ZkRegisterService starterService (){
         ZkRegisterService zkRegisterService =  new ZkRegisterService(properties,context);
+        log.debug(context.getDisplayName() + "  -- " + context.getApplicationName());
+
         zkRegisterService.connect();
+        zkRegisterService.setProviderHandle(providerHandle);
         zkRegisterService.registerService();
         return zkRegisterService;
     }
@@ -44,6 +42,6 @@ public class StarterAutoConfigure {
 
     @PostConstruct
     public  void init(){
-        log.debug("zhost={},zport={}",properties.getZhost() , properties.getZport());
+        log.debug("properties = {}",properties);
     }
 }

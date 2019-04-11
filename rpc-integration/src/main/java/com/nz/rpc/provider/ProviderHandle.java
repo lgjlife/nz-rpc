@@ -27,4 +27,9 @@ public class ProviderHandle {
         clzMap.remove(interfaceName);
 
     }
+
+
+    public Map<String, String> getClzMap() {
+        return clzMap;
+    }
 }

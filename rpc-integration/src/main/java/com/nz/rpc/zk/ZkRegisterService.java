@@ -1,9 +1,10 @@
-package com.nz.rpc.rpcserver.config;
+package com.nz.rpc.zk;
 
-import com.nz.rpc.rpcserver.properties.RpcProperties;
-import com.nz.rpc.rpcsupport.annotation.RpcService;
-import com.nz.rpc.rpcsupport.utils.RegistryConfig;
-import com.nz.rpc.rpcsupport.utils.ZookeeperPath;
+
+import com.nz.rpc.properties.RpcProperties;
+import com.nz.rpc.provider.ProviderHandle;
+import com.nz.rpc.utils.RegistryConfig;
+import com.nz.rpc.utils.ZookeeperPath;
 import com.utils.serialization.AbstractSerialize;
 import com.utils.serialization.HessianSerializeUtil;
 import lombok.Data;
@@ -11,11 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -37,10 +36,13 @@ public class ZkRegisterService {
 
     private CuratorFramework client;
     private RpcProperties properties;
+    private ProviderHandle providerHandle;
+
+
 
     private AbstractSerialize serialize = HessianSerializeUtil.getSingleton();
     //应用上下文,用于获取注解
-    private ApplicationContext context;
+    ApplicationContext context;
 
 
     public ZkRegisterService(RpcProperties properties, ApplicationContext context){
@@ -48,7 +50,9 @@ public class ZkRegisterService {
         this.context = context;
     }
 
-
+    public void setProviderHandle(ProviderHandle providerHandle) {
+        this.providerHandle = providerHandle;
+    }
 
     /**
      *功能描述
@@ -63,10 +67,10 @@ public class ZkRegisterService {
         //拒绝策略
         RetryPolicy retryPolicy
                 = new ExponentialBackoffRetry(1000, 3);
-        client = CuratorFrameworkFactory.newClient(properties.getZhost()+":"+properties.getZport(),
+        client = CuratorFrameworkFactory.newClient(properties.getZookeeperAdress(),
                 retryPolicy);
         client.start();
-        log.debug("zookeeper client start....");
+        log.debug("zookeeper[{}] client start....",properties.getZookeeperAdress());
       //  setListener(client);
     }
     
@@ -80,23 +84,19 @@ public class ZkRegisterService {
      *
     */
     public void registerService() throws BeansException {
+
+
+
         log.debug("ServiceRegistry setApplicationContext..");
 
-        Map<String, Object> annotations = context.getBeansWithAnnotation(RpcService.class);
-
-        if (!CollectionUtils.isEmpty(annotations)) {
-            annotations.values().forEach((service) -> {
-                String serviceClass = service.getClass()
-                        .getAnnotation(RpcService.class).interfaceClass().getName();
-                if (serviceClass == "void") {
-                    serviceClass = service.getClass().getName();
-                }
-                log.debug("注册接口 {}", serviceClass);
+        Map<String, String> clzs = providerHandle.getClzMap();
+        if(clzs != null){
+            clzs.forEach((k,v)->{
+                log.debug("注册接口 {}", k);
                 // createRootPath(serviceClass);
-                registryConfig(serviceClass, context.getId());
+                registerConfig(k, context.getId());
             });
         }
-
     }
 
     /**
@@ -108,7 +108,7 @@ public class ZkRegisterService {
      * @param:
      * @return:
      */
-    private void registryConfig(String serviceClass, String appName) {
+    private void registerConfig(String serviceClass, String appName) {
 
         String regPath = getPath(serviceClass);
         try {
@@ -136,8 +136,8 @@ public class ZkRegisterService {
 
             //获取注册信息
             RegistryConfig config = new RegistryConfig();
-            config.setHost(properties.getZhost());
-            config.setPort(properties.getNport());
+          //  config.setHost(properties.getZhost());
+          //  config.setPort(properties.getNport());
             config.setApplication(appName);
             config.setInterfaceName(serviceClass);
             Class clz = Class.forName(serviceClass);
@@ -193,15 +193,6 @@ public class ZkRegisterService {
     }
 
 
-    public  void setListener(CuratorFramework client ){
-        try{
-            TreeCache treeCache = new TreeCache(client,"/app");
-            treeCache.getListenable().addListener(new ZkListener());
-            treeCache.start();
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
-    }
+
 
 }

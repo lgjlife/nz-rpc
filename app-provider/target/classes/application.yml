@@ -10,10 +10,9 @@ server:
   port: 8465
 
 nzrpc:
-  server:
-    zhost: 127.0.0.1
-    zport: 2181
-    nport: 8000
-
-
+  zookeeper:
+    address: "127.0.0.1:2181"
+  netty:
+    port: 8121
+  data: "assssss"
 
