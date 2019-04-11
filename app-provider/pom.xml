@@ -13,17 +13,15 @@
     <dependencies>
         <dependency>
             <groupId>com.nz.rpc</groupId>
+            <artifactId>rpc-integration-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nz.rpc</groupId>
             <artifactId>app-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.nz.rpc</groupId>
-            <artifactId>rpc-server-spring-boot-starter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-
 
     </dependencies>
 

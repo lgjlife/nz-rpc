@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.nz.rpc.proxy.RpcProxyConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.nz.rpc.proxy.RpcProxyConfiguration,\
+com.nz.rpc.provider.ProviderAutoConfiguration

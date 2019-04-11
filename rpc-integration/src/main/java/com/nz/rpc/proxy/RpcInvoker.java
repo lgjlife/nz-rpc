@@ -59,6 +59,7 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
         for(Object arg:args){
             log.debug("参数 = " + arg);
         }
+
         return "执行动态代理成功";
     }
 }

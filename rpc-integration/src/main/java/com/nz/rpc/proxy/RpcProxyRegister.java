@@ -18,6 +18,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ *功能描述
+ * @author lgj
+ * @Description  将@RpcReference注解的接口创建代理对象，并将代理对象注入bean容器中
+ *                1. ApplicationContextAware 用于获取 ApplicationContext
+ *                2. BeanDefinitionRegistryPostProcessor可以在创建其他@Service注解的bean之前执行。
+ *                   先注入接口，以免@RpcReference出现注入失败的情况
+ * @date 4/11/19
+*/
 @Slf4j
 public class RpcProxyRegister implements BeanDefinitionRegistryPostProcessor , ApplicationContextAware {
 
@@ -30,18 +39,23 @@ public class RpcProxyRegister implements BeanDefinitionRegistryPostProcessor , A
         this.proxyFactory = proxyFactory;
     }
 
-    public void setContext(ApplicationContext context) {
-        this.context = context;
-    }
-
+    /**
+     *功能描述
+     * @author lgj
+     * @Description   查找@RpcReference注解的接口，并创建代理对象，注入容器
+     * @date 4/11/19
+     * @param:
+     * @return:
+     *
+    */
     public  void discoverProxy(){
 
         DefaultListableBeanFactory  listableBeanFactory = (DefaultListableBeanFactory) context.getAutowireCapableBeanFactory();
 
         Set<Field> serviceNames = new HashSet<>();
 
-        Reflections reflections1 = new Reflections("com",new FieldAnnotationsScanner());
-        Set<Field> fields = reflections1.getFieldsAnnotatedWith(RpcReference.class);
+        Reflections reflections = new Reflections("com",new FieldAnnotationsScanner());
+        Set<Field> fields = reflections.getFieldsAnnotatedWith(RpcReference.class);
         serviceNames.addAll(fields);
 
         serviceNames.forEach((v)->{
@@ -68,7 +82,7 @@ public class RpcProxyRegister implements BeanDefinitionRegistryPostProcessor , A
 
             }
             catch(Exception ex){
-                ex.printStackTrace();
+                log.error("创建代理对象失败[{className}]:{}",className,ex.getMessage());
             }
 
         }
@@ -76,6 +90,15 @@ public class RpcProxyRegister implements BeanDefinitionRegistryPostProcessor , A
 
     }
 
+    /**
+     *功能描述
+     * @author lgj
+     * @Description  容器启动时将会执行
+     * @date 4/11/19
+     * @param:
+     * @return:
+     *
+    */
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
         discoverProxy();
@@ -86,96 +109,19 @@ public class RpcProxyRegister implements BeanDefinitionRegistryPostProcessor , A
 
     }
 
+    /**
+     *功能描述
+     * @author lgj
+     * @Description  获取  context
+     * @date 4/11/19
+     * @param:
+     * @return:
+     *
+    */
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         log.debug("RpcProxyRegister setApplicationContext......");
         this.context = context;
     }
 
-    /* private ApplicationContext context;
-
-    private DefaultListableBeanFactory listableBeanFactory;
-
-    private RpcProperties properties;
-
-
-    private RpcProxyFactory proxyFactory;
-
-    public void setProxyFactory(RpcProxyFactory proxyFactory) {
-        this.proxyFactory = proxyFactory;
-    }
-
-    public void setProperties(RpcProperties properties) {
-        this.properties = properties;
-    }
-
-    @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
-
-        log.debug("+++++++++++postProcessBeanDefinitionRegistry");
-
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(Demo.class);
-        BeanDefinition definition = builder.getBeanDefinition();
-
-        listableBeanFactory = (DefaultListableBeanFactory) context.getAutowireCapableBeanFactory();
-        listableBeanFactory.registerBeanDefinition("demo", definition);
-        properties = new RpcProperties();
-        properties.setScan("com");
-        String[] scanPackages = properties.getScan().split(",");
-
-
-        Set<Field> serviceNames = new HashSet<>();
-
-        for(String s:scanPackages){
-
-            log.debug("scanPackages = " + s);
-            Reflections reflections1 = new Reflections(s,new FieldAnnotationsScanner());
-            Set<Field> fields = reflections1.getFieldsAnnotatedWith(RpcReference.class);
-            serviceNames.addAll(fields);
-        }
-
-
-        for(Field serviceName:serviceNames){
-            String className = serviceName.getType().getName();
-            log.debug("RpcReference 注解类："+className);
-
-            try{
-                Class clazz = Class.forName(className);
-                if(proxyFactory == null){
-                    log.debug("proxyFactory is null");
-                }
-                else{
-                    log.debug("proxyFactory info = " + proxyFactory.getClass());
-                }
-
-                listableBeanFactory.registerBeanDefinition(clazz.getName(),
-                        BeanDefinitionBuilder
-                                .genericBeanDefinition(new RpcProxyFactory().createInstance(clazz,false).getClass())
-                                .getBeanDefinition());
-
-            }
-            catch(Exception ex){
-                ex.printStackTrace();
-            }
-
-        }
-
-
-    }
-
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
-
-    }
-
-
-    @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
-        log.debug("RpcProxyRegister setApplicationContext......");
-        this.context = context;
-       // listableBeanFactory =  (DefaultListableBeanFactory)context.getAutowireCapableBeanFactory();
-
-
-    }
-*/
 }
