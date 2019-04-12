@@ -122,6 +122,8 @@ public class RpcProxyRegister implements BeanDefinitionRegistryPostProcessor , A
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         log.debug("RpcProxyRegister setApplicationContext......");
         this.context = context;
+
+        this.discoverProxy();
     }
 
 }

@@ -70,7 +70,10 @@ public class ZkRegisterService {
         client = CuratorFrameworkFactory.newClient(properties.getZookeeperAdress(),
                 retryPolicy);
         client.start();
-        log.debug("zookeeper[{}] client start....",properties.getZookeeperAdress());
+
+
+
+        log.debug("zookeeper[{}] client start....,state = {}",properties.getZookeeperAdress(),client.getState());
       //  setListener(client);
     }
     
@@ -84,8 +87,6 @@ public class ZkRegisterService {
      *
     */
     public void registerService() throws BeansException {
-
-
 
         log.debug("ServiceRegistry setApplicationContext..");
 
@@ -156,7 +157,6 @@ public class ZkRegisterService {
             log.info("regPath = " + regPath);
             client.setData().forPath(regPath, regData);
 
-            //client.setData().forPath(createPath,);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -191,8 +191,6 @@ public class ZkRegisterService {
     private String getPath(String serviceClass) {
         return ZookeeperPath.rootPath + "/" + serviceClass + ZookeeperPath.providersPath;
     }
-
-
 
 
 }

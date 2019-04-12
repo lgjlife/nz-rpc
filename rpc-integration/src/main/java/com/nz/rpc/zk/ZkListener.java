@@ -22,7 +22,6 @@ public class ZkListener  implements TreeCacheListener {
                 case DELETE:
                     log.debug( curatorEvent.getPath() + " DELETE" ); break;
 
-
                 default:break;
             }
         }
@@ -46,8 +45,6 @@ public class ZkListener  implements TreeCacheListener {
                 case NODE_UPDATED:
                     System.out.println("NODE_UPDATED : "+ data.getPath() +"  数据:"+ new String(data.getData()));
                     break;
-
-
 
                 default:break;
             }

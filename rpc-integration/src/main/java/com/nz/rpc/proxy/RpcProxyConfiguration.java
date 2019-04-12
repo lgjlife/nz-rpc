@@ -16,6 +16,7 @@ public class RpcProxyConfiguration {
     public  RpcProxyRegister rpcProxyRegister(){
         RpcProxyRegister register = new RpcProxyRegister();
         register.setProxyFactory(proxyFactory(invoker()));
+       // register.discoverProxy();
         return  register;
     }
 
@@ -31,6 +32,7 @@ public class RpcProxyConfiguration {
         RpcInvoker invoker = new RpcInvoker();
         return  invoker;
     }
+
 
 }
 

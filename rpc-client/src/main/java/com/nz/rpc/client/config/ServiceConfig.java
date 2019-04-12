@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ServiceConfig {
+public class  ServiceConfig {
 
     private static List<RegistryConfig> configs;
 

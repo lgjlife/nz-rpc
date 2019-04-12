@@ -8,13 +8,20 @@
   ],
   "properties": [
     {
-      "name": "nzrpc.data",
+      "name": "nzrpc.nport",
+      "type": "java.lang.String",
+      "description": "netty服务端口 默认值：8321",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.scan-package",
       "type": "java.lang.String",
       "sourceType": "com.nz.rpc.properties.RpcProperties"
     },
     {
       "name": "nzrpc.zookeeper-adress",
       "type": "java.lang.String",
+      "description": "zookeeper 连接地址： \"localhost:2182,localhost:2183,localhost:2184\" 默认值： localhost:2182",
       "sourceType": "com.nz.rpc.properties.RpcProperties"
     }
   ],
