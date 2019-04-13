@@ -33,6 +33,15 @@ public class DiscoverAutoConfiguration {
 
 
 
+    /**
+     *功能描述
+     * @author lgj
+     * @Description  注册服务提供者
+     * @date 4/13/19
+     * @param:
+     * @return:
+     *
+    */
     @Bean
     public  ZookeeperServiceRegister zookeeperServiceRegister(){
         ZookeeperServiceRegister register  = new ZookeeperServiceRegister();
@@ -41,12 +50,37 @@ public class DiscoverAutoConfiguration {
         register.setProviderHandle(providerHandle);
         register.setProperties(rpcProperties);
 
-        register.test();
-        register.providerDiscover();
+        //向zookeeper注册被 {@link com.nz.rpc.anno.RpcService}注解的类
         register.registerService();
+        //查找被@RpcReference注解的消费者接口引用，并注入bean容器
         register.consumerDiscover();
 
         return register;
     }
+
+    /**
+    *功能描述
+    * @author lgj
+    * @Description
+    * @date 4/13/19
+    * @param:
+    * @return:
+    *
+   */
+    @Bean
+    public  ZookeeperServiceDiscover zookeeperServiceDiscover(){
+        ZookeeperServiceDiscover discover  = new ZookeeperServiceDiscover();
+        discover.setZkCli(zkCli);
+        discover.setContext(context);
+        discover.setProviderHandle(providerHandle);
+        discover.setProperties(rpcProperties);
+
+        discover.queryService();
+
+
+        return discover;
+    }
+
+
 
 }

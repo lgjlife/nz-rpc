@@ -11,6 +11,9 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Slf4j
 public class ZkCli {
@@ -104,6 +107,18 @@ public class ZkCli {
         catch(Exception ex){
             log.error("path [{}] set the type [{}] data exception! {}",path,ex.getMessage());
         }
+    }
+
+    public List<String> getChildren(String path){
+        try{
+            List<String> paths =  client.getChildren().forPath(path);
+            return  paths;
+        }
+        catch(Exception ex){
+            log.error("获取[{}]子路径失败",path,ex);
+            return  new ArrayList<>();
+        }
+
     }
 
 }

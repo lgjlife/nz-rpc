@@ -35,17 +35,17 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
     /**
      *功能描述
      * @author lgj
-     * @Description   向zookeeper注册服务
+     * @Description   向zookeeper注册被 {@link com.nz.rpc.anno.RpcService}注解的类
      * @date 3/27/19
      * @param:
      * @return:
-     *
+     *　
      */
     @Override
     public void registerService() throws BeansException {
 
         log.debug("ServiceRegistry setApplicationContext..");
-
+        this.providerDiscover();
         Map<String, String> clzs = providerHandle.getClzMap();
         if(clzs != null){
             clzs.forEach((k,v)->{

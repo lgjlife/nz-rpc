@@ -1,11 +1,12 @@
 package com.nz.rpc.discover;
 
-import com.nz.rpc.anno.RpcService;
-import com.nz.rpc.provider.ProviderHandle;
+import com.alibaba.fastjson.JSON;
+import com.nz.rpc.utils.RegistryConfig;
+import com.nz.rpc.utils.ZookeeperPath;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
-import java.util.Map;
+import java.util.List;
 
 
 @Slf4j
@@ -16,41 +17,6 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
 
 
-    public ZookeeperServiceDiscover(ApplicationContext context) {
-        this.context = context;
-    }
-
-
-
-
-    /**
-     *功能描述
-     * @author lgj
-     * @Description   获取@RpcService注解的类
-     * @date 4/11/19
-     * @param:
-     * @return:
-     *
-     */
-    public void discover(ProviderHandle providerHandle) {
-
-        Map<String, Object> providers = context.getBeansWithAnnotation(RpcService.class);
-        if(providers != null){
-
-
-            providers.forEach((k,v)->{
-                Class[] interfaces = v.getClass().getInterfaces();
-                log.debug("{}:providers clz = {},Interfaces = {}",k,v.getClass().getName(),interfaces);
-
-                //存在多个接口的情况
-                for(Class clz:interfaces){
-                    providerHandle.put(clz.getName(),v.getClass().getName());
-                }
-
-            });
-
-        }
-    }
 
 
     @Override
@@ -60,6 +26,21 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
     @Override
     public void queryService() {
+
+        List<String> interfacePaths =  zkCli.getChildren(ZookeeperPath.rootPath);
+        for(String interfacePath:interfacePaths){
+            List<String> providersConfigs  =  zkCli.getChildren(ZookeeperPath.rootPath
+                    +  ZookeeperPath.separator
+                    +  interfacePath
+                    +  ZookeeperPath.providersPath);
+
+            for(String providersConfig:providersConfigs){
+                RegistryConfig registryConfig = JSON.parseObject(providersConfig, RegistryConfig.class);
+                log.debug("服务提供者信息　registryConfig = " + registryConfig );
+
+
+            }
+        }
 
 
     }

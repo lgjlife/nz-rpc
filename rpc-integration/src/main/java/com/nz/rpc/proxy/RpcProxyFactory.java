@@ -15,7 +15,7 @@ public class RpcProxyFactory {
     }
 
     public <T> T createInstance(Class<T> interfaceClass) {
-        return createInstance(interfaceClass, true);
+        return createInstance(interfaceClass, false);
     }
 
     @SuppressWarnings("unchecked")

@@ -27,29 +27,4 @@ public class ZookeeperAutoConfigure {
         return  zkCli;
     }
 
-   /* //@Autowired
-    private  RpcProperties properties;
-
-    //@Autowired
-    private ApplicationContext context;
-
-    //@Autowired
-    private ProviderHandle providerHandle;
-
-    @Bean
-    public  ZkRegisterService starterService (){
-        ZkRegisterService zkRegisterService =  new ZkRegisterService(properties,context);
-        log.debug(context.getDisplayName() + "  -- " + context.getApplicationName());
-
-        zkRegisterService.connect();
-        zkRegisterService.setProviderHandle(providerHandle);
-        zkRegisterService.registerService();
-        return zkRegisterService;
-    }
-
-
-    @PostConstruct
-    public  void init(){
-        log.debug("properties = {}",properties);
-    }*/
 }

@@ -9,6 +9,7 @@ package com.nz.rpc.utils;
 */
 public class  ZookeeperPath {
 
+    public static final String separator = "/";
     public static final String rootPath = "/nzRpc";
     public static final String providersPath = "/providers";
 
