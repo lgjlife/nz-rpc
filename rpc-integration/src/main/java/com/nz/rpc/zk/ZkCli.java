@@ -8,6 +8,7 @@ import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
 
@@ -17,6 +18,12 @@ public class ZkCli {
     private CuratorFramework client;
     private RpcProperties properties;
     private AbstractSerialize serialize = HessianSerializeUtil.getSingleton();
+
+
+    public void setProperties(RpcProperties properties) {
+        this.properties = properties;
+    }
+
     /**
      *功能描述
      * @author lgj
@@ -51,15 +58,18 @@ public class ZkCli {
         return  false;
     }
 
-    public  void createPath(String path){
+    public  void createPath(ZkCreateConfig config){
        try{
 
-           if (false == checkExists(path)) {
-               log.debug("目录{}不存在，创建目录....", path);
-               client.create().creatingParentsIfNeeded().forPath(path);
+           if (false == checkExists(config.getPath())) {
+               log.debug("目录{}不存在，创建目录....", config.getPath());
+               client.create()
+                       .creatingParentsIfNeeded()
+                       .withMode((config == null?CreateMode.PERSISTENT:config.getCreateMode()))
+                       .forPath(config.getPath());
 
            } else {
-               log.debug("目录{}已经存在,获取目录信息", path);
+               log.debug("目录{}已经存在,获取目录信息", config.getPath());
            }
 
 

@@ -15,7 +15,7 @@ public class RpcProxyFactory {
     }
 
     public <T> T createInstance(Class<T> interfaceClass) {
-        return createInstance(interfaceClass, false);
+        return createInstance(interfaceClass, true);
     }
 
     @SuppressWarnings("unchecked")
@@ -25,16 +25,20 @@ public class RpcProxyFactory {
             Enhancer enhancer = new Enhancer();
             enhancer.setCallback(rpcInvoker);
             enhancer.setSuperclass(cls);
-            return (T) enhancer.create();
+            T instance = (T) enhancer.create();
+            return instance;
         } else {
             log.info("use jdk dynamic proxy : " + cls.getSimpleName());
             log.debug("getClassLoader = " + cls.getClassLoader()
                     + " getInterfaces  =   " + cls.getInterfaces());
             log.debug("rpcInvoker is null ?  = " + (rpcInvoker == null));
-            return (T) Proxy.newProxyInstance(cls.getClassLoader(),
+
+            T instance =  (T) Proxy.newProxyInstance(cls.getClassLoader(),
                     // cls.getInterfaces(),
                     new Class[]{cls},
                     rpcInvoker);
+
+            return instance;
         }
     }
 }

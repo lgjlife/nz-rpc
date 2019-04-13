@@ -9,7 +9,6 @@ logging:
     com.nz.rpc: debug
 server:
   port: 8465
-
 nzrpc:
   zookeeper:
     address: "127.0.0.1:2181"

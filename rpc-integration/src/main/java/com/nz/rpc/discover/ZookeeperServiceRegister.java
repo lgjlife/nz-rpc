@@ -1,15 +1,17 @@
 package com.nz.rpc.discover;
 
+import com.alibaba.fastjson.JSON;
 import com.nz.rpc.utils.RegistryConfig;
 import com.nz.rpc.utils.ZookeeperPath;
-import com.nz.rpc.zk.ZkCli;
+import com.nz.rpc.zk.ZkCreateConfig;
+import com.utils.serialization.AbstractSerialize;
+import com.utils.serialization.FastjsonSerializeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.InetAddress;
 import java.util.Map;
 
 
@@ -20,17 +22,16 @@ import java.util.Map;
  * @date 4/13/19
 */
 @Slf4j
-public class ZookeeperServiceRegister extends  AbstractServiceDiscover{
+public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
 
 
-    private  ZkCli zkCli;
-    private ApplicationContext context;
+
 
     @Override
     public void queryService() {
         throw  new UnsupportedOperationException();
     }
-
+    private AbstractSerialize serialize = FastjsonSerializeUtil.getSingleton();
     /**
      *功能描述
      * @author lgj
@@ -69,19 +70,11 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover{
         String regPath = getPath(serviceClass);
 
         try {
-            zkCli.createPath(regPath);
-
-            List<RegistryConfig> configs = null;
-            configs = (ArrayList)zkCli.getData(regPath,ArrayList.class);
-            log.debug("读取的信息:size = {}, configs = {} ", configs.size(), configs);
-            configs.removeIf((config) -> config.getApplication().equals(appName));
-
-            //  configs = new ArrayList<>();
 
             //获取注册信息
             RegistryConfig config = new RegistryConfig();
-            //  config.setHost(properties.getZhost());
-            //  config.setPort(properties.getNport());
+            config.setHost(InetAddress.getLocalHost().getHostAddress());
+            config.setPort(properties.getNport());
             config.setApplication(appName);
             config.setInterfaceName(serviceClass);
             Class clz = Class.forName(serviceClass);
@@ -91,15 +84,33 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover{
                 methodNames[i] = methods[i].getName();
             }
             config.setMethods(methodNames);
-            configs.add(config);
-            zkCli.setData(regPath,configs);
+
+            String configStr = JSON.toJSONString(config);
+            log.debug("configStr = {}",configStr);
+
+            ZkCreateConfig zkCreateConfig = ZkCreateConfig
+                    .builder()
+                    .path(regPath + "/" + configStr)
+                    .createMode(CreateMode.EPHEMERAL)
+                    .build();
+            zkCli.createPath(zkCreateConfig);
+
         } catch (Exception ex) {
-           log.debug("");
+           log.error("注册服务失败 {}",ex);
         }
     }
 
     private String getPath(String serviceClass) {
         return ZookeeperPath.rootPath + "/" + serviceClass + ZookeeperPath.providersPath;
     }
+
+
+    /*@Override
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+        log.debug("RpcProxyRegister setApplicationContext......");
+        this.context = context;
+        this.consumerDiscover();
+    }*/
+
 
 }

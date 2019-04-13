@@ -11,24 +11,17 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 
 *模块说明*
 
-## 目标
-| 目标|备注|
-| ----| ---|
-| springboot+maven搭建项目|完成|
-| rpc-client和rpc-server配置成starter|完成|
-| Zookeeper注册服务提供者信息|完成|
-| 消费者从Zookeeper中获取服务提供者信息|完成|
-| Zookeeper作为配置中心|完成,服务提供者注册服务信息，消费者获取服务信息并缓存，并监听服务信息的变化，如果发生变化，则重新拉取信息|
-| 多种序列化方式实现|完成。主要用于zookeeper，netty通信。[序列化repo](https://github.com/lgjlife/serialization)|
-| netty通信|完成|
-| 客户端接口调用反射拦截|完成|
-| 提供端接收客户端请求并反射执行相关方法返回结果|完成|
-| 负载均衡实现|未完成|
-| 调用链路检测实现|未完成|
-| 服务分组路由|未完成|
-| 服务依赖关系分析|未完成|
-| 服务降级|未完成|
+## 基本特性
 
+* 模块配置成SpringBoot Starter，引入POM依赖即可
+* 接入简单，通过添加注解[RpcReference](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fanno%2FRpcReference.java)和[RpcService](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fanno%2FRpcService.java),即可零配置启动。
+* 使用zookeeper实现服务注册与发现
+* 使用Netty作为底层NIO通信框架
+* 动态代理支持JDK和CGLIB方式，默认为JDK方式，可配置
+* 序列化支持JDK,Fastjson,Protostuff,Hessian方式,默认为Hessian方式，可配置
+* 服务下线通知
+* 负载均衡实现：随机,加权随机,轮轮询，加权轮询，最小时间法
+* 
 
 ## 模块介绍
 

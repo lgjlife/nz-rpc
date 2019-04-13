@@ -18,7 +18,7 @@ public class RegistryConfig implements Serializable {
     //通信host
     private String host;
     //通信端口
-    private int port;
+    private String port;
 
 
     private String interfaceName;
