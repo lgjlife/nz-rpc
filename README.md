@@ -11,6 +11,10 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 
 *模块说明*
 
+![](https://github.com/lgjlife/nz-rpc/blob/master/doc/1.png)
+
+![](https://github.com/lgjlife/nz-rpc/blob/master/doc/2.png)
+
 ## 基本特性
 
 * 模块配置成SpringBoot Starter，引入POM依赖即可
@@ -99,28 +103,35 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 
 ## 使用说明 
 
+* 每一个节点既可以作为服务消费者，也可以作为服务提供者，无需多余配置，使用上述配置即可。
+* 启动应用需先安装zookeeper,并启动,应用的默认地址端口配置是按照zookeeper的默认参数设置，可不进行配置，只要添加相关注解即可。
+* 相关使用实例参照[app-demo](https://github.com/lgjlife/nz-rpc/tree/master/app-demo)
+
 
 
 ###  服务提供端
 * 依赖引入
 ```xml
-<!-- nzRpc 服务端starter -->
 <dependency>
     <groupId>com.nz.rpc</groupId>
-    <artifactId>rpc-server-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>rpc-integration-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
 </dependency>
 
 ```
 * application.xml配置
-```yaml
-nzrpc:
-  server:
-    #zookeeper host
-    zhost: 127.0.0.1
-    #zookeeper port
-    zport: 2181
+可以不进行配置　，按默认配置即可启动,默认配置见[RpcProperties](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fproperties%2FRpcProperties.java)
 
+```yaml
+nzrpc: 
+#zookeeper 连接地址，有多个通过逗号","间隔
+  zookeeper:
+    address: "127.0.0.1:2181"
+#netty  监听地址端口
+  netty:
+    port: 8121
+# @RpcReference　注解的引用所在的包名，有多个使用逗号","间隔
+  scanPackage: "com,org"
 ```
 * 定义公共接口
 ```java
@@ -134,7 +145,7 @@ public interface IUserService {
 需要在接口上添加注解@RpcService
 ```java
 @Service
-@RpcService(interfaceClass=IUserService.class)
+@RpcService
 public class UserService  implements IUserService {
 
     @Override
@@ -149,10 +160,39 @@ public class UserService  implements IUserService {
 
 * 依赖引入
 ```xml
+<dependency>
+    <groupId>com.nz.rpc</groupId>
+    <artifactId>rpc-integration-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
 
 ```
 * application.xml配置
-```java
+可以不进行配置　，按默认配置即可启动,默认配置见[RpcProperties](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fproperties%2FRpcProperties.java)
 
+```yaml
+nzrpc: 
+#zookeeper 连接地址，有多个通过逗号","间隔
+  zookeeper:
+    address: "127.0.0.1:2181"
+#netty  监听地址端口
+  netty:
+    port: 8121
+# @RpcReference　注解的引用所在的包名，有多个使用逗号","间隔
+  scanPackage: "com,org"
 ```
+```java
+@Slf4j
+@RestController
+public class DemoController {
+    //使用RpcReference注解
+    @RpcReference
+    private UserService userService;
 
+    @GetMapping("/demo")
+    public  void  demo(){
+       //接口调用
+        userService.queryName("qqwq",13546L);
+    }
+}
+```
