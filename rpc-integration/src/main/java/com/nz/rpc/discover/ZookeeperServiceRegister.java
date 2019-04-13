@@ -1,8 +1,7 @@
 package com.nz.rpc.discover;
 
 import com.alibaba.fastjson.JSON;
-import com.nz.rpc.utils.RegistryConfig;
-import com.nz.rpc.utils.ZookeeperPath;
+import com.nz.rpc.zk.ZookeeperPath;
 import com.nz.rpc.zk.ZkCreateConfig;
 import com.utils.serialization.AbstractSerialize;
 import com.utils.serialization.FastjsonSerializeUtil;
@@ -12,7 +11,6 @@ import org.springframework.beans.BeansException;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
-import java.util.Map;
 
 
 /**
@@ -23,9 +21,6 @@ import java.util.Map;
 */
 @Slf4j
 public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
-
-
-
 
     @Override
     public void queryService() {
@@ -46,11 +41,10 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
 
         log.debug("ServiceRegistry setApplicationContext..");
         this.providerDiscover();
-        Map<String, String> clzs = providerHandle.getClzMap();
-        if(clzs != null){
-            clzs.forEach((k,v)->{
+
+        if(clzMap != null){
+            clzMap.forEach((k,v)->{
                 log.debug("注册接口 {}", k);
-                // createRootPath(serviceClass);
                 registerConfig(k, context.getId());
             });
         }
@@ -103,14 +97,6 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
     private String getPath(String serviceClass) {
         return ZookeeperPath.rootPath + "/" + serviceClass + ZookeeperPath.providersPath;
     }
-
-
-    /*@Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
-        log.debug("RpcProxyRegister setApplicationContext......");
-        this.context = context;
-        this.consumerDiscover();
-    }*/
 
 
 }

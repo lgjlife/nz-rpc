@@ -4,7 +4,6 @@ import com.nz.rpc.anno.RpcReference;
 import com.nz.rpc.anno.RpcService;
 import com.nz.rpc.common.TestDemo;
 import com.nz.rpc.properties.RpcProperties;
-import com.nz.rpc.provider.ProviderHandle;
 import com.nz.rpc.proxy.RpcProxyFactory;
 import com.nz.rpc.zk.ZkCli;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -26,9 +26,9 @@ import java.util.Set;
 */
 
 @Slf4j
-public  abstract  class AbstractServiceDiscover
-       // implements BeanDefinitionRegistryPostProcessor, ApplicationContextAware
-{
+public  abstract  class AbstractServiceDiscover{
+
+    protected Map<String,String> clzMap = new HashMap<>();
 
     protected  ZkCli zkCli;
 
@@ -39,11 +39,6 @@ public  abstract  class AbstractServiceDiscover
     }
 
     protected RpcProperties properties;
-    protected  ProviderHandle providerHandle;
-
-    public void setProviderHandle(ProviderHandle providerHandle) {
-        this.providerHandle = providerHandle;
-    }
 
     public void setZkCli(ZkCli zkCli) {
         this.zkCli = zkCli;
@@ -74,7 +69,7 @@ public  abstract  class AbstractServiceDiscover
 
                 //存在多个接口的情况
                 for(Class clz:interfaces){
-                    providerHandle.put(clz.getName(),v.getClass().getName());
+                    clzMap.put(clz.getName(),v.getClass().getName());
                 }
 
             });
@@ -118,18 +113,9 @@ public  abstract  class AbstractServiceDiscover
             try{
                 Class clazz = Class.forName(className);
 
-                /*listableBeanFactory.registerBeanDefinition(clazz.getName(),
-                        BeanDefinitionBuilder
-                                .genericBeanDefinition(new RpcProxyFactory().createInstance(clazz).getClass())
-
-                                .getBeanDefinition());*/
                 listableBeanFactory.registerSingleton(classToBeanName(className),new RpcProxyFactory().createInstance(clazz));
 
-
-                String beanName = clazz.getName();
                 Object bean =  listableBeanFactory.getBean(classToBeanName(className));
-             //   Object bean = listableBeanFactory.getBeanDefinition(beanName);
-
 
                 Class controllerClazz = serviceName.getDeclaringClass();
 
@@ -174,7 +160,16 @@ public  abstract  class AbstractServiceDiscover
 
 
 
-    //
+    /**
+     *功能描述
+     * @author lgj
+     * @Description   class　name 转化　为　bean name
+     *                com.nz.rpc.UserDemo --> userDemo
+     * @date 4/14/19
+     * @param:
+     * @return:
+     *
+    */
     public static  String classToBeanName(String className){
 
         int dot = className.lastIndexOf(".");
@@ -196,43 +191,6 @@ public  abstract  class AbstractServiceDiscover
         String result = classToBeanName("com.app.common.service.ZserService");
         System.out.println(result);
     }
-/*
-    *//**
-     *功能描述
-     * @author lgj
-     * @Description  容器启动时将会执行
-     * @date 4/11/19
-     * @param:
-     * @return:
-     *
-     *//*
-    @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
-        log.debug("RpcProxyRegister postProcessBeanDefinitionRegistry......");
-        this.consumerDiscover();
-    }
-
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
-
-    }
-
-    *//**
-     *功能描述
-     * @author lgj
-     * @Description  获取  context
-     * @date 4/11/19
-     * @param:
-     * @return:
-     *
-     *//*
-    @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
-        log.debug("RpcProxyRegister setApplicationContext......");
-        this.context = context;
-
-        this.consumerDiscover();
-    }*/
 
 
 }

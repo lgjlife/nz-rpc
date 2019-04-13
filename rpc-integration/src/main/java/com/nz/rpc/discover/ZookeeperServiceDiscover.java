@@ -1,8 +1,7 @@
 package com.nz.rpc.discover;
 
 import com.alibaba.fastjson.JSON;
-import com.nz.rpc.utils.RegistryConfig;
-import com.nz.rpc.utils.ZookeeperPath;
+import com.nz.rpc.zk.ZookeeperPath;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 

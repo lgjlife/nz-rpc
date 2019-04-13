@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 public class FastjsonSerialize implements Serialize {
 
-
     @Override
     public Object deserialize(byte[] b) {
         log.info("length = " + b.length);

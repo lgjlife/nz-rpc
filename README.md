@@ -40,6 +40,56 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
          
         ├────── app-provider1 服务提供者
 
+## 类说明
+
+├─── nz
+
+     ├─── rpc
+         ├─── anno         
+             ├─── RpcReference
+             ├─── RpcService   
+                   
+         ├─── common  
+                
+         ├─── discover
+            ├─── AbstractServiceDiscover            
+            ├─── DiscoverAutoConfiguration            
+            ├─── RegistryConfig            
+            ├─── ZookeeperServiceDiscover            
+            ├─── ZookeeperServiceRegister
+         
+         ├─── loadbalabce
+            ├─── LoadbalanceStrategy
+            ├─── RandomLoadbalanceStrategy           
+            ├─── WeightRandomLoadbalanceStrategy
+         
+         ├─── msg
+            ├─── RpcRequest
+            ├─── RpcResponse 
+         
+         ├─── netty
+         
+         ├─── properties
+            ├─── RpcProperties
+         
+         ├─── proxy
+            ├─── RpcInvoker
+            ├─── RpcProxyFactory
+         
+         ├─── utils
+            ├─── uid
+                ├─── UidProducer
+                ├─── UUidProducer
+         
+         ├─── zk
+            ├─── ZkCli
+            ├─── ZkCreateConfig
+            ├─── ZkListener
+            ├─── ZookeeperAutoConfigure
+            ├─── ZookeeperPath
+         
+          
+ 
 ## 使用技术
 * Spring  Boot-2.1
 * Netty-4.1 底层通信实现

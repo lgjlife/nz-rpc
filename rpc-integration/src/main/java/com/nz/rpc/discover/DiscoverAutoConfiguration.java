@@ -2,7 +2,6 @@ package com.nz.rpc.discover;
 
 
 import com.nz.rpc.properties.RpcProperties;
-import com.nz.rpc.provider.ProviderHandle;
 import com.nz.rpc.zk.ZkCli;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -20,14 +19,8 @@ public class DiscoverAutoConfiguration {
 
     @Autowired
     ApplicationContext context;
-
-
     @Autowired
     RpcProperties rpcProperties;
-
-    @Autowired
-    ProviderHandle providerHandle;
-
     @Autowired
     private  ZkCli zkCli;
 
@@ -47,7 +40,6 @@ public class DiscoverAutoConfiguration {
         ZookeeperServiceRegister register  = new ZookeeperServiceRegister();
         register.setZkCli(zkCli);
         register.setContext(context);
-        register.setProviderHandle(providerHandle);
         register.setProperties(rpcProperties);
 
         //向zookeeper注册被 {@link com.nz.rpc.anno.RpcService}注解的类
@@ -72,7 +64,6 @@ public class DiscoverAutoConfiguration {
         ZookeeperServiceDiscover discover  = new ZookeeperServiceDiscover();
         discover.setZkCli(zkCli);
         discover.setContext(context);
-        discover.setProviderHandle(providerHandle);
         discover.setProperties(rpcProperties);
 
         discover.queryService();

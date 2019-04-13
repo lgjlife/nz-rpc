@@ -10,10 +10,6 @@ public class RpcProxyFactory {
 
     private RpcInvoker rpcInvoker = new RpcInvoker();
 
-    public void setRpcInvoker(RpcInvoker rpcInvoker) {
-       // this.rpcInvoker = rpcInvoker;
-    }
-
     public <T> T createInstance(Class<T> interfaceClass) {
         return createInstance(interfaceClass, false);
     }
