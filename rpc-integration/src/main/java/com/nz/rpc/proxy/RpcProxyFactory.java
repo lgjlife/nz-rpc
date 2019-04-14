@@ -1,22 +1,23 @@
 package com.nz.rpc.proxy;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.proxy.Enhancer;
-
-import java.lang.reflect.Proxy;
 
 @Slf4j
 public class RpcProxyFactory {
 
     private RpcInvoker rpcInvoker = new RpcInvoker();
+    private ProxyCreate proxyCreate;
 
+    public  RpcProxyFactory(String type){
+        this.proxyCreate = ProxySelector.select(type).invoker(rpcInvoker);
+    }
     public <T> T createInstance(Class<T> interfaceClass) {
-        return createInstance(interfaceClass, false);
+        return proxyCreate.createInstance(interfaceClass);
+        //return createInstance(interfaceClass, false);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T createInstance(Class<T> cls, boolean isTargetClass) {
-        if (isTargetClass) {
+  /*  public <T> T createInstance(Class<T> cls, boolean isTargetClass) {
+        *//*if (isTargetClass) {
             log.info("use cglib : " + cls.getSimpleName());
             Enhancer enhancer = new Enhancer();
             enhancer.setCallback(rpcInvoker);
@@ -35,6 +36,6 @@ public class RpcProxyFactory {
                     rpcInvoker);
 
             return instance;
-        }
-    }
+        }*//*
+    }*/
 }

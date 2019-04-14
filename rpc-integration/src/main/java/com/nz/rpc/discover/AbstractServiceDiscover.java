@@ -113,7 +113,7 @@ public  abstract  class AbstractServiceDiscover{
             try{
                 Class clazz = Class.forName(className);
 
-                listableBeanFactory.registerSingleton(classToBeanName(className),new RpcProxyFactory().createInstance(clazz));
+                listableBeanFactory.registerSingleton(classToBeanName(className),new RpcProxyFactory(properties.getProxyType()).createInstance(clazz));
 
                 Object bean =  listableBeanFactory.getBean(classToBeanName(className));
 

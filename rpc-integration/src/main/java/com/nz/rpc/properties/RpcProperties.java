@@ -16,14 +16,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class RpcProperties {
 
 
-    /**
+    /*
      * zookeeper 连接地址： "localhost:2182,localhost:2183,localhost:2184"
      * 默认值： localhost:2182
     */
     @Value("${nzrpc.zookeeper.address:localhost:2182}")
     private String zookeeperAdress;
 
-    /**
+    /*
      * netty服务端口
      * 默认值：8321
      */
@@ -37,5 +37,17 @@ public class RpcProperties {
     */
     @Value("${nzrpc.scan-package:com}")
     private String scanPackage;
+
+
+    /*
+    动态代理方式　
+    1. jdk　　　jdk动态代理
+    2. cglib
+    3. javassit
+
+    默认值：jdk
+     */
+    @Value("${nzrpc.proxy-type:jdk}")
+    private String proxyType;
 
 }

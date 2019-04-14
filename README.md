@@ -50,47 +50,52 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 
      ├─── rpc
          ├─── anno         
-             ├─── RpcReference
-             ├─── RpcService   
+             ├─── RpcReference  注解在服务消费端接口引用上，用于标示该引用是消费者接口
+             ├─── RpcService   注解在服务提供端接口实现类上，用于标示该类为消费者提供服务
                    
          ├─── common  
                 
          ├─── discover
-            ├─── AbstractServiceDiscover            
-            ├─── DiscoverAutoConfiguration            
-            ├─── RegistryConfig            
-            ├─── ZookeeperServiceDiscover            
-            ├─── ZookeeperServiceRegister
+            ├─── AbstractServiceDiscover        服务注册与发现抽象类    
+            ├─── DiscoverAutoConfiguration  　　服务注册与发现自动配置类           
+            ├─── RegistryConfig                 服务注册配置类
+            ├─── ZookeeperServiceDiscover       实现类，用于服务发现     
+            ├─── ZookeeperServiceRegister　　　　实现类，用于服务注册
          
          ├─── loadbalabce
-            ├─── LoadbalanceStrategy
-            ├─── RandomLoadbalanceStrategy           
-            ├─── WeightRandomLoadbalanceStrategy
+            ├─── LoadbalanceStrategy　　　　　　　负载均衡策略接口
+            ├─── RandomLoadbalanceStrategy       随机负载均衡    
+            ├─── WeightRandomLoadbalanceStrategy　加权随机负载均衡
          
          ├─── msg
-            ├─── RpcRequest
-            ├─── RpcResponse 
+            ├─── RpcRequest　　　　　　　　　　　　netty通信请求pojo
+            ├─── RpcResponse 　　　　　　　　　　　netty通信响应pojo
          
          ├─── netty
          
          ├─── properties
-            ├─── RpcProperties
+            ├─── RpcProperties　　　　　　　　　　系统所有的配置，相关配置在application.yml中进行配置
          
          ├─── proxy
-            ├─── RpcInvoker
-            ├─── RpcProxyFactory
+            ├─── ProxyCreate　　　　　　　　　　　动态代理创建类接口
+            ├─── CglibProxyCreate　　　　　　　　cglib动态代理创建类实现类
+            ├─── JavassitProxyCreate　　　　　　 Javassit动态代理创建类实现类
+            ├─── JdkProxyCreate                 jdk动态代理创建类实现类
+            ├─── ProxySelector                  用于根据配置选择对应的动态代理创建类
+            ├─── RpcInvoker　　　　　　　　　　　　接口动态代理类,用于执行方法拦截
+            ├─── RpcProxyFactory　　　　　　　　　动态代理类生成工厂
          
          ├─── utils
             ├─── uid
-                ├─── UidProducer
-                ├─── UUidProducer
+                ├─── UidProducer　　　　　　　　　分布式唯一ID生成接口
+                ├─── UUidProducer               使用JDK的UUID来生成唯一ID
          
          ├─── zk
-            ├─── ZkCli
-            ├─── ZkCreateConfig
-            ├─── ZkListener
-            ├─── ZookeeperAutoConfigure
-            ├─── ZookeeperPath
+            ├─── ZkCli                          zookeeper操作类，用于连接读写操作
+            ├─── ZkCreateConfig　　　　　　　　　　zk创建path时的配置类
+            ├─── ZkListener　　　　　　　　　　　　zk监听器
+            ├─── ZookeeperAutoConfigure　　　　　zk自动配置类
+            ├─── ZookeeperPath　　　　　　　　　　zk路径的工具类
          
           
  
@@ -119,7 +124,7 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 </dependency>
 
 ```
-* application.xml配置
+* application.yml配置
 可以不进行配置　，按默认配置即可启动,默认配置见[RpcProperties](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fproperties%2FRpcProperties.java)
 
 ```yaml
@@ -167,7 +172,7 @@ public class UserService  implements IUserService {
 </dependency>
 
 ```
-* application.xml配置
+* application.yml配置
 可以不进行配置　，按默认配置即可启动,默认配置见[RpcProperties](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fproperties%2FRpcProperties.java)
 
 ```yaml
