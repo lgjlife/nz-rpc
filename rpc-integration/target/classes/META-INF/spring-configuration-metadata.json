@@ -9,8 +9,9 @@
   "properties": [
     {
       "name": "nzrpc.nport",
-      "type": "java.lang.String",
-      "sourceType": "com.nz.rpc.properties.RpcProperties"
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.properties.RpcProperties",
+      "defaultValue": 0
     },
     {
       "name": "nzrpc.proxy-type",

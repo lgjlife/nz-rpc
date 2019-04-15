@@ -28,7 +28,7 @@ public class RpcProperties {
      * 默认值：8321
      */
     @Value("${nzrpc.netty.port:8321}")
-    private String nport;
+    private int nport;
 
 
     /*

@@ -1,8 +1,6 @@
-package com.nz.rpc.rpcserver.netty.server.config;
+package com.nz.rpc.netty.server;
 
-
-import com.nz.rpc.rpcserver.netty.server.handle.ChildChannelHandler;
-import com.nz.rpc.rpcserver.properties.RpcProperties;
+import com.nz.rpc.netty.server.handler.ChildChannelHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -10,27 +8,15 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
-import javax.annotation.PostConstruct;
 
-@DependsOn
 @Slf4j
-@Configuration
-@EnableConfigurationProperties
-public class NettyServerConfig   {
+public class NettyServer {
 
-
-    @Autowired
-    RpcProperties properties;
-
-    private  static final int  port = 8112;
-
-    public void bind(int port) throws Exception {
+    public void bind(int port) {
 
         log.info("controller bind port = " + port);
         //reactor 主从模式 EventLoopGroup 线程池
@@ -47,47 +33,31 @@ public class NettyServerConfig   {
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
-
                     .childHandler(new ChildChannelHandler());
 
             //绑定端口，同步等待成功
-            ChannelFuture channelFuture = serverBootstrap.bind(port).sync();
+            log.debug("正在绑定端口:[{}]",port);
+            ChannelFuture channelFuture = serverBootstrap.bind(port);
             Channel channel = channelFuture.channel();
 
-            log.info("绑定端口，同步等待成功");
+            channelFuture.addListener(new GenericFutureListener(){
+                @Override
+                public void operationComplete(Future future) throws Exception {
+                    log.debug("绑定端口:[{}]成功,channel状态[{}]",port,channel.isActive());
+
+                }
+            });
+          //  log.info("绑定端口，同步等待成功");
             //等待服务端监听端口关闭
             //   channelFuture.channel().close().sync();
-            log.info("等待服务端监听端口关闭");
+         //   log.info("等待服务端监听端口关闭");
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("服务端绑定端口[{}]失败！",port,ex);
         } finally {
-            //log.info("shutdownGracefully....");
+            log.info("shutdownGracefully....");
             //  bossGroup.shutdownGracefully();
             //  workerGroup.shutdownGracefully();
         }
     }
-
-    @PostConstruct
-    public void  register(){
-
-        log.debug(properties.toString());
-        try{
-            bind(properties.getNport());
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
-
-    }
-
-    /*@Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        try {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }*/
 }

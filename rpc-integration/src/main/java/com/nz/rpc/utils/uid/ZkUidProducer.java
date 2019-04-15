@@ -2,14 +2,13 @@ package com.nz.rpc.utils.uid;
 
 import com.nz.rpc.zk.ZkCli;
 import com.nz.rpc.zk.ZkCreateConfig;
-import com.nz.rpc.zk.ZookeeperPath;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
 public class ZkUidProducer implements UidProducer {
 
     private ZkCli zkCli;
-    private  String uidPath = ZookeeperPath.rootPath + "/uid";
+    private  String uidPath = "/nzRpcUid";
 
     public ZkUidProducer(ZkCli zkCli) {
 
