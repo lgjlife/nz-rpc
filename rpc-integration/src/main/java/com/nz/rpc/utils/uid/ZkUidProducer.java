@@ -17,7 +17,7 @@ public class ZkUidProducer implements UidProducer {
     }
 
     @Override
-    public int getUidForInt() {
+    public long getUidForLong() {
 
         Stat stat = zkCli.setData(uidPath,1);
         if (stat != null){
@@ -45,8 +45,5 @@ public class ZkUidProducer implements UidProducer {
         throw  new UnsupportedOperationException();
     }
 
-    @Override
-    public long getUidForLong() {
-        throw  new UnsupportedOperationException();
-    }
+
 }

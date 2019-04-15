@@ -21,4 +21,10 @@ public class UidAutoConfiguration {
 
         return producer;
     }
+
+    @Bean
+    public  CustomProducer customProducer(){
+        return  new CustomProducer();
+
+    }
 }

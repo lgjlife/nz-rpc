@@ -11,10 +11,7 @@ public class UUidProducer implements UidProducer {
         return UUID.randomUUID().toString();
     }
 
-    @Override
-    public int getUidForInt() {
-        throw  new UnsupportedOperationException();
-    }
+
 
     @Override
     public long getUidForLong() {
