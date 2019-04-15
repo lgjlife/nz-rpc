@@ -72,6 +72,27 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── RpcResponse 　　　　　　　　　　　netty通信响应pojo
          
          ├─── netty
+            ├─── client
+                ├─── handle
+                    ├───　ClientChannelInboundHandler
+                    ├───　ClientChannelOutboundHandle
+                    ├───　NettyChannelHandler
+                ├───　NettyClient
+                ├───　NettyClientAutoConfiguration
+            ├─── coder
+                ├───　MsgCoder
+                ├───　MsgDecoder
+            ├─── message
+                ├───　Header
+                ├───　MessageType
+                ├───　NettyMessage
+            ├─── server
+                ├─── handle
+                    ├───　ChildChannelHandler
+                    ├───　ServerChannelInboundHandler
+                    ├───　ServerChannelOutboundHandle
+                ├───　NettyServer
+                ├───　NettyServerAutoConfiguration
          
          ├─── properties
             ├─── RpcProperties　　　　　　　　　　系统所有的配置，相关配置在application.yml中进行配置
@@ -89,6 +110,9 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── uid
                 ├─── UidProducer　　　　　　　　　分布式唯一ID生成接口
                 ├─── UUidProducer               使用JDK的UUID来生成唯一ID
+                ├─── CustomProducer             自定义唯一id生成方式
+                ├─── UidAutoConfiguration　　　　唯一id模块自动配置类
+                ├─── ZkUidProducer 　　　　　　　 zookeeper方式生成唯一id
          
          ├─── zk
             ├─── ZkCli                          zookeeper操作类，用于连接读写操作
