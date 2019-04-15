@@ -77,13 +77,13 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── RpcProperties　　　　　　　　　　系统所有的配置，相关配置在application.yml中进行配置
          
          ├─── proxy
-            ├─── ProxyCreate　　　　　　　　　　　动态代理创建类接口
+            ├─── ProxyCreate　　　　　　　　　　  动态代理创建类接口
             ├─── CglibProxyCreate　　　　　　　　cglib动态代理创建类实现类
             ├─── JavassitProxyCreate　　　　　　 Javassit动态代理创建类实现类
-            ├─── JdkProxyCreate                 jdk动态代理创建类实现类
-            ├─── ProxySelector                  用于根据配置选择对应的动态代理创建类
-            ├─── RpcInvoker　　　　　　　　　　　　接口动态代理类,用于执行方法拦截
-            ├─── RpcProxyFactory　　　　　　　　　动态代理类生成工厂
+            ├─── JdkProxyCreate                jdk动态代理创建类实现类
+            ├─── ProxySelector                 用于根据配置选择对应的动态代理创建类
+            ├─── RpcInvoker　　　　　　　　　　　 接口动态代理类,用于执行方法拦截
+            ├─── RpcProxyFactory　　　　　　　　 动态代理类生成工厂
          
          ├─── utils
             ├─── uid

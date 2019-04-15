@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.nz.rpc.zk.ZookeeperAutoConfigure,\
-com.nz.rpc.provider.ProviderAutoConfiguration,\
-com.nz.rpc.discover.DiscoverAutoConfiguration
+com.nz.rpc.discover.DiscoverAutoConfiguration,\
+com.nz.rpc.utils.uid.UidAutoConfiguration

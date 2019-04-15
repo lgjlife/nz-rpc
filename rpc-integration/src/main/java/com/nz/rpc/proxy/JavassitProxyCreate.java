@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 /**
  *功能描述
  * @author lgj
- * @Description  javassit
+ * @Description  javassit　　存在问题，无法代理接口!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * @date 4/14/19
 */
 @Slf4j
@@ -25,6 +25,7 @@ public class JavassitProxyCreate implements ProxyCreate {
 
     public <T> T getProxy(Class<T> interfaceClass){
 
+
         ProxyFactory proxyFactory  = new ProxyFactory();
         try{
 
@@ -38,10 +39,11 @@ public class JavassitProxyCreate implements ProxyCreate {
 
                 }
             });
-            return  (T)proxyFactory.createClass().newInstance();
+            T bean =  (T)proxyFactory.createClass().newInstance();
+            return  bean;
         }
         catch(Exception ex){
-            log.error(ex.getMessage());
+            log.error("Javassit 创建代理失败:{}",ex.getMessage());
             return null;
         }
 

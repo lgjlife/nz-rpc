@@ -81,7 +81,7 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
 
         }
         RpcRequest  request = new RpcRequest();
-        request.setRequestId(uidProducer.getUid());
+        request.setRequestId(uidProducer.getUidForString());
         request.setClassName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
         request.setParameterTypes(classes);

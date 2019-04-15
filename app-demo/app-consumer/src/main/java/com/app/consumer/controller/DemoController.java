@@ -4,8 +4,9 @@ package com.app.consumer.controller;
 import com.app.common.service.DemoService;
 import com.app.common.service.UserService;
 import com.nz.rpc.anno.RpcReference;
-import com.nz.rpc.proxy.RpcProxyFactory;
+import com.nz.rpc.utils.uid.ZkUidProducer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,9 @@ public class DemoController {
     private DemoService demoService;
 
 
+    @Autowired
+    private ZkUidProducer zkUidProducer;
+
 
     @GetMapping("/demo")
     public  void  demo(){
@@ -32,17 +36,25 @@ public class DemoController {
 
     }
 
-    @GetMapping("/demo1")
-    public  void  demo1(){
-        log.debug("/demo1");
-        UserService userService =  new RpcProxyFactory().createInstance(UserService.class);
-        String result =  userService.queryName("aaa",123L);
-        log.debug("result = " + result);
-
+    @GetMapping("/uid")
+    public  Integer  demo1(){
+       return zkUidProducer.getUidForInt();
 
     }
 
 
 
 
+}
+
+class UserSemo implements  UserService{
+    @Override
+    public String queryName(Long id) {
+        return null;
+    }
+
+    @Override
+    public String queryName(String name, Long id) {
+        return null;
+    }
 }

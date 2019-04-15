@@ -14,10 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import javax.annotation.PostConstruct;
 
-
+@DependsOn
 @Slf4j
 @Configuration
 @EnableConfigurationProperties
@@ -46,6 +47,7 @@ public class NettyServerConfig   {
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
+
                     .childHandler(new ChildChannelHandler());
 
             //绑定端口，同步等待成功

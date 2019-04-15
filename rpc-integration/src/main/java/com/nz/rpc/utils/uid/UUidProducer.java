@@ -5,9 +5,19 @@ import java.util.UUID;
 public class UUidProducer implements UidProducer {
 
     @Override
-    public String getUid() {
+    public String getUidForString() {
 
         //FFFF FFFF 0000 0000
         return UUID.randomUUID().toString();
+    }
+
+    @Override
+    public int getUidForInt() {
+        throw  new UnsupportedOperationException();
+    }
+
+    @Override
+    public long getUidForLong() {
+        throw  new UnsupportedOperationException();
     }
 }

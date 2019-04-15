@@ -2,6 +2,13 @@ package com.nz.rpc.proxy;
 
 import lombok.extern.slf4j.Slf4j;
 
+
+/**
+ *功能描述
+ * @author lgj
+ * @Description  动态代理工厂
+ * @date 4/14/19
+*/
 @Slf4j
 public class RpcProxyFactory {
 

@@ -61,15 +61,17 @@ public class ZkCli {
         return  false;
     }
 
-    public  void createPath(ZkCreateConfig config){
+    public  String createPath(ZkCreateConfig config){
        try{
 
            if (false == checkExists(config.getPath())) {
                log.debug("目录{}不存在，创建目录....", config.getPath());
-               client.create()
+               String result  =  client.create()
                        .creatingParentsIfNeeded()
                        .withMode((config == null?CreateMode.PERSISTENT:config.getCreateMode()))
                        .forPath(config.getPath());
+               log.debug("创建[{}]结果　result = ",config.getPath(),result);
+               return result;
 
            } else {
                log.debug("目录{}已经存在,获取目录信息", config.getPath());
@@ -80,6 +82,8 @@ public class ZkCli {
        catch(Exception ex){
            log.error(ex.getMessage());
        }
+
+       return  null;
 
     }
 
@@ -97,16 +101,19 @@ public class ZkCli {
         }
     }
 
-    public  void setData(String path,Object object){
+    public  Stat setData(String path,Object object){
 
         try{
             byte[] data = serialize.serialize(object);
 
-            client.setData().forPath(path,data);
+           Stat result = client.setData().forPath(path,data);
+           return  result;
         }
         catch(Exception ex){
             log.error("path [{}] set the type [{}] data exception! {}",path,ex.getMessage());
         }
+
+        return  null;
     }
 
     public List<String> getChildren(String path){
