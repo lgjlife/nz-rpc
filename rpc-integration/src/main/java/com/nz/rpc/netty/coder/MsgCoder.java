@@ -1,7 +1,6 @@
 package com.nz.rpc.netty.coder;
 
 import com.nz.rpc.serialization.AbstractSerialize;
-import com.nz.rpc.serialization.SerializationCreate;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -10,8 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MsgCoder extends MessageToByteEncoder<Object> {
 
-    private AbstractSerialize serialize = SerializationCreate.create("fastjson");
+    private AbstractSerialize serialize ;
 
+    public MsgCoder(AbstractSerialize serialize) {
+        this.serialize = serialize;
+    }
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Object o, ByteBuf byteBuf) throws Exception {

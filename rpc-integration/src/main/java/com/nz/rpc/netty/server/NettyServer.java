@@ -1,6 +1,8 @@
 package com.nz.rpc.netty.server;
 
 import com.nz.rpc.netty.server.handler.ChildChannelHandler;
+import com.nz.rpc.serialization.AbstractSerialize;
+import com.nz.rpc.serialization.SerializationCreate;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -10,11 +12,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 
+@Data
 @Slf4j
 public class NettyServer {
+
+    private AbstractSerialize serialize = SerializationCreate.create("fastjson");
 
     public void bind(int port) {
 
@@ -33,7 +39,7 @@ public class NettyServer {
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
-                    .childHandler(new ChildChannelHandler());
+                    .childHandler(new ChildChannelHandler(this));
 
             //绑定端口，同步等待成功
             log.debug("正在绑定端口:[{}]",port);

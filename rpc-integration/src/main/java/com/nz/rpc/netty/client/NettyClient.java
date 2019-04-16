@@ -1,6 +1,8 @@
 package com.nz.rpc.netty.client;
 
 import com.nz.rpc.netty.client.handler.NettyChannelHandler;
+import com.nz.rpc.serialization.AbstractSerialize;
+import com.nz.rpc.serialization.SerializationCreate;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -10,27 +12,38 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@Data
 public class NettyClient {
 
     private EventLoopGroup group = new NioEventLoopGroup();
     private Bootstrap bootstrap = new Bootstrap();
     private static  Map<String, Channel> channelCache = new ConcurrentHashMap<>();
+    private static final  int reConnectIntervalTimeMs = 5000;
+
+    private AbstractSerialize serialize = SerializationCreate.create("fastjson");
+
 
 
     public NettyClient(){
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
-                .handler(new NettyChannelHandler());
+                .handler(new NettyChannelHandler(this));
 
     }
 
+    public void  connect(SocketAddress remoteAddress){
+
+        connect(parseToHost(remoteAddress),parseToPort(remoteAddress));
+    }
 
     public void connect(String host,int port){
 
@@ -43,23 +56,52 @@ public class NettyClient {
                 @Override
                 public void operationComplete(Future future) throws Exception {
                     log.debug("与服务端[{}:{}]连接状态！连接状态:[{}]",host,port,future.isSuccess());
-                    NettyClient.channelCache.put(getKey(host,port),channelFuture.channel());
+                    if(future.isSuccess() == false){
+                        channelCache.remove(getKey(host,port));
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                try{
+                                    Thread.sleep(reConnectIntervalTimeMs);
+                                    connect(host,port);
+                                }
+                                catch(Exception ex){
+                                    log.error(ex.getMessage());
+                                }
+                            }
+                        }.start();
+                    }
+                    else {
+                        channelCache.put(getKey(host,port),channelFuture.channel());
+                    }
+
                 }
 
             } );
 
         } catch (Exception ex) {
             log.debug("与服务端[{}:{}]连接失败！发起重连！",host,port);
-            try{
-                Thread.sleep(100);
-            }
-            catch(Exception e){
-                log.error(e.getMessage());
-            }
-            this.connect(host,port);
         }
 
     }
+
+    private String  parseToHost(SocketAddress remoteAddress){
+        String address = remoteAddress.toString();
+
+        int end = address.indexOf(":");
+
+        return address.substring(1,end);
+    }
+    private int  parseToPort(SocketAddress remoteAddress){
+        String address = remoteAddress.toString();
+
+        int start = address.indexOf(":");
+
+        return Integer.valueOf( address.substring(start+1,address.length()));
+
+    }
+
+
 
     private  String getKey(String host,int port){
 

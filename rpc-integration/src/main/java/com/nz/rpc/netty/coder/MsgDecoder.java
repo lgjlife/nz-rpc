@@ -2,7 +2,6 @@ package com.nz.rpc.netty.coder;
 
 import com.nz.rpc.netty.message.NettyMessage;
 import com.nz.rpc.serialization.AbstractSerialize;
-import com.nz.rpc.serialization.SerializationCreate;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
@@ -14,10 +13,11 @@ import java.util.List;
 @Slf4j
 public class MsgDecoder extends MessageToMessageDecoder<ByteBuf> {
 
-    private AbstractSerialize serialize = SerializationCreate.create("fastjson");
+    private AbstractSerialize serialize;
 
-
-
+    public MsgDecoder(AbstractSerialize serialize) {
+        this.serialize = serialize;
+    }
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
