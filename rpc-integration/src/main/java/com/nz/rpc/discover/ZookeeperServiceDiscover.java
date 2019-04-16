@@ -15,9 +15,6 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
     private ApplicationContext context;
 
 
-
-
-
     @Override
     public void registerService() {
         throw  new UnsupportedOperationException();
@@ -36,8 +33,7 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
             for(String providersConfig:providersConfigs){
                 RegistryConfig registryConfig = JSON.parseObject(providersConfig, RegistryConfig.class);
                 log.debug("服务提供者信息　registryConfig = " + registryConfig );
-
-
+                RegisterConfigContainer.putConfig(registryConfig);
             }
         }
 

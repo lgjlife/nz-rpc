@@ -14,6 +14,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ *功能描述 
+ * @author lgj
+ * @Description  心跳请求处理类
+ * @date 4/16/19
+*/
 @Slf4j
 public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 

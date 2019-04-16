@@ -1,5 +1,6 @@
 package com.nz.rpc.proxy;
 
+import com.nz.rpc.msg.MsgRequestHandler;
 import com.nz.rpc.msg.RpcRequest;
 import com.nz.rpc.utils.uid.UUidProducer;
 import com.nz.rpc.utils.uid.UidProducer;
@@ -61,16 +62,11 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
         RpcRequest request = buildRequest(method,args);
         log.debug("RPC请求数据:{}",request);
 
-        //todo
-        //1.获取消费提供者信息
-        //2.负载均衡选择服务提供者
-        //3.创建连接获取channle
-        //4.发送请求
-        //5.注册回调函数
-        //6.超时处理
 
+        MsgRequestHandler requestHandler =  MsgRequestHandler.getInstance();
+        long uid = requestHandler.doRequest(request);
 
-        return "执行动态代理成功";
+        return requestHandler.result(uid);
     }
 
     private RpcRequest  buildRequest(Method method, Object[] args){
@@ -81,7 +77,7 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
 
         }
         RpcRequest  request = new RpcRequest();
-        request.setRequestId(uidProducer.getUidForString());
+        request.setRequestId(uidProducer.getUidForLong());
         request.setClassName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
         request.setParameterTypes(classes);

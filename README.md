@@ -74,25 +74,27 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
          ├─── netty
             ├─── client
                 ├─── handle
-                    ├───　ClientChannelInboundHandler
-                    ├───　ClientChannelOutboundHandle
-                    ├───　NettyChannelHandler
-                ├───　NettyClient
-                ├───　NettyClientAutoConfiguration
+                    ├───　ClientChannelInboundHandler　　　 数据输入处理handler
+                    ├───　ClientChannelOutboundHandle　　　 数据输出处理handler
+                    ├───　HeartbeatRequestHandler　　　　　　心跳请求处理类
+                    ├───　NettyChannelHandler　　　　　　　　 责任连管理类
+                ├───　NettyClient　　　　　　　　　　　　　　　netty客户端相关处理
+                ├───　NettyClientAutoConfiguration　　　　　 客户端自动配置类
             ├─── coder
-                ├───　MsgCoder
-                ├───　MsgDecoder
+                ├───　MsgCoder                             消息编码处理,pojo-->byte数组
+                ├───　MsgDecoder　　　　　　　　　　　　　　　 消息解码处理,byte数组-->pojo
             ├─── message
-                ├───　Header
-                ├───　MessageType
-                ├───　NettyMessage
+                ├───　Header                                消息头
+                ├───　MessageType　　　　　　　　　　　　　　　消息类型
+                ├───　NettyMessage　　　　　　　　　　　　　　　整个消息
             ├─── server
                 ├─── handle
-                    ├───　ChildChannelHandler
-                    ├───　ServerChannelInboundHandler
-                    ├───　ServerChannelOutboundHandle
-                ├───　NettyServer
-                ├───　NettyServerAutoConfiguration
+                    ├───　ChildChannelHandler　　　　　　　　　服务端责任连管理
+                    ├───　HeartbeatResponseHandler　　　　　　服务端心跳处理类
+                    ├───　ServerChannelInboundHandler　　　　服务端数据输入处理handler
+                    ├───　ServerChannelOutboundHandle       服务端数据输出处理handler
+                ├───　NettyServer                           netty服务端相关处理
+                ├───　NettyServerAutoConfiguration　　　　　　netty服务端自动配置类
          
          ├─── properties
             ├─── RpcProperties　　　　　　　　　　系统所有的配置，相关配置在application.yml中进行配置

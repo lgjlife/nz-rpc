@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 public class RpcResponse implements Serializable {
 
-    private String responseId;  //对应请求id
+    private Long responseId;  //对应请求id
     private Exception exception; //失败抛出的异常
     private Object result;   //结果
 }

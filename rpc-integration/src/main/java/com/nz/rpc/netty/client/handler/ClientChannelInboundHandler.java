@@ -1,6 +1,7 @@
 package com.nz.rpc.netty.client.handler;
 
 
+import com.nz.rpc.msg.MsgRequestHandler;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
@@ -50,6 +51,9 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
         log.debug("接收到服务端返回消息:"+msg);
+        NettyMessage  nettyMessage = (NettyMessage)msg;
+        MsgRequestHandler msgRequestHandler = MsgRequestHandler.getInstance();
+        msgRequestHandler.finish(nettyMessage.getBody());
         super.channelRead(ctx, msg);
     }
 

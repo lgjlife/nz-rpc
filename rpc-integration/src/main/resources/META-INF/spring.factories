@@ -3,4 +3,5 @@ com.nz.rpc.discover.DiscoverAutoConfiguration,\
 com.nz.rpc.utils.uid.UidAutoConfiguration,\
 com.nz.rpc.netty.server.NettyServerAutoConfiguration,\
 com.nz.rpc.netty.client.NettyClientAutoConfiguration,\
-com.nz.rpc.serialization.SerializationAutoConfiguration
+com.nz.rpc.serialization.SerializationAutoConfiguration,\
+com.nz.rpc.msg.MsgAutoConfiguration
