@@ -6,6 +6,8 @@ import com.nz.rpc.netty.coder.MsgDecoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 
 /**
  *功能描述
@@ -21,8 +23,11 @@ public class NettyChannelHandler extends ChannelInitializer<SocketChannel> {
       //  CoderConfig.JdkCoder(socketChannel);
         ChannelPipeline pipeline = socketChannel.pipeline();
 
+        pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 2, 0, 2));
         pipeline.addLast(new MsgDecoder());
+        pipeline.addLast(new LengthFieldPrepender(2));
         pipeline.addLast(new MsgCoder());
+        pipeline.addLast(new HeartbeatRequestHandler());
         pipeline.addLast(new ClientChannelInboundHandler());
         pipeline.addLast(new ClientChannelOutboundHandle());
     }

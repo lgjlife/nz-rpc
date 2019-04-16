@@ -8,6 +8,7 @@ nzrpc:
     address: "127.0.0.1:2181"
   netty:
     port: 8122
+  serialization: "hessian"
 # logger
 logging:
   level:

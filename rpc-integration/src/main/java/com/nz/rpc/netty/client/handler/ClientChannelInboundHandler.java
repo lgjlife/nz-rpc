@@ -1,6 +1,9 @@
 package com.nz.rpc.netty.client.handler;
 
 
+import com.nz.rpc.netty.message.Header;
+import com.nz.rpc.netty.message.MessageType;
+import com.nz.rpc.netty.message.NettyMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +30,14 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.debug("ServerChannelInboundHandler channelActive　,remoteAddress[{}],",ctx.channel().remoteAddress());
-        ctx.channel().writeAndFlush("client request ");
-        super.channelActive(ctx);
+        NettyMessage nettyMessage = new NettyMessage();
+        Header header =  new Header();
+        header.setType(MessageType.APP_REQUEST_TYPE);
+      //  nettyMessage.setBody("client request ");
+        nettyMessage.setHeader(header);
+
+        ctx.channel().writeAndFlush(nettyMessage);
+       // super.channelActive(ctx);
     }
 
     @Override

@@ -19,14 +19,22 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        ctx.executor().schedule(new HeartbeatRequestHandler.HeartbeatTask(ctx),5, TimeUnit.SECONDS);
+        ctx.executor().scheduleAtFixedRate(new HeartbeatRequestHandler.HeartbeatTask(ctx),0,5, TimeUnit.SECONDS);
 
         super.channelActive(ctx);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
+
+        NettyMessage message = (NettyMessage)msg;
+        if((message.getHeader() != null)
+           &&(message.getHeader().getType() == MessageType.HEARTBEAT_RESPONSE_TYPE)){
+            log.debug("接收到[{}]的心跳响应消息",ctx.channel().remoteAddress());
+        }
+       // super.channelRead(ctx, msg);
+
+
     }
 
     private  class   HeartbeatTask implements  Runnable{
@@ -41,7 +49,6 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
         public void run() {
             log.debug("给[{}]发送心跳消息",ctx.channel().remoteAddress());
             NettyMessage nettyMessage = buildHeartbeatMessage();
-
             ctx.writeAndFlush(nettyMessage);
         }
     }

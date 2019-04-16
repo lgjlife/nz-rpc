@@ -8,7 +8,7 @@ public class SerializationCreate {
             case "fastjson": return  new FastjsonSerializeUtil();
             case "jdk": return  new JdkSerializeUtil();
             case "hessian": return  new HessianSerializeUtil();
-            default: return  new JdkSerializeUtil() ;
+            default: return  new HessianSerializeUtil() ;
         }
     }
 }

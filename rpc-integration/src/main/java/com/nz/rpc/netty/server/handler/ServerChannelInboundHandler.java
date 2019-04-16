@@ -1,6 +1,9 @@
 package com.nz.rpc.netty.server.handler;
 
 
+import com.nz.rpc.netty.message.Header;
+import com.nz.rpc.netty.message.MessageType;
+import com.nz.rpc.netty.message.NettyMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +43,13 @@ public class ServerChannelInboundHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
         log.debug("接收到客户端消息:"+msg);
-        ctx.channel().writeAndFlush("server response");
+        NettyMessage nettyMessage = new NettyMessage();
+        Header header =  new Header();
+        header.setType(MessageType.APP_REQUEST_TYPE);
+        nettyMessage.setBody("server response ");
+        nettyMessage.setHeader(header);
+
+        ctx.channel().writeAndFlush(nettyMessage);
         super.channelRead(ctx, msg);
     }
 

@@ -13,6 +13,5 @@ nzrpc:
   zookeeper:
     address: "127.0.0.1:2181"
   netty:
-    port:
-  serialization: "hessian"
+    port: 8121
 

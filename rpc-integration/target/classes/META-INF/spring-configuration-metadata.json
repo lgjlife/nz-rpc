@@ -24,6 +24,11 @@
       "sourceType": "com.nz.rpc.properties.RpcProperties"
     },
     {
+      "name": "nzrpc.serialization",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
       "name": "nzrpc.zookeeper-adress",
       "type": "java.lang.String",
       "sourceType": "com.nz.rpc.properties.RpcProperties"

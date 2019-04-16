@@ -3,10 +3,13 @@ package com.nz.rpc.serialization;
 
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+
+@Slf4j
 public class HessianSerializeUtil extends AbstractSerialize {
 
 
@@ -24,6 +27,7 @@ public class HessianSerializeUtil extends AbstractSerialize {
             return  bos.toByteArray();
         }
         catch(Exception ex){
+            log.error("HessianSerializeUtil序列化发生异常!"+ex);
             throw new  RuntimeException();
         }
 
@@ -41,6 +45,7 @@ public class HessianSerializeUtil extends AbstractSerialize {
 
         }
         catch(Exception ex){
+            log.error("HessianSerializeUtil反序列化发生异常!"+ex);
             throw new  RuntimeException();
         }
 

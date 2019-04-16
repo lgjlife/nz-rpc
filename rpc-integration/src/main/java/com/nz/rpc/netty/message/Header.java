@@ -3,6 +3,7 @@ package com.nz.rpc.netty.message;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
 */
 
 @Data
-public class Header {
+public class Header implements Serializable {
 
     //校验头
     private int crcCode;

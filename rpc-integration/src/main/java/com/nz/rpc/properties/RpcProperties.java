@@ -51,5 +51,5 @@ public class RpcProperties {
     private String proxyType;
 
     @Value("${nzrpc.serialization:hessian}")
-    private String serialization;
+    public  String serialization;
 }
