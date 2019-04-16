@@ -50,4 +50,6 @@ public class RpcProperties {
     @Value("${nzrpc.proxy-type:jdk}")
     private String proxyType;
 
+    @Value("${nzrpc.serialization:hessian}")
+    private String serialization;
 }

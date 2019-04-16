@@ -1,6 +1,8 @@
 package com.nz.rpc.netty.message;
 
 
+import lombok.Data;
+
 import java.util.Map;
 
 /**
@@ -9,6 +11,8 @@ import java.util.Map;
  * @Description  netty自定义协议消息头
  * @date 4/16/19
 */
+
+@Data
 public class Header {
 
     //校验头

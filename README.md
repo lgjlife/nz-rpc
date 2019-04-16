@@ -106,6 +106,14 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── RpcInvoker　　　　　　　　　　　 接口动态代理类,用于执行方法拦截
             ├─── RpcProxyFactory　　　　　　　　 动态代理类生成工厂
          
+         ├─── serialization
+            ├─── AbstractSerialize                序列化抽象接口
+            ├─── FastjsonSerializeUtil 　　　　　　 Fastjson实现类
+            ├─── HessianSerializeUtil　　　　　　　 Hessian实现类
+            ├─── JdkSerializeUtil       　　　　　　Jdk实现类
+            ├─── ProtostuffSerializeUtil　　　　　　Protostuff实现类
+            ├─── SerializationAutoConfiguration　　序列化自动配置类
+            ├─── SerializationCreate　　　　　　　 　序列化创建工厂
          ├─── utils
             ├─── uid
                 ├─── UidProducer　　　　　　　　　分布式唯一ID生成接口
