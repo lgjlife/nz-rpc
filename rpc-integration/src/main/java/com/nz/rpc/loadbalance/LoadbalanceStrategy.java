@@ -1,7 +1,7 @@
 package com.nz.rpc.loadbalance;
 
 
-import com.nz.rpc.discover.RegistryConfig;
+import com.nz.rpc.discover.ProviderConfig;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ import java.util.List;
 */
 public interface LoadbalanceStrategy {
 
-    public RegistryConfig select(List<RegistryConfig> configs);
+    public ProviderConfig select(List<ProviderConfig> configs, Object object);
 }

@@ -66,7 +66,7 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
         try {
 
             //获取注册信息
-            RegistryConfig config = new RegistryConfig();
+            ProviderConfig config = new ProviderConfig();
 
             config.setHost(properties.getNhost());
             config.setPort(properties.getNport());

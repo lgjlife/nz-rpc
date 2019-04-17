@@ -31,9 +31,9 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
                     +  ZookeeperPath.providersPath);
 
             for(String providersConfig:providersConfigs){
-                RegistryConfig registryConfig = JSON.parseObject(providersConfig, RegistryConfig.class);
+                ProviderConfig registryConfig = JSON.parseObject(providersConfig, ProviderConfig.class);
                 log.debug("服务提供者信息　registryConfig = " + registryConfig );
-                RegisterConfigContainer.putConfig(registryConfig);
+                ProviderConfigContainer.putConfig(registryConfig);
             }
         }
 

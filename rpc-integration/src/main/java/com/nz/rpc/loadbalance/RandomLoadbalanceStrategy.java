@@ -1,7 +1,7 @@
 package com.nz.rpc.loadbalance;
 
 
-import com.nz.rpc.discover.RegistryConfig;
+import com.nz.rpc.discover.ProviderConfig;
 
 import java.util.List;
 import java.util.Random;
@@ -15,8 +15,7 @@ import java.util.Random;
 public class RandomLoadbalanceStrategy  implements LoadbalanceStrategy{
 
     @Override
-    public RegistryConfig select(List<RegistryConfig> configs) {
-
+    public ProviderConfig select(List<ProviderConfig> configs, Object object) {
         int index = new Random().nextInt(configs.size());
         return configs.get(index);
     }

@@ -1,7 +1,7 @@
 package com.nz.rpc.loadbalance;
 
 
-import com.nz.rpc.discover.RegistryConfig;
+import com.nz.rpc.discover.ProviderConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class WeightPollingLoadbalanceStrategy implements LoadbalanceStrategy {
 
     private Map<String,Integer> indexMap = new ConcurrentHashMap<>();
 
-    public RegistryConfig select(List<RegistryConfig> configs){
+    public ProviderConfig select(List<ProviderConfig> configs, Object object){
 
         Integer index = indexMap.get(getKey(configs.get(0)));
         if(index == null){
@@ -27,16 +27,14 @@ public class WeightPollingLoadbalanceStrategy implements LoadbalanceStrategy {
         }
         else {
 
-            List<RegistryConfig> newConfigs = new ArrayList<>();
+            List<ProviderConfig> newConfigs = new ArrayList<>();
 
-
-            for(RegistryConfig config:configs){
+            for(ProviderConfig config:configs){
 
                 for(int i = 0; i< config.getWeight(); i++){
                     newConfigs.add(config);
                 }
             }
-
             index++;
             if(index >= newConfigs.size()){
                 index = 0;
@@ -47,7 +45,7 @@ public class WeightPollingLoadbalanceStrategy implements LoadbalanceStrategy {
         }
     }
 
-    public String getKey(RegistryConfig config){
+    public String getKey(ProviderConfig config){
 
         return  config.getInterfaceName();
     }

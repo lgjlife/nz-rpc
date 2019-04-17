@@ -1,7 +1,7 @@
 package com.nz.rpc.loadbalance;
 
 
-import com.nz.rpc.discover.RegistryConfig;
+import com.nz.rpc.discover.ProviderConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,11 @@ import java.util.Random;
 public class WeightRandomLoadbalanceStrategy implements LoadbalanceStrategy{
 
     @Override
-    public RegistryConfig select(List<RegistryConfig> configs) {
+    public ProviderConfig select(List<ProviderConfig> configs, Object object) {
 
-        List<RegistryConfig> newConfigs = new ArrayList<>();
+        List<ProviderConfig> newConfigs = new ArrayList<>();
 
-
-        for(RegistryConfig config:configs){
+        for(ProviderConfig config:configs){
 
             for(int i = 0; i< config.getWeight(); i++){
                 newConfigs.add(config);

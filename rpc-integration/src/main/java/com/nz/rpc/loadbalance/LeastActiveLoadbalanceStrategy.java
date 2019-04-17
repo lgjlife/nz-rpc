@@ -1,7 +1,7 @@
 package com.nz.rpc.loadbalance;
 
 
-import com.nz.rpc.discover.RegistryConfig;
+import com.nz.rpc.discover.ProviderConfig;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,14 +15,14 @@ import java.util.List;
 */
 public class LeastActiveLoadbalanceStrategy implements  LoadbalanceStrategy{
 
-    public RegistryConfig select(List<RegistryConfig> configs){
+    public ProviderConfig select(List<ProviderConfig> configs, Object object){
 
-        RegistryConfig[] registryConfigs= new RegistryConfig[configs.size()];
+        ProviderConfig[] registryConfigs= new ProviderConfig[configs.size()];
         configs.toArray(registryConfigs);
 
-        Arrays.sort(registryConfigs, new Comparator<RegistryConfig>() {
+        Arrays.sort(registryConfigs, new Comparator<ProviderConfig>() {
             @Override
-            public int compare(RegistryConfig o1, RegistryConfig o2) {
+            public int compare(ProviderConfig o1, ProviderConfig o2) {
 
                 if(o1.getCallTime() < o2.getCallTime()){
                     return -1;

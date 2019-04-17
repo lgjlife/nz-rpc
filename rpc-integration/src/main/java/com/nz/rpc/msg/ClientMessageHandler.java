@@ -1,7 +1,7 @@
 package com.nz.rpc.msg;
 
-import com.nz.rpc.discover.RegisterConfigContainer;
-import com.nz.rpc.discover.RegistryConfig;
+import com.nz.rpc.discover.ProviderConfigContainer;
+import com.nz.rpc.discover.ProviderConfig;
 import com.nz.rpc.loadbalance.LoadbalanceStrategy;
 import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.netty.message.Header;
@@ -54,8 +54,8 @@ public class ClientMessageHandler {
 
 
         //获取消费者
-        Map<String, RegistryConfig> configMap = RegisterConfigContainer.getConfigMap();
-        List<RegistryConfig> registryConfigLists = new ArrayList<>();
+        Map<String, ProviderConfig> configMap = ProviderConfigContainer.getConfigMap();
+        List<ProviderConfig> registryConfigLists = new ArrayList<>();
         configMap.forEach((k,v)->{
             if(v.getInterfaceName().equals(request.getInterfaceName())){
                 registryConfigLists.add(v);
@@ -66,7 +66,7 @@ public class ClientMessageHandler {
         log.debug("服务提供者信息:{}",registryConfigLists);
 
         //负载均衡处理
-        RegistryConfig registryConfig =  loadbalanceStrategy.select(registryConfigLists);
+        ProviderConfig registryConfig =  loadbalanceStrategy.select(registryConfigLists,null);
         log.debug("registryConfig = " + registryConfig);
         //设置唯一的请求id
         long uid = uidProducer.getUidForLong();
