@@ -7,10 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.Serializable;
 
 @Slf4j
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
-@ToString
 @NoArgsConstructor
 public class RegistryConfig implements Serializable {
 

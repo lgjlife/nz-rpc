@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  *功能描述 
  * @author lgj
- * @Description  随机负载均衡
+ * @Description  加权随机负载均衡
  * @date 3/28/19
 */
 public class WeightRandomLoadbalanceStrategy implements LoadbalanceStrategy{
