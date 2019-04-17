@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: rpc-provider-1
+  banner:
+    location: banner.txt
+# logger
+logging:
+  level:
+    com.nz.rpc: debug
+server:
+  port: 8466
+nzrpc:
+  zookeeper:
+    address: "127.0.0.1:2181"
+  netty:
+    port: 8123
+    host: "127.0.0.1"

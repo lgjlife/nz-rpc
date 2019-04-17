@@ -85,8 +85,13 @@ public class NettyClient {
     }
 
     public Channel getChannel(String host,int port){
+        Channel channel = channelCache.get(host + ":" + port);
 
-       return channelCache.get(host + ":" + port);
+        if(channel == null){
+            this.connect(host,port);
+        }
+
+        return channelCache.get(host + ":" + port);
     }
 
     private String  parseToHost(SocketAddress remoteAddress){
