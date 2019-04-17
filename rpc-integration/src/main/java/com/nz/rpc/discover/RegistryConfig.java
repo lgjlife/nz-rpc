@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistryConfig implements Serializable {
+public class RegistryConfig implements Serializable{
 
     private static final long serialVersionUID = 1;
     //通信host
@@ -27,5 +27,6 @@ public class RegistryConfig implements Serializable {
 
     private int weight;
 
+    private int callTime;
 
 }

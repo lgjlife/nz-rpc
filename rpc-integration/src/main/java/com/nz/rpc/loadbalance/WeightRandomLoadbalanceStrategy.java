@@ -18,18 +18,18 @@ public class WeightRandomLoadbalanceStrategy implements LoadbalanceStrategy{
     @Override
     public RegistryConfig select(List<RegistryConfig> configs) {
 
-        List<RegistryConfig> registryConfigs = new ArrayList<>();
+        List<RegistryConfig> newConfigs = new ArrayList<>();
 
 
         for(RegistryConfig config:configs){
 
             for(int i = 0; i< config.getWeight(); i++){
-                registryConfigs.add(config);
+                newConfigs.add(config);
             }
 
         }
 
-        int index = new Random().nextInt(registryConfigs.size()-1);
-        return registryConfigs.get(index);
+        int index = new Random().nextInt(newConfigs.size()-1);
+        return newConfigs.get(index);
     }
 }

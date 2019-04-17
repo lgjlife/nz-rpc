@@ -16,8 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 */
 public class WeightPollingLoadbalanceStrategy implements LoadbalanceStrategy {
 
-
-
     private Map<String,Integer> indexMap = new ConcurrentHashMap<>();
 
     public RegistryConfig select(List<RegistryConfig> configs){
@@ -29,23 +27,22 @@ public class WeightPollingLoadbalanceStrategy implements LoadbalanceStrategy {
         }
         else {
 
-            List<RegistryConfig> registryConfigs = new ArrayList<>();
+            List<RegistryConfig> newConfigs = new ArrayList<>();
 
 
             for(RegistryConfig config:configs){
 
                 for(int i = 0; i< config.getWeight(); i++){
-                    registryConfigs.add(config);
+                    newConfigs.add(config);
                 }
-
             }
 
             index++;
-            if(index >= registryConfigs.size()){
+            if(index >= newConfigs.size()){
                 index = 0;
             }
             indexMap.put(getKey(configs.get(0)),index);
-            return registryConfigs.get(index);
+            return newConfigs.get(index);
 
         }
     }
