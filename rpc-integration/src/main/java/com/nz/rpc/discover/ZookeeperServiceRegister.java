@@ -1,8 +1,9 @@
 package com.nz.rpc.discover;
 
 import com.alibaba.fastjson.JSON;
-import com.nz.rpc.zk.ZookeeperPath;
+import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.zk.ZkCreateConfig;
+import com.nz.rpc.zk.ZookeeperPath;
 import com.utils.serialization.AbstractSerialize;
 import com.utils.serialization.FastjsonSerializeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.BeansException;
 
 import java.lang.reflect.Method;
-import java.net.InetAddress;
 
 
 /**
@@ -42,8 +42,8 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
         log.debug("ServiceRegistry setApplicationContext..");
         this.providerDiscover();
 
-        if(clzMap != null){
-            clzMap.forEach((k,v)->{
+        if(NettyContext.getLocalServiceImplMap() != null){
+            NettyContext.getLocalServiceImplMap().forEach((k,v)->{
                 log.debug("注册接口 {}", k);
                 registerConfig(k, context.getId());
             });
@@ -67,7 +67,8 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
 
             //获取注册信息
             RegistryConfig config = new RegistryConfig();
-            config.setHost(InetAddress.getLocalHost().getHostAddress());
+
+            config.setHost(properties.getNhost());
             config.setPort(properties.getNport());
             config.setApplication(appName);
             config.setInterfaceName(serviceClass);

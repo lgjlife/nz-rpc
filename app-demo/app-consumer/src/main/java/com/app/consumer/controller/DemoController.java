@@ -34,8 +34,11 @@ public class DemoController {
     @GetMapping("/demo")
     public  void  demo(){
         log.debug("/demo");
-        userService.queryName("qqwq",13546L);
-        demoService.setName(13546L);
+        String reslut = userService.queryName("qqwq",13546L);
+        System.out.println(reslut);
+        reslut = demoService.setName(13546L);
+        System.out.println(reslut);
+
 
 
     }

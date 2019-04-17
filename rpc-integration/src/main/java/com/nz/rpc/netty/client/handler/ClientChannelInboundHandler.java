@@ -1,14 +1,19 @@
 package com.nz.rpc.netty.client.handler;
 
 
-import com.nz.rpc.msg.MsgRequestHandler;
-import com.nz.rpc.netty.message.Header;
-import com.nz.rpc.netty.message.MessageType;
+import com.nz.rpc.msg.ClientMessageHandler;
+import com.nz.rpc.msg.RpcResponse;
 import com.nz.rpc.netty.message.NettyMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ *功能描述 
+ * @author lgj
+ * @Description 客户端消息接收处理
+ * @date 4/17/19
+*/
 @Slf4j
 public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
 
@@ -31,14 +36,13 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.debug("ServerChannelInboundHandler channelActive　,remoteAddress[{}],",ctx.channel().remoteAddress());
-        NettyMessage nettyMessage = new NettyMessage();
+   /*     NettyMessage nettyMessage = new NettyMessage();
         Header header =  new Header();
         header.setType(MessageType.APP_REQUEST_TYPE);
-      //  nettyMessage.setBody("client request ");
         nettyMessage.setHeader(header);
 
-        ctx.channel().writeAndFlush(nettyMessage);
-       // super.channelActive(ctx);
+        ctx.channel().writeAndFlush(nettyMessage);*/
+        super.channelActive(ctx);
     }
 
     @Override
@@ -52,8 +56,8 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
         log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
         log.debug("接收到服务端返回消息:"+msg);
         NettyMessage  nettyMessage = (NettyMessage)msg;
-        MsgRequestHandler msgRequestHandler = MsgRequestHandler.getInstance();
-        msgRequestHandler.finish(nettyMessage.getBody());
+        ClientMessageHandler clientMessageHandler = ClientMessageHandler.getInstance();
+        clientMessageHandler.finish((RpcResponse) nettyMessage.getBody());
         super.channelRead(ctx, msg);
     }
 

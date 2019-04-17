@@ -3,7 +3,6 @@ package com.nz.rpc.netty.server.handler;
 
 import com.nz.rpc.netty.coder.MsgCoder;
 import com.nz.rpc.netty.coder.MsgDecoder;
-import com.nz.rpc.netty.server.NettyServer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -18,12 +17,6 @@ import io.netty.handler.codec.LengthFieldPrepender;
 */
 public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
-    private NettyServer nettyServer;
-
-    public ChildChannelHandler(NettyServer nettyServer) {
-        this.nettyServer = nettyServer;
-    }
-
 
 
     @Override
@@ -31,9 +24,9 @@ public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
         //CoderConfig.JdkCoder(socketChannel);
         ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 2, 0, 2));
-        pipeline.addLast(new MsgDecoder(nettyServer.getSerialize()));
+        pipeline.addLast(new MsgDecoder());
         pipeline.addLast(new LengthFieldPrepender(2));
-        pipeline.addLast(new MsgCoder(nettyServer.getSerialize()));
+        pipeline.addLast(new MsgCoder());
         pipeline.addLast(new HeartbeatResponseHandler());
         pipeline.addLast(new ServerChannelInboundHandler());
         pipeline.addLast(new ServerChannelOutboundHandle());

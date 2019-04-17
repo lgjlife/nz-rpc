@@ -1,6 +1,6 @@
 package com.nz.rpc.netty.client.handler;
 
-import com.nz.rpc.netty.client.NettyClient;
+import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
@@ -25,24 +25,14 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
     private Map<String,Integer> timeOutCount = new HashMap<>();
     private Map<String,ScheduledFuture> futureTaskMap = new HashMap<>();
-    private static final  int heartbeatRateTimeSecond = 5;
-    private static final   int heartbeatTimeOutSecond = 10;
+    private static final  int heartbeatRateTimeSecond = 1000;
+    private static final   int heartbeatTimeOutSecond = 2000;
 
-    private NettyClient nettyClient;
-
-
-    private HeartbeatRequestHandler() {
-
-    }
-
-    public HeartbeatRequestHandler(NettyClient nettyClient) {
-        this.nettyClient = nettyClient;
-    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        ScheduledFuture futureTask  = ctx.executor().scheduleAtFixedRate(new HeartbeatRequestHandler.HeartbeatTask(ctx),0,5, TimeUnit.SECONDS);
+        ScheduledFuture futureTask  = ctx.executor().scheduleAtFixedRate(new HeartbeatRequestHandler.HeartbeatTask(ctx),0,heartbeatRateTimeSecond, TimeUnit.SECONDS);
         futureTaskMap.put(getAddress(ctx),futureTask);
         super.channelActive(ctx);
     }
@@ -53,7 +43,7 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
         NettyMessage message = (NettyMessage)msg;
         if((message.getHeader() != null)
            &&(message.getHeader().getType() == MessageType.HEARTBEAT_RESPONSE_TYPE)){
-            log.debug("接收到[{}]的心跳响应消息",getAddress(ctx));
+          //  log.debug("接收到[{}]的心跳响应消息",getAddress(ctx));
             timeOutCount.put(getAddress(ctx),0);
 
         }
@@ -87,7 +77,7 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
             if((count != null)&&((++count)*heartbeatRateTimeSecond > heartbeatTimeOutSecond)){
                 log.debug("与[{}]已经断开连接",getAddress(ctx));
                 ScheduledFuture future = futureTaskMap.get(getAddress(ctx));
-                nettyClient.connect(ctx.channel().remoteAddress());
+                NettyContext.getNettyClient().connect(ctx.channel().remoteAddress());
                 future.cancel(true);
                 futureTaskMap.remove(getAddress(ctx));
 
@@ -96,7 +86,7 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
                 count = (count==null)?1:count;
 
                 timeOutCount.put(getAddress(ctx),count);
-                log.debug("给[{}]发送心跳消息",getAddress(ctx));
+               // log.debug("给[{}]发送心跳消息",getAddress(ctx));
                 NettyMessage nettyMessage = buildHeartbeatMessage();
                 ctx.writeAndFlush(nettyMessage);
             }

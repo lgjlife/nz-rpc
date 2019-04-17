@@ -1,7 +1,7 @@
 package com.nz.rpc.netty.coder;
 
+import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.netty.message.NettyMessage;
-import com.nz.rpc.serialization.AbstractSerialize;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
@@ -13,11 +13,6 @@ import java.util.List;
 @Slf4j
 public class MsgDecoder extends MessageToMessageDecoder<ByteBuf> {
 
-    private AbstractSerialize serialize;
-
-    public MsgDecoder(AbstractSerialize serialize) {
-        this.serialize = serialize;
-    }
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
@@ -26,7 +21,7 @@ public class MsgDecoder extends MessageToMessageDecoder<ByteBuf> {
         byte[] b = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(b);
 
-        NettyMessage message =  serialize.deserialize(b, NettyMessage.class);
+        NettyMessage message =  NettyContext.getSerialize().deserialize(b, NettyMessage.class);
         log.debug("message = [{}]",message);
         list.add(message);
 

@@ -31,6 +31,9 @@ public class RpcProperties {
     private int nport;
 
 
+    @Value("${nzrpc.netty.host:127.0.0.1}")
+    private String nhost;
+
     /*
     * 被@RpcReference注解的消费者接口引用所在的类,如有多个中间使用","隔开
     *  nzrpc.scan-package: "com,org"

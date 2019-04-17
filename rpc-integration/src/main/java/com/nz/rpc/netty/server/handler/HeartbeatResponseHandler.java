@@ -17,7 +17,7 @@ public class HeartbeatResponseHandler extends ChannelInboundHandlerAdapter {
 
         if( (message.getHeader() != null)
             &&(message.getHeader().getType() == MessageType.HEARTBEAT_REQUEST_TYPE)){
-            log.debug("接收到来自客户端[{}]的心跳消息",ctx.channel().remoteAddress());
+           // log.debug("接收到来自客户端[{}]的心跳消息",ctx.channel().remoteAddress());
             NettyMessage nettyMessage = new NettyMessage();
             Header header =  new Header();
             header.setType(MessageType.HEARTBEAT_RESPONSE_TYPE);

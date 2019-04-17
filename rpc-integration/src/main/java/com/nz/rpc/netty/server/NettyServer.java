@@ -39,7 +39,7 @@ public class NettyServer {
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
-                    .childHandler(new ChildChannelHandler(this));
+                    .childHandler(new ChildChannelHandler());
 
             //绑定端口，同步等待成功
             log.debug("正在绑定端口:[{}]",port);

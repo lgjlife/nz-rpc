@@ -1,8 +1,6 @@
 package com.nz.rpc.netty.client;
 
 import com.nz.rpc.netty.client.handler.NettyChannelHandler;
-import com.nz.rpc.serialization.AbstractSerialize;
-import com.nz.rpc.serialization.SerializationCreate;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -24,19 +22,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NettyClient {
 
     private EventLoopGroup group = new NioEventLoopGroup();
-    private Bootstrap bootstrap = new Bootstrap();
+    private Bootstrap bootstrap ;
     private static  Map<String, Channel> channelCache = new ConcurrentHashMap<>();
     private static final  int reConnectIntervalTimeMs = 5000;
 
-    private AbstractSerialize serialize = SerializationCreate.create("fastjson");
+
 
 
 
     public NettyClient(){
+        bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
-                .handler(new NettyChannelHandler(this));
+                .handler(new NettyChannelHandler());
 
     }
 

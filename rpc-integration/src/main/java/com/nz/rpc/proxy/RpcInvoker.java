@@ -1,8 +1,8 @@
 package com.nz.rpc.proxy;
 
-import com.nz.rpc.msg.MsgRequestHandler;
+import com.nz.rpc.msg.ClientMessageHandler;
 import com.nz.rpc.msg.RpcRequest;
-import com.nz.rpc.utils.uid.UUidProducer;
+import com.nz.rpc.utils.uid.CustomProducer;
 import com.nz.rpc.utils.uid.UidProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.proxy.MethodInterceptor;
@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class RpcInvoker implements InvocationHandler, MethodInterceptor {
 
-    private  UidProducer uidProducer = new UUidProducer();
+    private  UidProducer uidProducer = new CustomProducer();
     /**
      * 功能描述
      *
@@ -63,7 +63,7 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
         log.debug("RPC请求数据:{}",request);
 
 
-        MsgRequestHandler requestHandler =  MsgRequestHandler.getInstance();
+        ClientMessageHandler requestHandler =  ClientMessageHandler.getInstance();
         long uid = requestHandler.doRequest(request);
 
         return requestHandler.result(uid);
@@ -78,7 +78,7 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
         }
         RpcRequest  request = new RpcRequest();
         request.setRequestId(uidProducer.getUidForLong());
-        request.setClassName(method.getDeclaringClass().getName());
+        request.setInterfaceName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
         request.setParameterTypes(classes);
         request.setParameters(args);

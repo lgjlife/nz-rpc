@@ -8,6 +8,11 @@
   ],
   "properties": [
     {
+      "name": "nzrpc.nhost",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
       "name": "nzrpc.nport",
       "type": "java.lang.Integer",
       "sourceType": "com.nz.rpc.properties.RpcProperties",

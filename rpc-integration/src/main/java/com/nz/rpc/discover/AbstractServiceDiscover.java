@@ -3,6 +3,7 @@ package com.nz.rpc.discover;
 import com.nz.rpc.anno.RpcReference;
 import com.nz.rpc.anno.RpcService;
 import com.nz.rpc.common.TestDemo;
+import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.properties.RpcProperties;
 import com.nz.rpc.proxy.RpcProxyFactory;
 import com.nz.rpc.zk.ZkCli;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +28,7 @@ import java.util.Set;
 @Slf4j
 public  abstract  class AbstractServiceDiscover{
 
-    protected Map<String,String> clzMap = new HashMap<>();
+   // protected Map<String,String> clzMap = new HashMap<>();
 
     protected  ZkCli zkCli;
 
@@ -68,8 +68,8 @@ public  abstract  class AbstractServiceDiscover{
                 log.debug("{}:providers clz = {},Interfaces = {}",k,v.getClass().getName(),interfaces);
 
                 //存在多个接口的情况
-                for(Class clz:interfaces){
-                    clzMap.put(clz.getName(),v.getClass().getName());
+                for(Class inter:interfaces){
+                    NettyContext.getLocalServiceImplMap().put(inter.getName(),v.getClass().getName());
                 }
 
             });

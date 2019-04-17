@@ -17,7 +17,9 @@ public class RandomLoadbalanceStrategy  implements LoadbalanceStrategy{
     @Override
     public RegistryConfig select(List<RegistryConfig> configs) {
 
-        int index = new Random().nextInt(configs.size()-1);
+        int index = new Random().nextInt(configs.size());
         return configs.get(index);
     }
+
+
 }

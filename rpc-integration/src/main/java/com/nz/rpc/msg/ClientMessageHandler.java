@@ -21,21 +21,21 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Data
 @Slf4j
-public class MsgRequestHandler {
+public class ClientMessageHandler {
 
 
-    private static  MsgRequestHandler instance= new MsgRequestHandler();
+    private static ClientMessageHandler instance= new ClientMessageHandler();
     private NettyClient nettyClient;
     private LoadbalanceStrategy  loadbalanceStrategy;
     private UidProducer uidProducer;
     private Map<Long,RpcResponse> resultMap = new ConcurrentHashMap<>();
-    private static  final int requestTimeoutMs = 20;
+    private static  final int requestTimeoutMs = 200;
 
     private Map<Long,ReentrantLock> lockMap = new ConcurrentHashMap<>();
     private Map<Long,Condition> conditionMap  =  new ConcurrentHashMap<>();
 
 
-    public static MsgRequestHandler getInstance() {
+    public static ClientMessageHandler getInstance() {
         return instance;
     }
 
@@ -57,7 +57,7 @@ public class MsgRequestHandler {
         Map<String, RegistryConfig> configMap = RegisterConfigContainer.getConfigMap();
         List<RegistryConfig> registryConfigLists = new ArrayList<>();
         configMap.forEach((k,v)->{
-            if(v.getInterfaceName().equals(request.getClassName())){
+            if(v.getInterfaceName().equals(request.getInterfaceName())){
                 registryConfigLists.add(v);
             }
 
@@ -67,6 +67,7 @@ public class MsgRequestHandler {
 
         //负载均衡处理
         RegistryConfig registryConfig =  loadbalanceStrategy.select(registryConfigLists);
+        log.debug("registryConfig = " + registryConfig);
         //设置唯一的请求id
         long uid = uidProducer.getUidForLong();
         request.setRequestId(uid);
@@ -111,7 +112,7 @@ public class MsgRequestHandler {
             try{
                 lockMap.get(uid).lock();
                 //等待结果返回,超时则返回null
-                conditionMap.get(uid).await(requestTimeoutMs, TimeUnit.MICROSECONDS);
+                conditionMap.get(uid).await(requestTimeoutMs, TimeUnit.MILLISECONDS);
                 if(resultMap.get(uid) == null){
                     return null;
                 }

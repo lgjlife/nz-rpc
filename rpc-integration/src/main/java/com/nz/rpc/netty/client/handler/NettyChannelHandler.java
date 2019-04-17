@@ -1,7 +1,6 @@
 package com.nz.rpc.netty.client.handler;
 
 
-import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.netty.coder.MsgCoder;
 import com.nz.rpc.netty.coder.MsgDecoder;
 import io.netty.channel.ChannelInitializer;
@@ -20,11 +19,7 @@ import lombok.Data;
 @Data
 public class NettyChannelHandler extends ChannelInitializer<SocketChannel> {
 
-    private NettyClient nettyClient;
 
-    public NettyChannelHandler(NettyClient nettyClient) {
-        this.nettyClient = nettyClient;
-    }
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
@@ -32,10 +27,10 @@ public class NettyChannelHandler extends ChannelInitializer<SocketChannel> {
         ChannelPipeline pipeline = socketChannel.pipeline();
 
         pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 2, 0, 2));
-        pipeline.addLast(new MsgDecoder(nettyClient.getSerialize()));
+        pipeline.addLast(new MsgDecoder());
         pipeline.addLast(new LengthFieldPrepender(2));
-        pipeline.addLast(new MsgCoder(nettyClient.getSerialize()));
-        pipeline.addLast(new HeartbeatRequestHandler(nettyClient));
+        pipeline.addLast(new MsgCoder());
+        pipeline.addLast(new HeartbeatRequestHandler());
         pipeline.addLast(new ClientChannelInboundHandler());
         pipeline.addLast(new ClientChannelOutboundHandle());
     }
