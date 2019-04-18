@@ -58,18 +58,27 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
          ├─── discover
             ├─── AbstractServiceDiscover        服务注册与发现抽象类    
             ├─── DiscoverAutoConfiguration  　　服务注册与发现自动配置类           
-            ├─── RegistryConfig                 服务注册配置类
+            ├─── ProviderConfig                 服务注册配置类
+            ├─── ProviderConfigContainer        
             ├─── ZookeeperServiceDiscover       实现类，用于服务发现     
             ├─── ZookeeperServiceRegister　　　　实现类，用于服务注册
          
          ├─── loadbalabce
-            ├─── LoadbalanceStrategy　　　　　　　负载均衡策略接口
-            ├─── RandomLoadbalanceStrategy       随机负载均衡    
-            ├─── WeightRandomLoadbalanceStrategy　加权随机负载均衡
+            ├─── LeastActiveLoadbalanceStrategy     最小调用时延
+            ├─── LoadbalanceStrategy　　　　　　　　　负载均衡策略接口
+            ├─── PollingLoadbalanceStrategy　　　　　轮询算法
+            ├─── RandomLoadbalanceStrategy       　　随机负载均衡    
+            ├─── UniformityHashLoadbalanceStrategy　一致性hash算法
+            ├─── WeightPollingLoadbalanceStrategy　　加权轮询算法
+            ├─── WeightRandomLoadbalanceStrategy　　加权随机负载均衡
+            
          
          ├─── msg
+            ├─── ClientMessageHandler　　　　　　客户端消息综合处理类
+            ├─── MsgAutoConfiguration　　　　　　自动配置类
             ├─── RpcRequest　　　　　　　　　　　　netty通信请求pojo
             ├─── RpcResponse 　　　　　　　　　　　netty通信响应pojo
+            ├─── ServerMessageHandler　　　　　　server消息综合处理类
          
          ├─── netty
             ├─── client

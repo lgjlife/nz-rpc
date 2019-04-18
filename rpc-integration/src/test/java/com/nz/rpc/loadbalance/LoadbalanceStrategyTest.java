@@ -63,7 +63,7 @@ public class LoadbalanceStrategyTest {
             configs.add(config);
         }
 
-        ProviderConfig config = strategy.select(configs,"127.0.0.1:1234");
+        ProviderConfig config = strategy.select(configs,"127.0.0.1:0234");
         System.out.println("选择结果:" + config.getHost() + ":" + config.getPort());
     }
 

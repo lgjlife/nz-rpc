@@ -2,6 +2,7 @@ package com.nz.rpc.loadbalance;
 
 
 import com.nz.rpc.discover.ProviderConfig;
+import lombok.Data;
 
 import java.util.List;
 import java.util.SortedMap;
@@ -30,16 +31,27 @@ public class UniformityHashLoadbalanceStrategy  implements  LoadbalanceStrategy{
 
         System.out.println(sortedMap);
         Integer requestHashcCode = caculHash((String)object);
-        sortedMap.forEach((k,v)->{
-            System.out.println("hashcode: " + k + "  " + v.getHost()+":"+v.getPort());
-        });
-        System.out.println("------------------请求的hashcode:"+requestHashcCode);
-
-        SortedMap<Integer, ProviderConfig> subMap = sortedMap.tailMap(requestHashcCode);
-        Integer index = subMap.firstKey();
 
 
-        return  subMap.get(index);
+        SortedMap<Integer, ProviderConfig> subMap = sortedMap.subMap(requestHashcCode,Integer.MAX_VALUE);
+        ProviderConfig result= null;
+        if(subMap.size()  != 0){
+            Integer index = subMap.firstKey();
+            result =  subMap.get(index);
+        }
+        else{
+            result = sortedMap.get(0);
+        }
+
+        ////　打印测试数据
+
+        new PrintResult(sortedMap,requestHashcCode).print();
+
+        /////
+
+        return  result;
+
+
     }
     private String getKey(String host,int port,String node){
         return new StringBuilder().append(host).append(":").append(port).append(node).toString();
@@ -68,4 +80,36 @@ public class UniformityHashLoadbalanceStrategy  implements  LoadbalanceStrategy{
 
     }
 
+}
+
+@Data
+class PrintResult{
+
+    private  boolean flag =false;
+    private SortedMap<Integer, ProviderConfig> sortedMap;
+    private int requestHashcCode;
+
+    public PrintResult(SortedMap<Integer, ProviderConfig> sortedMap, int requestHashcCode) {
+        this.sortedMap = sortedMap;
+        this.requestHashcCode = requestHashcCode;
+    }
+
+    public void print(){
+
+        sortedMap.forEach((k,v)->{
+
+            if( (false == flag) && ( k > requestHashcCode)){
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            }
+            System.out.println("hashcode: " + k + "  " + v.getHost()+":"+v.getPort());
+            if( (false == flag) && ( k > requestHashcCode)){
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                flag = true;
+            }
+
+        });
+
+        System.out.println("------------------请求的hashcode:"+requestHashcCode);
+
+    }
 }
