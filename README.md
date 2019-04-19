@@ -25,7 +25,7 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 * 序列化支持JDK,Fastjson,Protostuff,Hessian方式,默认为Hessian方式，可配置
 * 服务下线通知
 * 负载均衡实现：随机,加权随机,轮轮询，加权轮询，最小时间法
-* 
+* 分布式锁实现:redis实现
 
 ## 模块介绍
 
@@ -72,7 +72,15 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── WeightPollingLoadbalanceStrategy　　加权轮询算法
             ├─── WeightRandomLoadbalanceStrategy　　加权随机负载均衡
             
-         
+         ├─── lock
+            ├─── redis
+                ├─── RedisAutoConfiguration　　Redis自动配置类
+                ├─── RedisClient　　　　　　　　Redis操作客户端
+                ├─── RedisLockUtil　　　　　　　Redis锁实现
+                ├─── RedisPoolClient　　　　　　Redis连接池
+            ├─── zk
+            ├─── Lock　　　　　　　　　　　　　　分布式锁接口
+            ├─── LockProperties　　　　　　　　 Lock模块属性配置类
          ├─── msg
             ├─── ClientMessageHandler　　　　　　客户端消息综合处理类
             ├─── MsgAutoConfiguration　　　　　　自动配置类

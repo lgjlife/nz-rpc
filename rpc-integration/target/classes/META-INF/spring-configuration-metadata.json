@@ -1,12 +1,62 @@
 {
   "groups": [
     {
+      "name": "lock",
+      "type": "com.nz.rpc.lock.LockProperties",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
       "name": "nzrpc",
       "type": "com.nz.rpc.properties.RpcProperties",
       "sourceType": "com.nz.rpc.properties.RpcProperties"
     }
   ],
   "properties": [
+    {
+      "name": "lock.host",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
+      "name": "lock.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.max-wait",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.password",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
+      "name": "lock.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.user-name",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
     {
       "name": "nzrpc.nhost",
       "type": "java.lang.String",

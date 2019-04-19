@@ -1,37 +1,51 @@
 package com.nz.rpc.serialization;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nz.rpc.msg.RpcRequest;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
+import com.nz.rpc.serialization.anno.SerializationException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+public class JacksonSerializeUtil   {
 
-/**
- *功能描述
- * @author lgj
- * @Description fastjson ,对象属性需要实现get/set
- * @date 3/24/19
-*/
-public class FastjsonSerializeUtil  extends AbstractSerialize {
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-    public <T> byte[] serialize(T obj) {
-        if (obj  == null){
-            throw new NullPointerException();
+
+   // @Override
+    public <T> byte[] serialize(T obj) throws SerializationException {
+        if(obj == null){
+            return new byte[0];
         }
 
-        String json = JSON.toJSONString(obj);
-        byte[] data = json.getBytes();
-        return data;
+        try{
+            return   this.objectMapper.writeValueAsBytes(obj);
+        }
+        catch(Exception ex){
+            throw new SerializationException("Jackson Serialize Fail!"+ex.getMessage(),ex.getCause());
+        }
     }
 
-    public <T> T deserialize(byte[] data, Class<T> clazz) {
+ //   @Override
+    public Object deserialize(byte[] data) throws SerializationException {
 
-        T obj = JSON.parseObject(new String(data),clazz);
-        return obj;
+        return   deserialize(data,Object.class);
+    }
+
+
+  //  @Override
+    public Object deserialize(byte[] data, Class clazz) throws SerializationException {
+
+        try{
+            return    this.objectMapper.readValue(data,clazz);
+        }
+        catch(Exception ex){
+            throw new SerializationException("Jackson Serialize Fail!"+ex.getMessage(),ex.getCause());
+        }
+
     }
 
     public static void main(String args[]){
@@ -67,9 +81,11 @@ public class FastjsonSerializeUtil  extends AbstractSerialize {
         JacksonSerializeUtil serializeUtil = new JacksonSerializeUtil();
 
         try{
-            String json = JSON.toJSONString(message);
-            NettyMessage nettyMessage = (NettyMessage)JSON.parseObject(json,Object.class);
-            System.out.println(nettyMessage);
+           byte[] data =  serializeUtil.serialize(message);
+            System.out.println("序列化:"+ new String(data));
+            NettyMessage nettyMessage = (NettyMessage)serializeUtil.deserialize(data);
+
+            System.out.println("反序列化:"+ nettyMessage);
 
         }
         catch(Exception ex){
