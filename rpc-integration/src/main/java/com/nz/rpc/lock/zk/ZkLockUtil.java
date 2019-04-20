@@ -3,16 +3,15 @@ package com.nz.rpc.lock.zk;
 import com.nz.rpc.zk.ZkCreateConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.CreateMode;
 
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 
 /**
@@ -31,7 +30,7 @@ public class ZkLockUtil {
     private ThreadLocal<Thread> curThread =  new ThreadLocal();
     private ThreadLocal<Map<Thread,String>> lockPathMap =  new ThreadLocal();
 
-    private ConcurrentHashMap<Thread,LockData>  lockDataMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Thread,List<LockData>>  lockDataMap = new ConcurrentHashMap<>();
 
     //锁路径　LOCK_ROOT_PATH + LOCKNAME + LOCKPATH_SEPARATOR + NUMS;
     //　－》　/locks/lockName_0000001
@@ -39,14 +38,39 @@ public class ZkLockUtil {
     private final String LOCKPATH_SEPARATOR = "-";
 
 
+    /**
+     *功能描述
+     * @author lgj
+     * @Description
+     * @date 4/20/19
+     * @param:
+     * @return:
+     *
+    */
     public boolean lock(String lockKey, int millisecondsToExpire) {
 
-        LockData lockData = lockDataMap.get(Thread.currentThread());
-        if((lockData != null)
+        List<LockData> lockDatas = lockDataMap.get(Thread.currentThread());
+       /* if((lockData != null)
                 &&(lockData.lockKey.equals(lockKey))){
             //重入锁
+            log.info("[{}]重入锁",lockKey);
             lockData.lockCount.incrementAndGet();
             return true;
+        }
+*/
+        if(lockDatas !=  null){
+
+            List<LockData> selectlockData =  lockDatas.stream().filter((val)-> val.lockKey.equals(lockKey)).collect(Collectors.toList());
+            if(selectlockData.size() != 0){
+                //重入锁
+                selectlockData.get(0).lockCount.incrementAndGet();
+
+                List<LockData> filter = lockDatas.stream().filter((val)-> !val.lockKey.equals(lockKey)).collect(Collectors.toList());
+                filter.add(selectlockData.get(0));
+                lockDataMap.put(Thread.currentThread(),filter);
+                return true;
+            }
+
         }
 
 
@@ -65,8 +89,14 @@ public class ZkLockUtil {
         //只有　一个节点，说明没有其他进程线程获取锁
         if(subRootPaths.size() == 1){
             log.info("[{}]获取锁",subRootPaths.get(0));
-            lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
-            lockDataMap.put(Thread.currentThread(),lockData);
+            LockData lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
+            List<LockData> lockData1 =  lockDataMap.get(Thread.currentThread());
+            if(lockData1  == null){
+                lockData1 = new ArrayList<>();
+
+            }
+            lockData1.add(lockData);
+            lockDataMap.put(Thread.currentThread(),lockData1);
             return true;
         }
         //有其他进程线程已经获取锁
@@ -85,8 +115,14 @@ public class ZkLockUtil {
 
             if (subMap.size() == 0){
                 //第一个获取锁,直接返回
-                lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
-                lockDataMap.put(Thread.currentThread(),lockData);
+                LockData lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
+                List<LockData> lockData1 =  lockDataMap.get(Thread.currentThread());
+                if(lockData1  == null){
+                    lockData1 = new ArrayList<>();
+
+                }
+                lockData1.add(lockData);
+                lockDataMap.put(Thread.currentThread(),lockData1);
                 return true;
 
             }
@@ -116,8 +152,15 @@ public class ZkLockUtil {
                     countDownLatch.await();
                     log.info("节点[{}]释放! 获取锁[{}]",prevNodePath,curLockPath);
                     curThread.set(Thread.currentThread());
-                    lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
-                    lockDataMap.put(Thread.currentThread(),lockData);
+
+                    LockData lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
+                    List<LockData> lockData1 =  lockDataMap.get(Thread.currentThread());
+                    if(lockData1  == null){
+                        lockData1 = new ArrayList<>();
+
+                    }
+                    lockData1.add(lockData);
+                    lockDataMap.put(Thread.currentThread(),lockData1);
                     return true;
                 }
                 catch(Exception ex){
@@ -141,16 +184,29 @@ public class ZkLockUtil {
 
     public void unlock(String lockKey) {
 
-        LockData lockData = lockDataMap.get(Thread.currentThread());
-        if(lockData == null){
-            log.info("从未获取过该锁[{}－{}]",lockKey);
-            return;
+        List<LockData> lockDatas = lockDataMap.get(Thread.currentThread());
+        if(lockDatas != null){
+            List<LockData> selectlockData =  lockDatas.stream().filter((val)-> val.lockKey.equals(lockKey)).collect(Collectors.toList());
+            if(selectlockData.size() == 0){
+                log.info("从未获取过该锁[{}－{}]",lockKey);
+                return;
+            }
+
+            int count = selectlockData.get(0).lockCount.decrementAndGet();
+
+            if(count == 0){
+                log.info("释放锁,删除[{}]",selectlockData.get(0).createLockPath);
+                zkClient.remove(selectlockData.get(0).createLockPath);
+            }
+
+            List<LockData> filter = lockDatas.stream().filter((val)-> !val.lockKey.equals(lockKey)).collect(Collectors.toList());
+            filter.add(selectlockData.get(0));
+            lockDataMap.put(Thread.currentThread(),filter);
+
+
         }
-        int count = lockData.lockCount.decrementAndGet();
-        if(count == 0){
-            log.info("释放锁,删除[{}]",lockData.createLockPath);
-            zkClient.remove(lockData.createLockPath);
-        }
+
+
 
     }
 
@@ -161,6 +217,7 @@ public class ZkLockUtil {
         return new StringBuilder().append(LOCK_ROOT_PATH).append("/").append(subPath).toString();
     }
 
+    @ToString
     @AllArgsConstructor
     private static class LockData{
 
@@ -170,5 +227,21 @@ public class ZkLockUtil {
 
 
 
+    }
+
+    public static void main(String args[]){
+
+        List<LockData> dataList = new LinkedList<>();
+        dataList.add(new LockData("a1","a2",new AtomicInteger(1)));
+        dataList.add(new LockData("a1","a3",new AtomicInteger(3)));
+
+        dataList.add(new LockData("b1","b2",new AtomicInteger(1)));
+        dataList.add(new LockData("b1","b3",new AtomicInteger(3)));
+
+
+        List<LockData> dataList1 = dataList.stream().filter((val)->
+            val.lockKey.equals("a11")).collect(Collectors.toList());
+
+        System.out.println(dataList1);
     }
 }

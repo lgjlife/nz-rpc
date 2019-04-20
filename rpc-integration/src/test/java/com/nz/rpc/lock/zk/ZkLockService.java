@@ -15,14 +15,15 @@ public class ZkLockService {
 
         String lockName = "func";
 
-        String lockPath = null;
         try{
             zkLockUtil.lock(lockName,100);
 
             log.info("＋＋＋＋＋＋  func 开始执行任务＋＋＋＋＋＋＋");
             Thread.sleep(new Random().nextInt(1000));
-            log.info("＋＋＋＋＋＋ func 任务执行完毕＋＋＋＋＋＋＋");
             func1();
+            func2();
+            log.info("＋＋＋＋＋＋ func 任务执行完毕＋＋＋＋＋＋＋");
+
         }
         catch(Exception ex){
             log.error(ex.getMessage());
@@ -36,8 +37,6 @@ public class ZkLockService {
 
 
         String lockName = "func";
-
-        String lockPath = null;
         try{
             zkLockUtil.lock(lockName,100);
             log.info("＋＋＋＋＋＋  func1 开始执行任务＋＋＋＋＋＋＋");
@@ -48,8 +47,27 @@ public class ZkLockService {
             log.error(ex.getMessage());
         }
         finally{
-            zkLockUtil.unlock(lockPath);
+            zkLockUtil.unlock(lockName);
         }
     }
+
+    public   void func2(){
+
+
+        String lockName = "func2";
+        try{
+            zkLockUtil.lock(lockName,100);
+            log.info("＋＋＋＋＋＋  func2 开始执行任务＋＋＋＋＋＋＋");
+            Thread.sleep(new Random().nextInt(1000));
+            log.info("＋＋＋＋＋＋ func2 任务执行完毕＋＋＋＋＋＋＋");
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
+        finally{
+            zkLockUtil.unlock(lockName);
+        }
+    }
+
 
 }
