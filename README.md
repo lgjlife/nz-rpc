@@ -46,16 +46,16 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 
 ## 类说明
 
-├─── nz
+    ├─── nz/
 
-     ├─── rpc
-         ├─── anno         
+      ├─── rpc/
+         ├─── anno/        
              ├─── RpcReference  注解在服务消费端接口引用上，用于标示该引用是消费者接口
              ├─── RpcService   注解在服务提供端接口实现类上，用于标示该类为消费者提供服务
                    
-         ├─── common  
+         ├─── common/  
                 
-         ├─── discover
+         ├─── discover/
             ├─── AbstractServiceDiscover        服务注册与发现抽象类    
             ├─── DiscoverAutoConfiguration  　　服务注册与发现自动配置类           
             ├─── ProviderConfig                 服务注册配置类
@@ -63,7 +63,7 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── ZookeeperServiceDiscover       实现类，用于服务发现     
             ├─── ZookeeperServiceRegister　　　　实现类，用于服务注册
          
-         ├─── loadbalabce
+         ├─── loadbalabce/
             ├─── LeastActiveLoadbalanceStrategy     最小调用时延
             ├─── LoadbalanceStrategy　　　　　　　　　负载均衡策略接口
             ├─── PollingLoadbalanceStrategy　　　　　轮询算法
@@ -72,40 +72,40 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── WeightPollingLoadbalanceStrategy　　加权轮询算法
             ├─── WeightRandomLoadbalanceStrategy　　加权随机负载均衡
             
-         ├─── lock
-            ├─── redis
+         ├─── lock/
+            ├─── redis/
                 ├─── RedisAutoConfiguration　　Redis自动配置类
                 ├─── RedisClient　　　　　　　　Redis操作客户端
                 ├─── RedisLockUtil　　　　　　　Redis锁实现
                 ├─── RedisPoolClient　　　　　　Redis连接池
-            ├─── zk
+            ├─── zk/
             ├─── Lock　　　　　　　　　　　　　　分布式锁接口
             ├─── LockProperties　　　　　　　　 Lock模块属性配置类
-         ├─── msg
+         ├─── msg/
             ├─── ClientMessageHandler　　　　　　客户端消息综合处理类
             ├─── MsgAutoConfiguration　　　　　　自动配置类
             ├─── RpcRequest　　　　　　　　　　　　netty通信请求pojo
             ├─── RpcResponse 　　　　　　　　　　　netty通信响应pojo
             ├─── ServerMessageHandler　　　　　　server消息综合处理类
          
-         ├─── netty
-            ├─── client
-                ├─── handle
+         ├─── netty/
+            ├─── client/
+                ├─── handle/
                     ├───　ClientChannelInboundHandler　　　 数据输入处理handler
                     ├───　ClientChannelOutboundHandle　　　 数据输出处理handler
                     ├───　HeartbeatRequestHandler　　　　　　心跳请求处理类
                     ├───　NettyChannelHandler　　　　　　　　 责任连管理类
                 ├───　NettyClient　　　　　　　　　　　　　　　netty客户端相关处理
                 ├───　NettyClientAutoConfiguration　　　　　 客户端自动配置类
-            ├─── coder
+            ├─── coder/
                 ├───　MsgCoder                             消息编码处理,pojo-->byte数组
                 ├───　MsgDecoder　　　　　　　　　　　　　　　 消息解码处理,byte数组-->pojo
-            ├─── message
+            ├─── message/
                 ├───　Header                                消息头
                 ├───　MessageType　　　　　　　　　　　　　　　消息类型
                 ├───　NettyMessage　　　　　　　　　　　　　　　整个消息
-            ├─── server
-                ├─── handle
+            ├─── server/
+                ├─── handle/
                     ├───　ChildChannelHandler　　　　　　　　　服务端责任连管理
                     ├───　HeartbeatResponseHandler　　　　　　服务端心跳处理类
                     ├───　ServerChannelInboundHandler　　　　服务端数据输入处理handler
@@ -113,10 +113,10 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
                 ├───　NettyServer                           netty服务端相关处理
                 ├───　NettyServerAutoConfiguration　　　　　　netty服务端自动配置类
          
-         ├─── properties
+         ├─── properties/
             ├─── RpcProperties　　　　　　　　　　系统所有的配置，相关配置在application.yml中进行配置
          
-         ├─── proxy
+         ├─── proxy/
             ├─── ProxyCreate　　　　　　　　　　  动态代理创建类接口
             ├─── CglibProxyCreate　　　　　　　　cglib动态代理创建类实现类
             ├─── JavassitProxyCreate　　　　　　 Javassit动态代理创建类实现类
@@ -125,7 +125,7 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── RpcInvoker　　　　　　　　　　　 接口动态代理类,用于执行方法拦截
             ├─── RpcProxyFactory　　　　　　　　 动态代理类生成工厂
          
-         ├─── serialization
+         ├─── serialization/
             ├─── AbstractSerialize                序列化抽象接口
             ├─── FastjsonSerializeUtil 　　　　　　 Fastjson实现类
             ├─── HessianSerializeUtil　　　　　　　 Hessian实现类
@@ -133,15 +133,15 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── ProtostuffSerializeUtil　　　　　　Protostuff实现类
             ├─── SerializationAutoConfiguration　　序列化自动配置类
             ├─── SerializationCreate　　　　　　　 　序列化创建工厂
-         ├─── utils
-            ├─── uid
+         ├─── utils/
+            ├─── uid/
                 ├─── UidProducer　　　　　　　　　分布式唯一ID生成接口
                 ├─── UUidProducer               使用JDK的UUID来生成唯一ID
                 ├─── CustomProducer             自定义唯一id生成方式
                 ├─── UidAutoConfiguration　　　　唯一id模块自动配置类
                 ├─── ZkUidProducer 　　　　　　　 zookeeper方式生成唯一id
          
-         ├─── zk
+         ├─── zk/
             ├─── ZkCli                          zookeeper操作类，用于连接读写操作
             ├─── ZkCreateConfig　　　　　　　　　　zk创建path时的配置类
             ├─── ZkListener　　　　　　　　　　　　zk监听器

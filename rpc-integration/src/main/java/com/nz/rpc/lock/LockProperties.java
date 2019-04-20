@@ -32,4 +32,9 @@ public class LockProperties {
     @Value("${lock.redis.poolConfig.maxActive:-1}")
     private int  maxWait;
 
+
+    //
+    @Value("${lock.zookeeper.address:localhost:2182}")
+    private String zookeeperAdress;
+
 }

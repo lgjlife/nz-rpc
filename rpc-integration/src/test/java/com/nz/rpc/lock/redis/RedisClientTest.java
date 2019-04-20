@@ -1,10 +1,10 @@
 package com.nz.rpc.lock.redis;
 
-import com.nz.rpc.lock.LockProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.SetParams;
+
+import java.util.Random;
 
 @Slf4j
 public class RedisClientTest {
@@ -18,7 +18,7 @@ public class RedisClientTest {
         redisLockUtil.setRedisClient(redisClient);
              redisLockUtil.lock("lock");*/
 
-        String result = jedis().set("key2",
+        String result = RedisFatory.jedis().set("key2",
                 "value",
                 SetParams.setParams().nx().ex(20));
         log.info("result = " + result);
@@ -26,7 +26,7 @@ public class RedisClientTest {
 
         String script = "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}";
 
-        Object object = jedis().eval(script,2,"aa","bb","cc","dd");
+        Object object = RedisFatory.jedis().eval(script,2,"aa","bb","cc","dd");
 
         System.out.println(object);
 
@@ -34,14 +34,14 @@ public class RedisClientTest {
 
         String script1 = "local msg = 'Hello, world!'" +
                 "return msg";
-        Object object1 = jedis().eval(script1);
+        Object object1 = RedisFatory.jedis().eval(script1);
 
         System.out.println(object1);
 
         //////////////
 
         script = "local val = redis.call('get','lua-key') return val";
-        object = jedis().eval(script);
+        object = RedisFatory.jedis().eval(script);
         System.out.println(object);
       //  script = "local val = redis.call('set',KEY[1],ARGV[1]) ";
       //   jedis().eval(script,1,"LUA-KEY","100");
@@ -49,7 +49,7 @@ public class RedisClientTest {
 
         String script2 ="local val = redis.call('get',KEYS[1])"
                 + "return val";
-        Object object2 = jedis().eval(script2, 1,"lua-key");
+        Object object2 = RedisFatory.jedis().eval(script2, 1,"lua-key");
         System.out.println(object2);
 
 
@@ -59,14 +59,15 @@ public class RedisClientTest {
     }
 
 
-    @Test
+   // @Test
     public void  lockTest(){
 
-        RedisLockUtil lockUtil =  redisLockUtil();
+        RedisLockUtil lockUtil =  RedisFatory.redisLockUtil();
         lockUtil.tryLock("lockTest",200,10000);
 
+        //模拟任务执行
         try{
-            Thread.sleep(100);
+            Thread.sleep(new Random().nextInt(400));
         }
         catch(Exception ex){
             log.error(ex.getMessage());
@@ -83,50 +84,16 @@ public class RedisClientTest {
 
     }
 
-    //@Test
-    /*public void expideAr() {
-        String result = jedis().set("key2",
+    @Test
+    public void expire() {
+        String result = RedisFatory.jedis().set("aa0",
                 "value",
-                SetParams.setParams().nx().px(200));
+                SetParams.setParams().nx().px(1000));
         log.info("result = " + result);
-    }*/
 
-
-
-    public   RedisLockUtil redisLockUtil(){
-        LockProperties  properties =  getLockProperties();
-        log.info("properties:{}",properties);
-        RedisPoolClient redisPoolClient = new RedisPoolClient(properties);
-        RedisClient redisClient =  new RedisClient();
-        redisClient.setRedisPoolClient(redisPoolClient);
-        RedisLockUtil redisLockUtil = new RedisLockUtil();
-        redisLockUtil.setRedisClient(redisClient);
-        redisLockUtil.setRedisPoolClient(redisPoolClient);
-
-        return  redisLockUtil;
-
-    }
-
-    LockProperties getLockProperties(){
-        LockProperties properties =  new LockProperties();
-        properties.setHost("127.0.0.1");
-        properties.setPort(6379);
-        properties.setMaxIdle(50);
-        properties.setMaxActive(100);
-        properties.setMinIdle(50);
-        properties.setMaxWait(-1);
-        return  properties;
+        RedisFatory.redisClient().setNxValue("aa","bb",1000);
     }
 
 
-    public Jedis jedis(){
-        LockProperties  properties =  getLockProperties();
-        log.info("properties:{}",properties);
-        RedisPoolClient redisPoolClient = new RedisPoolClient(properties);
-        RedisClient redisClient =  new RedisClient();
-        redisClient.setRedisPoolClient(redisPoolClient);
-
-        return redisPoolClient.getJedis();
-    }
 
 }

@@ -64,7 +64,7 @@ public class RedisLockUtil implements Lock {
         String reult = redisClient.setNxValue(lockKey,value,millisecondsToExpire);
         //请求锁失败
         if(reult == null){
-            log.info("请求锁[{}]失败",lockKey);
+            log.info("请求锁[{}-{}]失败",lockKey,value);
             return  false;
         }
         else if(reult.equals(SET_SUCCESS)){
@@ -98,7 +98,7 @@ public class RedisLockUtil implements Lock {
 
         //请求锁失败
         if(reult == null){
-            log.info("请求锁[{}]失败",lockKey);
+            log.info("请求锁[{}－{}]失败",lockKey,value);
             try{
                 int sleepTime = 20 ;
                 int sleepSum = 0;
@@ -107,14 +107,15 @@ public class RedisLockUtil implements Lock {
                     Thread.sleep(sleepTime);
                     sleepSum +=sleepTime;
                     if(sleepSum >= timeoutMs){
+                        log.info("请求锁[{}－{}]超时",lockKey,value,(timeoutMs-sleepSum));
                         return  false;
                     }
                     String reult1 = redisClient.setNxValue(lockKey,value,millisecondsToExpire);
-                    if(reult == null){
-                        log.info("请求锁[{}]失败,sleepSum=[{}]",lockKey,sleepSum);
+                    if(reult1 == null){
+                        log.info("请求锁[{}－{}]失败,还剩[{}]ms时间等待",lockKey,value,(timeoutMs-sleepSum));
                     }
                     else if(reult1.equals(SET_SUCCESS)){
-                        log.info("请求锁[{}]成功",lockKey);
+                        log.info("请求锁[{}－{}]成功",lockKey,value);
                         //用该线程不断检测过期时间，过期时间将要到，任务没完成，则重新设置超时时间
                         new LockThread(lockKey,value,millisecondsToExpire).start();
                         return  true;
@@ -160,9 +161,9 @@ public class RedisLockUtil implements Lock {
                     +" if(redis.call('get',KEYS[1]) == ARGV[1]) then "
                     //如果锁还存在,则查看超时时间
                     + " result=redis.call('del',KEYS[1])"
-                    + " return 'true'"
                     + " end"
-                    + " return 'false'";
+                    //返回删除锁状态
+                    + " return result";
            Object result = redisClient.jedis().eval(script,1,lockKey,value);
            log.info("锁[{}]删除结果result =[{}] ",lockKey,result);
         }
@@ -205,11 +206,11 @@ public class RedisLockUtil implements Lock {
                            + " end";
                    Object result =  redisClient.jedis().eval(script,1,lockey,lockValue,String.valueOf(millisecondsToExpire));
                    if(result.equals("false")){
-                       log.info("锁[{}]已经被删除！",lockey);
+                       log.info("锁[{}－{}]已经被删除！",lockey,lockValue);
                        return;
                    }
                    else {
-                       log.info("锁[{}]重新设置超时时间[{}]！",lockey,millisecondsToExpire);
+                       log.info("锁[{}－{}]重新设置超时时间[{}]！",lockey,lockValue,millisecondsToExpire);
                    }
 
                }

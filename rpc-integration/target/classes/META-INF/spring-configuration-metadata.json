@@ -58,6 +58,11 @@
       "sourceType": "com.nz.rpc.lock.LockProperties"
     },
     {
+      "name": "lock.zookeeper-adress",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
       "name": "nzrpc.nhost",
       "type": "java.lang.String",
       "sourceType": "com.nz.rpc.properties.RpcProperties"
