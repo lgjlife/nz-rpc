@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import redis.clients.jedis.params.SetParams;
 
-import java.util.Random;
-
 @Slf4j
 public class RedisClientTest {
 
@@ -58,29 +56,28 @@ public class RedisClientTest {
 
     }
 
+    @Test
+    public void Info(){
 
-   // @Test
+        String script = "local val = redis.call('info memory') return val";
+        Object object = RedisFatory.jedis().eval(script);
+        System.out.println(object);
+    }
+
+
+    @Test
     public void  lockTest(){
 
-        RedisLockUtil lockUtil =  RedisFatory.redisLockUtil();
-        lockUtil.tryLock("lockTest",200,10000);
+        RedisLockService service = new RedisLockService();
 
-        //模拟任务执行
-        try{
-            Thread.sleep(new Random().nextInt(400));
-        }
-        catch(Exception ex){
-            log.error(ex.getMessage());
-        }
+        for(int i = 0; i< 20; i++){
 
-        lockUtil.unlock("lockTest");
+            new Thread(()->{
+                service.func1();
 
-        try{
-            Thread.sleep(100000);
+            }).start();
         }
-        catch(Exception ex){
-            log.error(ex.getMessage());
-        }
+       while (true);
 
     }
 

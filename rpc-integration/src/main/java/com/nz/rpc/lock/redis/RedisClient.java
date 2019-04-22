@@ -40,11 +40,20 @@ public class RedisClient {
     }
 
     public  String setNxValue(String key,String object,int millisecondsToExpire){
-       // String value = JSON.toJSONString(object);
+        Jedis jedis = null;
+        try{
+             jedis = redisPoolClient.getJedis();
+            String result = jedis.set(key,object,SetParams.setParams().nx().px(millisecondsToExpire));
+            return  result;
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
+        finally{
+            jedis.close();
+        }
+        return  null;
 
-        log.info("[{}]--[{}]--[{}]",key,object,millisecondsToExpire);
-        String result = jedis().set(key,object,SetParams.setParams().nx().px(millisecondsToExpire));
-        return  result;//SetParams
     }
 
     public Object get(String key,Class clazz ){
@@ -53,14 +62,6 @@ public class RedisClient {
         return  object;
     }
     
-    public Long ttl(String key){
-
-        return jedis().ttl(key);
-    }
-
-    public Long expire(String key,long timeMs){
-        return jedis().pexpire(key,timeMs);
-    }
 
 
     public   Jedis jedis(){

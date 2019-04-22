@@ -79,6 +79,8 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
                 ├─── RedisLockUtil　　　　　　　Redis锁实现
                 ├─── RedisPoolClient　　　　　　Redis连接池
             ├─── zk/
+                ├─── ZkClient　　　　　　　　　zookeeper客户端操作
+                ├─── ZkLockUtil　　　　　　　　zookeeper分布式锁实现
             ├─── Lock　　　　　　　　　　　　　　分布式锁接口
             ├─── LockProperties　　　　　　　　 Lock模块属性配置类
          ├─── msg/

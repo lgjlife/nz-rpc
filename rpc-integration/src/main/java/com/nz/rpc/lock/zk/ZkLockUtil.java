@@ -1,5 +1,6 @@
 package com.nz.rpc.lock.zk;
 
+import com.nz.rpc.lock.Lock;
 import com.nz.rpc.zk.ZkCreateConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,14 +23,15 @@ import java.util.stream.Collectors;
 */
 @Slf4j
 @Data
-public class ZkLockUtil {
+public class ZkLockUtil implements Lock {
 
 
     private  ZkClient zkClient;
 
-    private ThreadLocal<Thread> curThread =  new ThreadLocal();
+
     private ThreadLocal<Map<Thread,String>> lockPathMap =  new ThreadLocal();
 
+    //用于保存当前线程的请求锁的原　锁名称,节点路径，重入锁技计数器
     private ConcurrentHashMap<Thread,List<LockData>>  lockDataMap = new ConcurrentHashMap<>();
 
     //锁路径　LOCK_ROOT_PATH + LOCKNAME + LOCKPATH_SEPARATOR + NUMS;
@@ -50,14 +52,7 @@ public class ZkLockUtil {
     public boolean lock(String lockKey, int millisecondsToExpire) {
 
         List<LockData> lockDatas = lockDataMap.get(Thread.currentThread());
-       /* if((lockData != null)
-                &&(lockData.lockKey.equals(lockKey))){
-            //重入锁
-            log.info("[{}]重入锁",lockKey);
-            lockData.lockCount.incrementAndGet();
-            return true;
-        }
-*/
+        //判断是否是重入锁
         if(lockDatas !=  null){
 
             List<LockData> selectlockData =  lockDatas.stream().filter((val)-> val.lockKey.equals(lockKey)).collect(Collectors.toList());
@@ -73,20 +68,20 @@ public class ZkLockUtil {
 
         }
 
-
-        //创建节点
+        //不是重入锁
+        //创建节点　节点　/locks/lockname_000000000001
         ZkCreateConfig config =  ZkCreateConfig.builder()
                 .createMode(CreateMode.EPHEMERAL_SEQUENTIAL)
                 .path(getCreatePath(lockKey))
                 .build();
-        //当前锁路径　-> /locks/lockname_00000000001
+        //当前锁路径　-> /locks/lockname_000000013
         String curLockPath = zkClient.createPath(config);
         long curPathNum = Long.valueOf(curLockPath.split(LOCKPATH_SEPARATOR)[1]);
 
-        //获取节点列表　size >= 1
+        //获取/locks子节点列表　size >= 1
         List<String> subRootPaths =  zkClient.getChildren(LOCK_ROOT_PATH);
         log.info("获取[{}]子节点列表:{}",LOCK_ROOT_PATH,subRootPaths);
-        //只有　一个节点，说明没有其他进程线程获取锁
+        //只有一个节点，说明只有刚才建立的节点,没有其他进程线程获取锁,设置LockData后便返回
         if(subRootPaths.size() == 1){
             log.info("[{}]获取锁",subRootPaths.get(0));
             LockData lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
@@ -129,13 +124,12 @@ public class ZkLockUtil {
 
             //前一个节点
             String prevNodePath = null;
-
-
             if(subMap.size() != 0){
                 Long key = subMap.lastKey();
                 prevNodePath = subMap.get(key);
             }
             log.info("[{}]前一个节点 [{}]",curLockPath,prevNodePath);
+            //创建一个计数器
             CountDownLatch countDownLatch = new CountDownLatch(1);
 
             if(prevNodePath != null){
@@ -151,7 +145,6 @@ public class ZkLockUtil {
                     log.info("等待节点[{}]释放.......",prevNodePath);
                     countDownLatch.await();
                     log.info("节点[{}]释放! 获取锁[{}]",prevNodePath,curLockPath);
-                    curThread.set(Thread.currentThread());
 
                     LockData lockData =  new LockData(lockKey,curLockPath,new AtomicInteger(1));
                     List<LockData> lockData1 =  lockDataMap.get(Thread.currentThread());
@@ -181,7 +174,15 @@ public class ZkLockUtil {
         return false;
     }
 
-
+    /**
+     *功能描述
+     * @author lgj
+     * @Description  解锁操作
+     * @date 4/20/19
+     * @param:
+     * @return:
+     *
+    */
     public void unlock(String lockKey) {
 
         List<LockData> lockDatas = lockDataMap.get(Thread.currentThread());
@@ -221,27 +222,13 @@ public class ZkLockUtil {
     @AllArgsConstructor
     private static class LockData{
 
+        //锁key  －》　lockName
+        //lock(lockName)
         private String lockKey;
+        //zookeeper 中的锁节点路径　/locks/lockName_0000000001
         private String createLockPath;
+        //可重入锁计数器,初始0，每申请一次锁加１,解锁时为0才能删除节点
         private AtomicInteger lockCount;
-
-
-
     }
 
-    public static void main(String args[]){
-
-        List<LockData> dataList = new LinkedList<>();
-        dataList.add(new LockData("a1","a2",new AtomicInteger(1)));
-        dataList.add(new LockData("a1","a3",new AtomicInteger(3)));
-
-        dataList.add(new LockData("b1","b2",new AtomicInteger(1)));
-        dataList.add(new LockData("b1","b3",new AtomicInteger(3)));
-
-
-        List<LockData> dataList1 = dataList.stream().filter((val)->
-            val.lockKey.equals("a11")).collect(Collectors.toList());
-
-        System.out.println(dataList1);
-    }
 }
