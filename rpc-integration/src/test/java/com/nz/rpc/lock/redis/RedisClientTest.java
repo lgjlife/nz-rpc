@@ -57,11 +57,12 @@ public class RedisClientTest {
     }
 
     @Test
-    public void Info(){
+    public void retansLock(){
 
-        String script = "local val = redis.call('info memory') return val";
-        Object object = RedisFatory.jedis().eval(script);
-        System.out.println(object);
+        RedisLockService service = new RedisLockService();
+        service.func2();
+        while (true);
+
     }
 
 
