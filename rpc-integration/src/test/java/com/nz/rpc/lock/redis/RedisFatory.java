@@ -35,7 +35,7 @@ public class RedisFatory {
     public  static  RedisLockUtil redisLockUtil(){
         RedisLockUtil redisLockUtil = new RedisLockUtil();
         redisLockUtil.setRedisClient(redisClient());
-        redisLockUtil.setRedisPoolClient(redisPoolClient());
+      //  redisLockUtil.setRedisPoolClient(redisPoolClient());
         return redisLockUtil;
     }
 

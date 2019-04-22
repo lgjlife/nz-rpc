@@ -56,11 +56,46 @@ public class RedisClient {
 
     }
 
-    public Object get(String key,Class clazz ){
-        String value = jedis().get(key);
-        Object object =  JSON.parseObject(value,clazz);
-        return  object;
+    public String get(String key ){
+
+        Jedis jedis = null;
+        try{
+            jedis = redisPoolClient.getJedis();
+            String value = jedis.get(key);
+            return  value;
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
+        finally{
+            jedis.close();
+        }
+        return  null;
+
+
     }
+
+
+    public Object eval(String script ,int count ,String... params){
+
+        Jedis jedis = null;
+        try{
+            jedis = redisPoolClient.getJedis();
+            Object value = jedis.eval(script,count,params);
+            return  value;
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
+        finally{
+            jedis.close();
+        }
+        return  null;
+
+
+    }
+
+
     
 
 

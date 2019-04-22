@@ -33,7 +33,7 @@ public class RedisLockService {
 
         try{
 
-            if(lockUtil.tryLock("lockTest",200,30000) == false){
+            if(lockUtil.tryLock("lockTest",400,30000) == false){
                 log.info("申请锁失败......");
             }
             //模拟任务执行
