@@ -69,7 +69,7 @@ public class ClientMessageHandler {
         ProviderConfig registryConfig =  loadbalanceStrategy.select(registryConfigLists,null);
         log.debug("registryConfig = " + registryConfig);
         //设置唯一的请求id
-        long uid = uidProducer.getUidForLong();
+        long uid = uidProducer.getUid();
         request.setRequestId(uid);
         //初始化锁
         initLock(uid);

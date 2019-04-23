@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -47,14 +46,13 @@ import java.util.stream.Collectors;
 public class RedisLockUtil implements Lock {
 
     private RedisClient redisClient;
-    private  int DEFAULT_TIMEOUT_MS = 10000;
+
     private  final  String SET_SUCCESS = "OK";
-    private ThreadLocal<String> lockValue = new ThreadLocal<String>();
     //private RedisPoolClient redisPoolClient;
 
     //用于保存当前线程的请求锁的原　锁名称,锁value，重入锁技计数器
     private ConcurrentHashMap<Thread, List<LockData>> lockDataMap = new ConcurrentHashMap<>();
-
+    private AtomicInteger lockUid = new AtomicInteger(0);
 
 
     /**
@@ -84,8 +82,7 @@ public class RedisLockUtil implements Lock {
             return true;
         }
 
-        String lockValue = new Random().nextInt(2000) + Thread.currentThread().getName()+new Random().nextInt(1000);
-        this.lockValue.set(lockValue);
+        String lockValue =  lockUid.incrementAndGet()+"";
 
         String reult = redisClient.setNxValue(lockKey,lockValue,millisecondsToExpire);//
 
@@ -117,9 +114,6 @@ public class RedisLockUtil implements Lock {
                 throw new RequestLockException("请求请求Redis锁失败！",ex.getCause());
 
             }
-
-
-           // return  false;
         }
         log.debug("请求锁[{}]－[{}]成功",lockKey,lockValue);
         //用该线程不断检测过期时间，过期时间将要到，任务没完成，则重新设置超时时间
@@ -195,10 +189,10 @@ public class RedisLockUtil implements Lock {
 
             int count = selectlockData.get(0).lockCount.decrementAndGet();
 
+            //log.info("selectlockData：　" + selectlockData.get(0));
             if(count == 0){
-                //log.info("释放锁,删除[{}]",selectlockData.get(0).createLockPath);
-
-                String value =   this.lockValue.get();
+                // String value =   this.lockValue.get();
+                String value = selectlockData.get(0).lockValue;
                 if(value != null){
                     String script = "local result "
                             +" if(redis.call('get',KEYS[1]) == ARGV[1]) then "

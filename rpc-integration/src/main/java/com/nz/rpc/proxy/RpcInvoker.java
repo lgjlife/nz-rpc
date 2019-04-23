@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class RpcInvoker implements InvocationHandler, MethodInterceptor {
 
-    private  UidProducer uidProducer = new CustomProducer();
+    private  UidProducer uidProducer = new CustomProducer(0);
     /**
      * 功能描述
      *
@@ -77,7 +77,7 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
 
         }
         RpcRequest  request = new RpcRequest();
-        request.setRequestId(uidProducer.getUidForLong());
+        request.setRequestId(uidProducer.getUid());
         request.setInterfaceName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
         request.setParameterTypes(classes);

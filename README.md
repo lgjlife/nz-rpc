@@ -73,6 +73,8 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
             ├─── WeightRandomLoadbalanceStrategy　　加权随机负载均衡
             
          ├─── lock/
+            ├─── exception/
+                ├───　RequestLockException　　　请求锁异常
             ├─── redis/
                 ├─── RedisAutoConfiguration　　Redis自动配置类
                 ├─── RedisClient　　　　　　　　Redis操作客户端
