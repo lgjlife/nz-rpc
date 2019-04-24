@@ -9,6 +9,10 @@ nzrpc:
   netty:
     port: 8122
   serialization: "hessian"
+  uid:
+    type: custom
+    macId: 123
+
 # logger
 logging:
   level:

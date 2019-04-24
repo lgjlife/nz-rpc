@@ -7,7 +7,7 @@ import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
-import com.nz.rpc.utils.uid.UidProducer;
+import com.nz.rpc.uid.UidProducer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,7 +60,6 @@ public class ClientMessageHandler {
             if(v.getInterfaceName().equals(request.getInterfaceName())){
                 registryConfigLists.add(v);
             }
-
         });
         //
         log.debug("服务提供者信息:{}",registryConfigLists);

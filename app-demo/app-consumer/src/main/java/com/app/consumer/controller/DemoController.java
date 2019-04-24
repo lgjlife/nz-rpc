@@ -4,8 +4,7 @@ package com.app.consumer.controller;
 import com.app.common.service.DemoService;
 import com.app.common.service.UserService;
 import com.nz.rpc.anno.RpcReference;
-import com.nz.rpc.utils.uid.CustomProducer;
-import com.nz.rpc.utils.uid.ZkUidProducer;
+import com.nz.rpc.uid.UidProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,19 +24,16 @@ public class DemoController {
 
 
     @Autowired
-    private ZkUidProducer zkUidProducer;
-
-    @Autowired
-    private CustomProducer customProducer;
-
+    private UidProducer uidProducer;
 
     @GetMapping("/demo")
-    public  void  demo(){
+    public  String  demo(){
         log.debug("/demo");
         String reslut = userService.queryName("qqwq",13546L);
         System.out.println(reslut);
         reslut = demoService.setName(13546L);
         System.out.println(reslut);
+        return reslut;
 
 
 
@@ -45,8 +41,8 @@ public class DemoController {
 
     @GetMapping("/uid")
     public  String  demo1(){
-        long zkCount = zkUidProducer.getUidForLong();
-        long customCount = customProducer.getUidForLong();
+        long zkCount = uidProducer.getUid();
+        long customCount = uidProducer.getUid();
 
        return "zkCount: " + zkCount + "  " + "customCount : " + customCount;
 

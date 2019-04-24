@@ -89,6 +89,11 @@
       "sourceType": "com.nz.rpc.properties.RpcProperties"
     },
     {
+      "name": "nzrpc.uid",
+      "type": "com.nz.rpc.uid.UidProperties",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
       "name": "nzrpc.zookeeper-adress",
       "type": "java.lang.String",
       "sourceType": "com.nz.rpc.properties.RpcProperties"

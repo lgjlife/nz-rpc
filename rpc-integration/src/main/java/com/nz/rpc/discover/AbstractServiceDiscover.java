@@ -7,6 +7,7 @@ import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.properties.RpcProperties;
 import com.nz.rpc.proxy.RpcProxyFactory;
 import com.nz.rpc.zk.ZkCli;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
@@ -25,6 +26,7 @@ import java.util.Set;
  * @date 4/12/19
 */
 
+@Data
 @Slf4j
 public  abstract  class AbstractServiceDiscover{
 
@@ -34,11 +36,16 @@ public  abstract  class AbstractServiceDiscover{
 
     protected   ApplicationContext  context;
 
-    public void setContext(ApplicationContext context) {
+    protected RpcProperties properties;
+
+
+    private RpcProxyFactory rpcProxyFactory;
+
+
+/*    public void setContext(ApplicationContext context) {
         this.context = context;
     }
 
-    protected RpcProperties properties;
 
     public void setZkCli(ZkCli zkCli) {
         this.zkCli = zkCli;
@@ -46,7 +53,9 @@ public  abstract  class AbstractServiceDiscover{
 
     public void setProperties(RpcProperties properties) {
         this.properties = properties;
-    }
+    }*/
+
+
 
     /**
      *功能描述
@@ -113,7 +122,8 @@ public  abstract  class AbstractServiceDiscover{
             try{
                 Class clazz = Class.forName(className);
 
-                listableBeanFactory.registerSingleton(classToBeanName(className),new RpcProxyFactory(properties.getProxyType()).createInstance(clazz));
+                listableBeanFactory.registerSingleton(classToBeanName(className),
+                        rpcProxyFactory.createInstance(clazz));
 
                 Object bean =  listableBeanFactory.getBean(classToBeanName(className));
 

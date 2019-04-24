@@ -1,16 +1,15 @@
 package com.nz.rpc.proxy;
 
+import com.nz.rpc.uid.*;
 import com.nz.rpc.msg.ClientMessageHandler;
 import com.nz.rpc.msg.RpcRequest;
-import com.nz.rpc.utils.uid.CustomProducer;
-import com.nz.rpc.utils.uid.UidProducer;
+import com.nz.rpc.msg.request.RequestHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-
 
 /**
  * 功能描述
@@ -23,7 +22,13 @@ import java.lang.reflect.Method;
 @Slf4j
 public class RpcInvoker implements InvocationHandler, MethodInterceptor {
 
-    private  UidProducer uidProducer = new CustomProducer(0);
+    private UidProducer uidProducer = new CustomProducer(0);
+
+    private RequestHandler requestHandler;
+
+
+
+
     /**
      * 功能描述
      *
@@ -57,7 +62,7 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
     public Object doIncoke(Method method, Object[] args) {
         Object result = null;
 
-        log.debug("++++++++++++++++++++++++++++++++RpcInvoker  doIncoke .....");
+        log.debug("++++++++++++++RpcInvoker  doIncoke ++++++++++++++++++");
 
         RpcRequest request = buildRequest(method,args);
         log.debug("RPC请求数据:{}",request);

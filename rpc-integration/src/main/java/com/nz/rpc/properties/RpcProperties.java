@@ -1,6 +1,7 @@
 package com.nz.rpc.properties;
 
 
+import com.nz.rpc.uid.UidProperties;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 3/27/19
 */
 @Data
-@ConfigurationProperties("nzrpc")
+@ConfigurationProperties(prefix="nzrpc")
 public class RpcProperties {
 
 
@@ -55,4 +56,6 @@ public class RpcProperties {
 
     @Value("${nzrpc.serialization:hessian}")
     public  String serialization;
+
+    private UidProperties uid;
 }

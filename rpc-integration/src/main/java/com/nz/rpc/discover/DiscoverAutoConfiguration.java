@@ -2,6 +2,7 @@ package com.nz.rpc.discover;
 
 
 import com.nz.rpc.properties.RpcProperties;
+import com.nz.rpc.proxy.RpcProxyFactory;
 import com.nz.rpc.zk.ZkCli;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -24,6 +25,11 @@ public class DiscoverAutoConfiguration {
     @Autowired
     private  ZkCli zkCli;
 
+    @Autowired
+    public  RpcProxyFactory rpcProxyFactory;
+
+
+
 
 
     /**
@@ -41,7 +47,7 @@ public class DiscoverAutoConfiguration {
         register.setZkCli(zkCli);
         register.setContext(context);
         register.setProperties(rpcProperties);
-
+        register.setRpcProxyFactory(rpcProxyFactory);
         //向zookeeper注册被 {@link com.nz.rpc.anno.RpcService}注解的类
         register.registerService();
         //查找被@RpcReference注解的消费者接口引用，并注入bean容器

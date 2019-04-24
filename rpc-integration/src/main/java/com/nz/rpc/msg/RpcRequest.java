@@ -4,6 +4,7 @@ package com.nz.rpc.msg;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 
 /**
@@ -20,5 +21,7 @@ public class RpcRequest implements Serializable {
     private String[] parameterTypes; //方法参数类型
     private Object[] parameters;   //方法参数
 
+    //擴展字段　
+    private Map<String, String> attachments;
 
 }

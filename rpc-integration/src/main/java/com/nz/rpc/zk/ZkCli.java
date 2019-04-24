@@ -116,6 +116,17 @@ public class ZkCli {
         return  null;
     }
 
+    public  int getVersion(String path){
+        try{
+            return  client.setData().forPath(path,new byte[0]).getVersion();
+        }
+        catch(Exception ex){
+            log.error("path [{}] set the type [{}] data exception! {}",path,ex.getMessage());
+        }
+        return  0;
+    }
+
+
     public List<String> getChildren(String path){
         try{
             List<String> paths =  client.getChildren().forPath(path);
