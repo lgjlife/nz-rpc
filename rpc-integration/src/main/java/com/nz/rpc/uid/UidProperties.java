@@ -1,5 +1,9 @@
 package com.nz.rpc.uid;
 
+
+import lombok.Data;
+
+@Data
 public class UidProperties {
 
     /**
@@ -10,7 +14,7 @@ public class UidProperties {
      *   zookeeper: zookeeper
      * @date 4/24/19
     */
-    private String typ="custom";
+    private String type="custom";
 
     /**
      *功能描述

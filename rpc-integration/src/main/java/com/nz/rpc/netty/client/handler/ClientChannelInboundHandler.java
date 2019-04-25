@@ -57,7 +57,7 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
         log.debug("接收到服务端返回消息:"+msg);
         NettyMessage  nettyMessage = (NettyMessage)msg;
         ClientMessageHandler clientMessageHandler = ClientMessageHandler.getInstance();
-        clientMessageHandler.finish((RpcResponse) nettyMessage.getBody());
+        clientMessageHandler.recvResponse((RpcResponse) nettyMessage.getBody());
         super.channelRead(ctx, msg);
     }
 

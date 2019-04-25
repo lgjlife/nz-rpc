@@ -5,7 +5,6 @@ import com.nz.rpc.properties.RpcProperties;
 import com.nz.rpc.zk.ZkCli;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,23 +21,19 @@ public class UidProducerAutoConfiguration {
 
 
     @Bean
-    @ConditionalOnProperty(name="nzrpc.uid.type",havingValue = "zookeeper")
     public  UidProducer zkUidProducer(){
 
-        log.debug("uid 生成方式:{zookeeper}");
-        ZkUidProducer producer = new ZkUidProducer(zkCli);
+        String uidType = properties.getUid().getType();
+        UidProducer producer = null;
+        log.debug("uid 生成方式:{}",uidType);
+        if("zookeeper".equals(uidType)){
+             producer = new ZkUidProducer(zkCli);
+        }
+        else if("custom".equals(uidType)){
+            producer = new CustomProducer(0);
+        }
 
         return producer;
     }
-
-    @Bean
-    @ConditionalOnProperty(name="nzrpc.uid.type",havingValue = "custom")
-    public  UidProducer customProducer(){
-        log.debug("uid 生成方式:{custom}");
-        return  new CustomProducer(0);
-
-    }
-
-
 
 }

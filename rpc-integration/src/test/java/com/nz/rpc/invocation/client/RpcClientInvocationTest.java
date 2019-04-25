@@ -36,11 +36,12 @@ public class RpcClientInvocationTest {
             args[0] = "libai";
 
             interceptorChain.addFirst("time",new TimeInterceptor());
-            interceptorChain.addLast("log",new LogInterceptor());
+            interceptorChain.addBefore("time","log",new LogInterceptor());
             interceptorChain.addLast("request",new RpcRequestInterceptor());
 
             List<Interceptor> interceptors = interceptorChain.getInterceptor();
 
+            System.out.println("interceptors = " + interceptors);
             invocation  = new RpcClientInvocation(method,args,interceptors);
 
             Object result = invocation.executeNext();
@@ -49,7 +50,7 @@ public class RpcClientInvocationTest {
 
         }
         catch(Exception ex){
-            System.out.println(ex.getMessage());
+            log.error(ex.getMessage());
         }
 
     }

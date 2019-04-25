@@ -6,4 +6,5 @@ com.nz.rpc.serialization.SerializationAutoConfiguration,\
 com.nz.rpc.msg.MsgAutoConfiguration,\
 com.nz.rpc.lock.redis.RedisAutoConfiguration,\
 com.nz.rpc.proxy.ProxyAutoConfiguration,\
-com.nz.rpc.uid.UidProducerAutoConfiguration
+com.nz.rpc.uid.UidProducerAutoConfiguration,\
+com.nz.rpc.interceptor.ClientInterceptorAutoConfiguration

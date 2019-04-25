@@ -8,8 +8,9 @@ public class LogInterceptor implements Interceptor {
 
     @Override
     public Object intercept(ClientInvocation invocation) throws Exception {
-        log.info("正在执行[{}]....",invocation.getMethod().getName());
+        log.info("正在执行LogInterceptor[{}]....",invocation.getMethod().getName());
         Object result = invocation.executeNext();
+        log.info("LogInterceptor执行结束");
         return result;
     }
 }

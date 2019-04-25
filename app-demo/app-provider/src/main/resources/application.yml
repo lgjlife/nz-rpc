@@ -15,3 +15,6 @@ nzrpc:
   netty:
     port: 8121
     host: "127.0.0.1"
+  uid:
+    type: custom
+    macId: 1

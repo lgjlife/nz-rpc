@@ -57,5 +57,5 @@ public class RpcProperties {
     @Value("${nzrpc.serialization:hessian}")
     public  String serialization;
 
-    private UidProperties uid;
+    private UidProperties uid = new UidProperties();
 }

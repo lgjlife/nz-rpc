@@ -1,13 +1,16 @@
 package com.nz.rpc.msg;
 
-import com.nz.rpc.discover.ProviderConfigContainer;
+import com.nz.rpc.constans.RpcClientConstans;
 import com.nz.rpc.discover.ProviderConfig;
+import com.nz.rpc.discover.ProviderConfigContainer;
+import com.nz.rpc.invocation.client.ClientInvocation;
 import com.nz.rpc.loadbalance.LoadbalanceStrategy;
 import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
 import com.nz.rpc.uid.UidProducer;
+import io.netty.channel.ChannelFuture;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,9 +38,119 @@ public class ClientMessageHandler {
     private Map<Long,Condition> conditionMap  =  new ConcurrentHashMap<>();
 
 
+    private Map<Long,RequestLock> requestLock = new ConcurrentHashMap<>();
+
     public static ClientMessageHandler getInstance() {
         return instance;
     }
+
+
+    /**
+     *功能描述
+     * @author lgj
+     * @Description 　选择服务提供者
+     * @date 4/25/19
+     * @param:
+     * @return:
+     *
+    */
+    public void serviceSelect(ClientInvocation invocation){
+
+        //获取消费者
+        Map<String, ProviderConfig> configMap = ProviderConfigContainer.getConfigMap();
+        List<ProviderConfig> registryConfigLists = new ArrayList<>();
+        configMap.forEach((k,v)->{
+            if(v.getInterfaceName().equals(invocation.getMethod().getDeclaringClass().getName())){
+                registryConfigLists.add(v);
+            }
+        });
+        //
+        log.debug("服务提供者信息:{}",registryConfigLists);
+
+        //负载均衡处理
+        ProviderConfig registryConfig =  loadbalanceStrategy.select(registryConfigLists,null);
+        log.debug("负载均衡选择结果 = " + registryConfig);
+
+        invocation.getAttachments().put(RpcClientConstans.NETTY_REQUEST_HOST,registryConfig.getHost());
+        invocation.getAttachments().put(RpcClientConstans.NETTY_REQUEST_PORT,registryConfig.getPort().toString());
+
+
+    }
+
+    public void sendRequest(String host,String port,NettyMessage nettyMessage){
+        //发送消息
+        ChannelFuture future =  nettyClient.getChannel(host,
+                Integer.valueOf(port))
+                .writeAndFlush(nettyMessage);
+        requestLock.put(((RpcRequest)nettyMessage.getBody()).getRequestId(),new RequestLock());
+    }
+
+    public Object getServerResponseResult(NettyMessage nettyMessage){
+
+        long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
+
+        ReentrantLock lock = requestLock.get(id).getLock();
+
+        Condition condition =  requestLock.get(id).getCondition();
+        Object result = null;
+        try{
+            lock.lock();
+            boolean flag = condition.await(requestTimeoutMs, TimeUnit.MILLISECONDS);
+            if(flag){
+                //请求响应成功
+                log.debug("请求响应成功[]",resultMap.get(id).getResult());
+                result = resultMap.get(id).getResult();
+            }
+            else {
+
+                //请求响应超时
+                log.debug("请求响应超时");
+                result = null;
+            }
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
+        finally{
+            lock.unlock();
+        }
+        //requestLock.remove(id);
+        return result;
+    }
+
+    public void recvResponse(RpcResponse response){
+        long id = response.getResponseId();
+        ReentrantLock lock = requestLock.get(id).getLock();
+        Condition condition = requestLock.get(id).getCondition();
+        try{
+            lock.lock();
+            resultMap.put(id,response);
+            condition.signalAll();
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
+        finally{
+            lock.unlock();
+        }
+
+    }
+
+
+    @Data
+    class RequestLock{
+
+        private ReentrantLock lock;
+        private Condition condition;
+
+
+        public RequestLock() {
+            this.lock = new ReentrantLock();
+            this.condition = lock.newCondition();
+
+        }
+    }
+
 
 
     /**

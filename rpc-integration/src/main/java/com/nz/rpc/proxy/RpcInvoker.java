@@ -1,9 +1,12 @@
 package com.nz.rpc.proxy;
 
-import com.nz.rpc.uid.*;
+import com.nz.rpc.invocation.client.ClientInvocation;
+import com.nz.rpc.invocation.client.RpcClientInvocation;
 import com.nz.rpc.msg.ClientMessageHandler;
 import com.nz.rpc.msg.RpcRequest;
 import com.nz.rpc.msg.request.RequestHandler;
+import com.nz.rpc.uid.CustomProducer;
+import com.nz.rpc.uid.UidProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
@@ -29,6 +32,8 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
 
 
 
+
+
     /**
      * 功能描述
      *
@@ -41,7 +46,11 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-        return doIncoke(method, args);
+        ClientInvocation clientInvocation = new RpcClientInvocation(method,args);
+        Object result = clientInvocation.executeNext();
+        return result;
+
+        //return doIncoke(method, args);
     }
 
 

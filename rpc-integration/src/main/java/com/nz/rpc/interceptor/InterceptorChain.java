@@ -8,6 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ *功能描述
+ * @author lgj
+ * @Description 拦截器包装类
+ * @date 4/25/19
+*/
 @Data
 public class InterceptorChain {
 
