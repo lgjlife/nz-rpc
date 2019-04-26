@@ -8,7 +8,10 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.Data;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  *功能描述
@@ -33,5 +36,6 @@ public class NettyChannelHandler extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new HeartbeatRequestHandler());
         pipeline.addLast(new ClientChannelInboundHandler());
         pipeline.addLast(new ClientChannelOutboundHandle());
+
     }
 }

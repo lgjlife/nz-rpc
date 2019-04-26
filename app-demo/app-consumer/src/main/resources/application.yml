@@ -1,5 +1,5 @@
 server:
-  port: 8110
+  port: 8112
 spring:
   application:
     name: rpc-provider

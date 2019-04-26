@@ -18,7 +18,15 @@ public class ServiceSelectInterceptor implements Interceptor {
     public Object intercept(ClientInvocation invocation) throws Exception {
 
         log.info("正在执行ServiceSelectInterceptor....");
-        handler.serviceSelect(invocation);
+        try{
+            handler.serviceSelect(invocation);
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+
+            return null;
+        }
+
         Object result = invocation.executeNext();
         return result;
     }

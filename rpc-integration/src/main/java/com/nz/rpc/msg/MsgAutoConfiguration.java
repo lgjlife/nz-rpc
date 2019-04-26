@@ -20,10 +20,8 @@ public class MsgAutoConfiguration {
 
     @Bean
     ClientMessageHandler msgRequestHandler(){
-
-        ClientMessageHandler requestHandler =  ClientMessageHandler.getInstance();
+        ClientMessageHandler requestHandler =   ClientMessageHandler.getInstance();
         requestHandler.setLoadbalanceStrategy(new RandomLoadbalanceStrategy());
-        requestHandler.setUidProducer(uidProducer);
         requestHandler.setNettyClient(NettyContext.getNettyClient());
         return requestHandler;
     }

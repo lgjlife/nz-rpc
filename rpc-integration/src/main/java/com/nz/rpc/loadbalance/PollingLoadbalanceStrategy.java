@@ -2,6 +2,7 @@ package com.nz.rpc.loadbalance;
 
 
 import com.nz.rpc.discover.ProviderConfig;
+import com.nz.rpc.loadbalance.exception.LoadbalanceException;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,14 @@ public class PollingLoadbalanceStrategy implements LoadbalanceStrategy {
     //使用一个Ｍap来缓存每类应用的轮询索引
     private Map<String,Integer> indexMap = new ConcurrentHashMap<>();
 
-    public ProviderConfig select(List<ProviderConfig> configs, Object object){
+    public ProviderConfig select(List<ProviderConfig> configs, Object object)throws Exception{
+
+        if(configs == null){
+            throw  new NullPointerException();
+        }
+        if(configs.size() == 0){
+            throw  new LoadbalanceException("Load balance fail! The configs have 0 config ");
+        }
 
         Integer index = indexMap.get(getKey(configs.get(0)));
         if(index == null){

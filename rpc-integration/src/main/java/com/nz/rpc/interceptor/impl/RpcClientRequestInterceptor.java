@@ -36,11 +36,11 @@ public class RpcClientRequestInterceptor implements Interceptor {
 
         NettyMessage nettyMessage = buildNettyMessage(request);
 
-        handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
+        result = handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
                 invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT),
                 nettyMessage);
 
-        return handler.getServerResponseResult(nettyMessage);
+        return result;
     }
 
     private NettyMessage buildNettyMessage(RpcRequest request){

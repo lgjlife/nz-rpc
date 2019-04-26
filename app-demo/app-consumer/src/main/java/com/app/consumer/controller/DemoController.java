@@ -29,10 +29,8 @@ public class DemoController {
     @GetMapping("/demo")
     public  String  demo(){
         log.debug("/demo");
-        String reslut = userService.queryName("qqwq",13546L);
-        System.out.println(reslut);
-        reslut = demoService.setName(13546L);
-        System.out.println(reslut);
+        String reslut = demoService.setName(13546L);
+        log.debug(reslut);
         return reslut;
 
 
@@ -54,6 +52,7 @@ public class DemoController {
 
 }
 
+/*
 class UserSemo implements  UserService{
     @Override
     public String queryName(Long id) {
@@ -64,4 +63,4 @@ class UserSemo implements  UserService{
     public String queryName(String name, Long id) {
         return null;
     }
-}
+}*/

@@ -70,8 +70,6 @@ public  abstract  class AbstractServiceDiscover{
 
         Map<String, Object> providers = context.getBeansWithAnnotation(RpcService.class);
         if(providers != null){
-
-
             providers.forEach((k,v)->{
                 Class[] interfaces = v.getClass().getInterfaces();
                 log.debug("{}:providers clz = {},Interfaces = {}",k,v.getClass().getName(),interfaces);

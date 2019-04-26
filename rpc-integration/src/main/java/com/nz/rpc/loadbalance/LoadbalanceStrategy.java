@@ -13,5 +13,5 @@ import java.util.List;
 */
 public interface LoadbalanceStrategy {
 
-    public ProviderConfig select(List<ProviderConfig> configs, Object object);
+    public ProviderConfig select(List<ProviderConfig> configs, Object object) throws Exception;
 }

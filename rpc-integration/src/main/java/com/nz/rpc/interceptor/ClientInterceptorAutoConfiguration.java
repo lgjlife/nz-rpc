@@ -29,7 +29,7 @@ public class ClientInterceptorAutoConfiguration {
         try{
             interceptorChain.addFirst("TimeOutInterceptor",new TimeOutInterceptor());
             interceptorChain.addLast("ServiceSelectInterceptor",new ServiceSelectInterceptor(handler));
-            interceptorChain.addLast("RpcClientRequestInterceptor",new RpcClientRequestInterceptor(uidProducer,handler));
+            interceptorChain.addAfter("ServiceSelectInterceptor","RpcClientRequestInterceptor",new RpcClientRequestInterceptor(uidProducer,handler));
             ClientContext.interceptors = interceptorChain.getInterceptor();
         }
         catch(Exception ex){

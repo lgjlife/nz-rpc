@@ -25,7 +25,7 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
     private Map<String,Integer> timeOutCount = new HashMap<>();
     private Map<String,ScheduledFuture> futureTaskMap = new HashMap<>();
-    private static final  int heartbeatRateTimeSecond = 1000;
+    private static final  int heartbeatRateTimeSecond = 100;
     private static final   int heartbeatTimeOutSecond = 2000;
 
 
@@ -111,6 +111,7 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
         nettyMessage.setHeader(header);
         return  nettyMessage;
     }
+
 
     private String getAddress(ChannelHandlerContext ctx){
         return ctx.channel().remoteAddress().toString();

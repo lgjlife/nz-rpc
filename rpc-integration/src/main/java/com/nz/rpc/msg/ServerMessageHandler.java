@@ -72,6 +72,7 @@ public class ServerMessageHandler {
         private  Object doInvoke(RpcRequest request){
 
             try{
+                log.debug("request = " + request);
                 String clzImplName = NettyContext.getLocalServiceImplMap().get(request.getInterfaceName());
                 Class clzImpl = Class.forName(clzImplName);
 
@@ -84,8 +85,10 @@ public class ServerMessageHandler {
 
                 Method method = clzImpl.getDeclaredMethod(request.getMethodName(),paramTypes);
 
+                log.debug("method = {},bean ={}",method,bean);
                Object result =  method.invoke(bean,request.getParameters());
 
+               log.debug("反射执行结果:"+result);
                return result;
             }
             catch(Exception ex){

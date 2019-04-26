@@ -2,6 +2,7 @@ package com.nz.rpc.loadbalance;
 
 
 import com.nz.rpc.discover.ProviderConfig;
+import com.nz.rpc.loadbalance.exception.LoadbalanceException;
 import lombok.Data;
 
 import java.util.List;
@@ -19,7 +20,14 @@ public class UniformityHashLoadbalanceStrategy  implements  LoadbalanceStrategy{
     private static final int VIRTUAL_NODES = 5;
 
 
-    public ProviderConfig select(List<ProviderConfig> configs, Object object){
+    public ProviderConfig select(List<ProviderConfig> configs, Object object)throws Exception{
+
+        if(configs == null){
+            throw  new NullPointerException();
+        }
+        if(configs.size() == 0){
+            throw  new LoadbalanceException("Load balance fail! The configs have 0 config ");
+        }
 
         SortedMap<Integer, ProviderConfig> sortedMap = new TreeMap();
 

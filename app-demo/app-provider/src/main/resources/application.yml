@@ -7,8 +7,10 @@ spring:
 logging:
   level:
     com.nz.rpc: debug
+
+
 server:
-  port: 8465
+  port: 8464
 nzrpc:
   zookeeper:
     address: "127.0.0.1:2181"

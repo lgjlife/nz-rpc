@@ -5,6 +5,8 @@ import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -30,4 +32,21 @@ public class HeartbeatResponseHandler extends ChannelInboundHandlerAdapter {
         }
 
     }
+
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+
+        log.debug("");
+        if(evt instanceof IdleStateEvent){
+            IdleStateEvent event = (IdleStateEvent)evt;
+            if (event.state()== IdleState.READER_IDLE){
+                ctx.channel().close();
+            }
+        }
+        else {
+            super.userEventTriggered(ctx, evt);
+        }
+    }
+
 }

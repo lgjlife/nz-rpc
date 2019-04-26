@@ -11,7 +11,7 @@ import java.util.Random;
 public class LoadbalanceStrategyTest {
 
     @Test
-    public void loadbalace(){
+    public void loadbalace()throws Exception{
         if(false){
             System.out.println("随机负载均衡....");
             LoadbalanceStrategy strategy1 = new RandomLoadbalanceStrategy();
@@ -50,7 +50,7 @@ public class LoadbalanceStrategyTest {
 
     }
 
-    public void uniformityHashLoadbalanceStrategyTest(LoadbalanceStrategy strategy ,int configNum){
+    public void uniformityHashLoadbalanceStrategyTest(LoadbalanceStrategy strategy ,int configNum) throws Exception{
 
         List<ProviderConfig> configs = new ArrayList<>();
         for(int i = 0; i< configNum; i++){
@@ -116,7 +116,7 @@ public class LoadbalanceStrategyTest {
      }
 
 
-    public void loadbalace(LoadbalanceStrategy strategy ,int configNum,int testCount ){
+    public void loadbalace(LoadbalanceStrategy strategy ,int configNum,int testCount )throws Exception{
 
         List<ProviderConfig> configs = new ArrayList<>();
         int[] counts = new int[configNum];
@@ -147,7 +147,7 @@ public class LoadbalanceStrategyTest {
 
     }
 
-    public void leastActiveLoadbalance(LoadbalanceStrategy strategy ,int configNum){
+    public void leastActiveLoadbalance(LoadbalanceStrategy strategy ,int configNum)throws Exception{
 
         List<ProviderConfig> configs = new ArrayList<>();
 

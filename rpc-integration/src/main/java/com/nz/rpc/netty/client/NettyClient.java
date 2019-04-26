@@ -94,6 +94,10 @@ public class NettyClient {
         return channelCache.get(host + ":" + port);
     }
 
+    public void removeChannel(String host,int port){
+        channelCache.remove(host + ":" + port);
+    }
+
     private String  parseToHost(SocketAddress remoteAddress){
         String address = remoteAddress.toString();
 

@@ -8,6 +8,9 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.timeout.IdleStateHandler;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  *功能描述 
@@ -27,8 +30,10 @@ public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new MsgDecoder());
         pipeline.addLast(new LengthFieldPrepender(2));
         pipeline.addLast(new MsgCoder());
+        pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
         pipeline.addLast(new HeartbeatResponseHandler());
         pipeline.addLast(new ServerChannelInboundHandler());
         pipeline.addLast(new ServerChannelOutboundHandle());
+
     }
 }
