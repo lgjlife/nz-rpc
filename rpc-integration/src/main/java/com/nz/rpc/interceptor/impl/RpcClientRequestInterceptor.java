@@ -30,7 +30,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
     public Object intercept(ClientInvocation invocation) throws Exception {
 
         Object result = null;
-        log.info("正在执行RpcRequestInterceptor....");
+        //log.info("正在执行RpcRequestInterceptor....");
         //准备消息
         RpcRequest request = buildRequest(invocation.getMethod(),invocation.getArgs());
 
@@ -39,7 +39,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
         result = handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
                 invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT),
                 nettyMessage);
-
+        log.info("request result =[{}]",result);
         return result;
     }
 

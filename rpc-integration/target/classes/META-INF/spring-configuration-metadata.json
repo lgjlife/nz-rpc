@@ -63,6 +63,16 @@
       "sourceType": "com.nz.rpc.lock.LockProperties"
     },
     {
+      "name": "nzrpc.netty-client",
+      "type": "com.nz.rpc.netty.client.properties.NettyClientProperties",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.netty-server",
+      "type": "com.nz.rpc.netty.server.properties.NettyServerProperties",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
       "name": "nzrpc.nhost",
       "type": "java.lang.String",
       "sourceType": "com.nz.rpc.properties.RpcProperties"

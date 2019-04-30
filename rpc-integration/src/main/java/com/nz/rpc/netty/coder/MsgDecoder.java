@@ -17,12 +17,12 @@ public class MsgDecoder extends MessageToMessageDecoder<ByteBuf> {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
 
-        log.debug("decode....");
+        //log.debug("decode....");
         byte[] b = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(b);
 
         NettyMessage message =  NettyContext.getSerialize().deserialize(b, NettyMessage.class);
-        log.debug("message = [{}]",message);
+       // log.debug("message = [{}]",message);
         list.add(message);
 
 

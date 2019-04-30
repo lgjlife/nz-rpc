@@ -14,7 +14,7 @@ public class NettyServerAutoConfiguration {
 
     @Bean
     public  NettyServer nettyServer(){
-        NettyServer server = new NettyServer();
+        NettyServer server = new NettyServer(properties);
         server.bind(properties.getNport());
 
         return  server;

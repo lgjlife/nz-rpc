@@ -17,7 +17,7 @@ public class ServiceSelectInterceptor implements Interceptor {
     @Override
     public Object intercept(ClientInvocation invocation) throws Exception {
 
-        log.info("正在执行ServiceSelectInterceptor....");
+       // log.info("正在执行ServiceSelectInterceptor....");
         try{
             handler.serviceSelect(invocation);
         }

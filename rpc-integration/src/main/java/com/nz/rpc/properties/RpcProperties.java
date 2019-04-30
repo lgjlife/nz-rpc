@@ -1,6 +1,8 @@
 package com.nz.rpc.properties;
 
 
+import com.nz.rpc.netty.client.properties.NettyClientProperties;
+import com.nz.rpc.netty.server.properties.NettyServerProperties;
 import com.nz.rpc.uid.UidProperties;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,4 +60,11 @@ public class RpcProperties {
     public  String serialization;
 
     private UidProperties uid = new UidProperties();
+
+
+    private NettyClientProperties nettyClient = new NettyClientProperties();
+
+    private NettyServerProperties nettyServer = new NettyServerProperties();
+
+
 }

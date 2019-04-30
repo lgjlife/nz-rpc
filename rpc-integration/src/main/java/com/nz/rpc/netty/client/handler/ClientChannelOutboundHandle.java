@@ -1,11 +1,7 @@
 package com.nz.rpc.netty.client.handler;
 
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
-import io.netty.channel.ChannelPromise;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.SocketAddress;
 
 
 /**
@@ -22,7 +18,7 @@ public class ClientChannelOutboundHandle extends ChannelOutboundHandlerAdapter {
         super();
     }
 
-    @Override
+   /* @Override
     public void bind(ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) throws Exception {
         log.debug("ServerChannelOutboundHandle bind　,remoteAddress[{}]",ctx.channel().remoteAddress());
         super.bind(ctx, localAddress, promise);
@@ -75,5 +71,5 @@ public class ClientChannelOutboundHandle extends ChannelOutboundHandlerAdapter {
         log.debug("ServerChannelOutboundHandle flush　,remoteAddress[{}]",ctx.channel().remoteAddress());
 
         super.flush(ctx);
-    }
+    }*/
 }

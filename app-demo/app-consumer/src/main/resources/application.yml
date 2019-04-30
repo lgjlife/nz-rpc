@@ -12,8 +12,13 @@ nzrpc:
   uid:
     type: custom
     macId: 123
+  nettyClient:
+    workerTheads: 4
 
 # logger
 logging:
   level:
-    com.nz.rpc: debug
+    com: error
+#    com.nz.rpc: debug
+ #   com.nz.rpc.msg.ClientMessageHandler: error
+  #  com.nz.rpc.netty.coder.MsgCoder: error

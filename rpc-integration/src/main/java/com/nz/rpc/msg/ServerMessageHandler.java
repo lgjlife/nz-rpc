@@ -8,19 +8,17 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Slf4j
 public class ServerMessageHandler {
 
     private static  ServerMessageHandler serverMessageHandler = new ServerMessageHandler();
 
-    private  static  ExecutorService executorService = new ThreadPoolExecutor(1000,1000,
+    private  static  ThreadPoolExecutor executorService = new ThreadPoolExecutor(1000,1000,
             1000, TimeUnit.MICROSECONDS,
-            new LinkedBlockingQueue<Runnable>());
+            new LinkedBlockingQueue<Runnable>(),
+     new ThreadPoolExecutor.CallerRunsPolicy());
 
 
     private ServerMessageHandler(){
@@ -35,8 +33,8 @@ public class ServerMessageHandler {
 
 
     public   void submit(ChannelHandlerContext ctx,RpcRequest request){
-
-        executorService.submit(new RequestHandler(ctx,request));
+        Future<?> future = executorService.submit(new RequestHandler(ctx,request));
+        log.debug("executorService = {}",executorService.toString());
     }
 
 
@@ -85,10 +83,9 @@ public class ServerMessageHandler {
 
                 Method method = clzImpl.getDeclaredMethod(request.getMethodName(),paramTypes);
 
-                log.debug("method = {},bean ={}",method,bean);
                Object result =  method.invoke(bean,request.getParameters());
 
-               log.debug("反射执行结果:"+result);
+               log.debug("method [{}] done ![{}]",method,result);
                return result;
             }
             catch(Exception ex){
@@ -102,5 +99,7 @@ public class ServerMessageHandler {
             return  null;
         }
     }
+
+
 
 }

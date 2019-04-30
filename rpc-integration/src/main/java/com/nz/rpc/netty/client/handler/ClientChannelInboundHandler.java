@@ -21,7 +21,7 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
         super();
     }
 
-    @Override
+    /*@Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
         log.debug("ServerChannelInboundHandler channelRegistered　,remoteAddress[{}],",ctx.channel().remoteAddress());
         super.channelRegistered(ctx);
@@ -36,12 +36,6 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.debug("ServerChannelInboundHandler channelActive　,remoteAddress[{}],",ctx.channel().remoteAddress());
-   /*     NettyMessage nettyMessage = new NettyMessage();
-        Header header =  new Header();
-        header.setType(MessageType.APP_REQUEST_TYPE);
-        nettyMessage.setHeader(header);
-
-        ctx.channel().writeAndFlush(nettyMessage);*/
         super.channelActive(ctx);
     }
 
@@ -49,19 +43,19 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.debug("ServerChannelInboundHandler channelInactive　,remoteAddress[{}],",ctx.channel().remoteAddress());
         super.channelInactive(ctx);
-    }
+    }*/
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
-        log.debug("接收到服务端返回消息:"+msg);
+        //log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
+        log.debug("recv data from [{}]/r/n[{}]",ctx.channel().remoteAddress(),msg);
         NettyMessage  nettyMessage = (NettyMessage)msg;
         ClientMessageHandler clientMessageHandler = ClientMessageHandler.getInstance();
         clientMessageHandler.recvResponse((RpcResponse) nettyMessage.getBody());
         super.channelRead(ctx, msg);
     }
 
-    @Override
+ /*   @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         log.debug("ServerChannelInboundHandler channelReadComplete　,remoteAddress[{}],",ctx.channel().remoteAddress());
         super.channelReadComplete(ctx);
@@ -83,5 +77,5 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.debug("ServerChannelInboundHandler exceptionCaught　,remoteAddress[{}],",ctx.channel().remoteAddress());
         super.exceptionCaught(ctx, cause);
-    }
+    }*/
 }

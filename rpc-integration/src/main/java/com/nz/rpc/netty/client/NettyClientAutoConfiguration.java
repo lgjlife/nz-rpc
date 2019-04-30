@@ -16,13 +16,13 @@ public class NettyClientAutoConfiguration {
 
     @Bean
     NettyClient nettyClient(){
-        NettyClient nettyClient = new NettyClient();
+        NettyClient nettyClient = new NettyClient(rpcProperties);
         if(rpcProperties.getNport() != 8121){
             nettyClient.connect("127.0.0.1",8121);
         }
 
         NettyContext.setNettyClient(nettyClient);
-        NettyContext.setSerialize(SerializationCreate.create("jdk"));
+        NettyContext.setSerialize(SerializationCreate.create(rpcProperties.getSerialization()));
 
         return  nettyClient;
     }

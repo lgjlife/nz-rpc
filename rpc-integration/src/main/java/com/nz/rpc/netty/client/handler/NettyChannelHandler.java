@@ -33,6 +33,7 @@ public class NettyChannelHandler extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new MsgDecoder());
         pipeline.addLast(new LengthFieldPrepender(2));
         pipeline.addLast(new MsgCoder());
+        pipeline.addLast(new IdleStateHandler(5, 1, 0, TimeUnit.SECONDS));
         pipeline.addLast(new HeartbeatRequestHandler());
         pipeline.addLast(new ClientChannelInboundHandler());
         pipeline.addLast(new ClientChannelOutboundHandle());

@@ -7,8 +7,8 @@ spring:
 logging:
   level:
     com.nz.rpc: debug
-
-
+    #com.nz.rpc.netty.server.handler.HeartbeatResponseHandler: info
+    com.nz.rpc.netty.coder.MsgCoder: info
 server:
   port: 8464
 nzrpc:
@@ -20,3 +20,6 @@ nzrpc:
   uid:
     type: custom
     macId: 1
+  nettyServer:
+    bossTheads: 2
+    workerTheads: 8

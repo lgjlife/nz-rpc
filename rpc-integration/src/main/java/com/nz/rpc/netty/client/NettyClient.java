@@ -1,6 +1,7 @@
 package com.nz.rpc.netty.client;
 
 import com.nz.rpc.netty.client.handler.NettyChannelHandler;
+import com.nz.rpc.properties.RpcProperties;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -8,29 +9,35 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.SocketAddress;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Data
 public class NettyClient {
 
-    private EventLoopGroup group = new NioEventLoopGroup();
+    private EventLoopGroup group ;
     private Bootstrap bootstrap ;
     private static  Map<String, Channel> channelCache = new ConcurrentHashMap<>();
     private static final  int reConnectIntervalTimeMs = 5000;
 
+    private List<String> connectingServer = new CopyOnWriteArrayList<String>();
 
 
 
 
-    public NettyClient(){
+    public NettyClient(RpcProperties rpcProperties){
+        group = new NioEventLoopGroup(rpcProperties.getNettyClient().getWorkerTheads(),
+                new DefaultThreadFactory("client1", true));
         bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
@@ -46,17 +53,24 @@ public class NettyClient {
 
     public void connect(String host,int port){
 
+        String key = getKey(host,port);
+
+        if(connectingServer.contains(key)){
+            return;
+        }
+        connectingServer.add(key);
+
         try {
-            log.debug("与服务端[{}:{}]进行连接.....",host,port);
+            log.debug("conect to [{}:{}].....",host,port);
 
             ChannelFuture channelFuture = bootstrap.connect(host, port);
 
             channelFuture.addListener(new GenericFutureListener(){
                 @Override
                 public void operationComplete(Future future) throws Exception {
-                    log.debug("与服务端[{}:{}]连接状态！连接状态:[{}]",host,port,future.isSuccess());
+                    log.debug("connect to  [{}:{}] state [{}]",host,port,future.isSuccess());
                     if(future.isSuccess() == false){
-                        channelCache.remove(getKey(host,port));
+                        channelCache.remove(key);
                         new Thread(){
                             @Override
                             public void run() {
@@ -71,7 +85,8 @@ public class NettyClient {
                         }.start();
                     }
                     else {
-                        channelCache.put(getKey(host,port),channelFuture.channel());
+                        channelCache.put(key,channelFuture.channel());
+                        connectingServer.remove(key);
                     }
 
                 }
@@ -79,13 +94,14 @@ public class NettyClient {
             } );
 
         } catch (Exception ex) {
-            log.debug("与服务端[{}:{}]连接失败！发起重连！",host,port);
+            log.debug("connect to [{}:{}] fail , reconnect again !",host,port);
         }
 
     }
 
     public Channel getChannel(String host,int port){
         Channel channel = channelCache.get(host + ":" + port);
+        log.debug("channelCache len =[{}]",channelCache.size());
 
         if(channel == null){
             this.connect(host,port);
@@ -95,7 +111,14 @@ public class NettyClient {
     }
 
     public void removeChannel(String host,int port){
-        channelCache.remove(host + ":" + port);
+        String key = getKey(host,port);
+
+        Channel channel =  channelCache.get(key);
+        if(channel != null){
+            channelCache.remove(host + ":" + port);
+            channel.close();
+        }
+
     }
 
     private String  parseToHost(SocketAddress remoteAddress){

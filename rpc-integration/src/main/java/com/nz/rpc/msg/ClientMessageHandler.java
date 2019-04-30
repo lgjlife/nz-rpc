@@ -7,6 +7,7 @@ import com.nz.rpc.invocation.client.ClientInvocation;
 import com.nz.rpc.loadbalance.LoadbalanceStrategy;
 import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.netty.message.NettyMessage;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class ClientMessageHandler {
     private LoadbalanceStrategy  loadbalanceStrategy;
 
     private Map<Long,RpcResponse> resultMap = new ConcurrentHashMap<>();
-    private static  final int requestTimeoutMs = 200;
+    private static  final int requestTimeoutMs = 30000;
     private Map<Long,RequestLock> requestLock = new ConcurrentHashMap<>();
 
     public static ClientMessageHandler getInstance() {
@@ -78,13 +79,31 @@ public class ClientMessageHandler {
      *
     */
     public Object sendRequest(String host,String port,NettyMessage nettyMessage){
-        //发送消息
-        ChannelFuture future =  nettyClient.getChannel(host,
-                Integer.valueOf(port))
-                .writeAndFlush(nettyMessage);
-        requestLock.put(((RpcRequest)nettyMessage.getBody()).getRequestId(),new RequestLock());
+        log.debug("sendRequest [{}]-[{}]-[{}]",host,port,nettyMessage);
 
-        return getServerResponseResult(host,port,nettyMessage);
+        long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
+
+        Channel channel = nettyClient.getChannel(host,
+                Integer.valueOf(port));
+        if(channel == null){
+            log.debug("sendRequest:channel is null,reconnect ....");
+            new  Thread(){
+                @Override
+                public void run() {
+                    nettyClient.connect(host,Integer.valueOf(port));
+                }
+            }.start();
+            return null;
+        }
+        else {
+            //发送消息
+            ChannelFuture future = channel.writeAndFlush(nettyMessage);
+            requestLock.put(id,new RequestLock());
+            return getServerResponseResult(host,port,nettyMessage);
+        }
+
+
+
     }
 
     /**
@@ -109,16 +128,16 @@ public class ClientMessageHandler {
             boolean flag = condition.await(requestTimeoutMs, TimeUnit.MILLISECONDS);
             if(flag){
                 //请求响应成功
-                log.debug("请求响应成功[]",resultMap.get(id).getResult());
+                log.debug("server response []",resultMap.get(id).getResult());
                 result = resultMap.get(id).getResult();
             }
             else {
                 //请求响应超时
-                log.debug("请求响应超时");
+                log.error("server response time out,removeChannel and reconnect...");
                 //关闭channel
-                nettyClient.removeChannel(host,Integer.valueOf(port));
+                //nettyClient.removeChannel(host,Integer.valueOf(port));
                 //发起重新连接
-                nettyClient.connect(host,Integer.valueOf(port));
+                //nettyClient.connect(host,Integer.valueOf(port));
 
                 result = null;
             }
@@ -140,6 +159,7 @@ public class ClientMessageHandler {
      * @date 4/25/19
     */
     public void recvResponse(RpcResponse response){
+        log.info("response = "+response);
         long id = response.getResponseId();
         ReentrantLock lock = requestLock.get(id).getLock();
         Condition condition = requestLock.get(id).getCondition();
