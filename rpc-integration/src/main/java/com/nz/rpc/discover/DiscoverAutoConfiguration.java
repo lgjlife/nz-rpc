@@ -67,7 +67,7 @@ public class DiscoverAutoConfiguration {
    */
     @Bean
     public  ZookeeperServiceDiscover zookeeperServiceDiscover(){
-        ZookeeperServiceDiscover discover  = new ZookeeperServiceDiscover();
+        ZookeeperServiceDiscover discover  = new ZookeeperServiceDiscover(zkCli);
         discover.setZkCli(zkCli);
         discover.setContext(context);
         discover.setProperties(rpcProperties);

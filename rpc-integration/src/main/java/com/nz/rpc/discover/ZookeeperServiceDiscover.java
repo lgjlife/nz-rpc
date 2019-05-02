@@ -1,9 +1,11 @@
 package com.nz.rpc.discover;
 
 import com.alibaba.fastjson.JSON;
+import com.nz.rpc.zk.ListenerEventHandler;
+import com.nz.rpc.zk.ZkCli;
 import com.nz.rpc.zk.ZookeeperPath;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
+import org.apache.curator.framework.recipes.cache.ChildData;
 
 import java.util.List;
 
@@ -11,9 +13,11 @@ import java.util.List;
 @Slf4j
 public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
+    public ZookeeperServiceDiscover(ZkCli zkCli) {
+        super(zkCli);
+        zkCli.setListener(new ListenerEventHandlerImpl(),ZookeeperPath.rootPath);
 
-    private ApplicationContext context;
-
+    }
 
     @Override
     public void registerService() {
@@ -38,5 +42,25 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
         }
 
 
+    }
+
+    class ListenerEventHandlerImpl implements ListenerEventHandler {
+
+        @Override
+        public void addHandler(ChildData data) {
+
+            log.debug("");
+            queryService();
+        }
+
+        @Override
+        public void removeHandler(ChildData data) {
+            queryService();
+        }
+
+        @Override
+        public void updateHandler(ChildData data) {
+            queryService();
+        }
     }
 }

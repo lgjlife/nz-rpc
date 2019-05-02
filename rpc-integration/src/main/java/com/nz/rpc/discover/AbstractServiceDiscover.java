@@ -2,7 +2,6 @@ package com.nz.rpc.discover;
 
 import com.nz.rpc.anno.RpcReference;
 import com.nz.rpc.anno.RpcService;
-import com.nz.rpc.common.TestDemo;
 import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.properties.RpcProperties;
 import com.nz.rpc.proxy.RpcProxyFactory;
@@ -30,8 +29,6 @@ import java.util.Set;
 @Slf4j
 public  abstract  class AbstractServiceDiscover{
 
-   // protected Map<String,String> clzMap = new HashMap<>();
-
     protected  ZkCli zkCli;
 
     protected   ApplicationContext  context;
@@ -41,21 +38,12 @@ public  abstract  class AbstractServiceDiscover{
 
     private RpcProxyFactory rpcProxyFactory;
 
-
-/*    public void setContext(ApplicationContext context) {
-        this.context = context;
+    public AbstractServiceDiscover() {
     }
 
-
-    public void setZkCli(ZkCli zkCli) {
+    public AbstractServiceDiscover(ZkCli zkCli) {
         this.zkCli = zkCli;
     }
-
-    public void setProperties(RpcProperties properties) {
-        this.properties = properties;
-    }*/
-
-
 
     /**
      *功能描述
@@ -88,7 +76,9 @@ public  abstract  class AbstractServiceDiscover{
     /**
      *功能描述
      * @author lgj
-     * @Description   查找被@RpcReference注解的消费者接口引用
+     * @Description   １.查找被@RpcReference注解的消费者接口引用
+     * 　　　　　　　　 2. 创建动态代理
+     * 　　　　　　　　　3　注入bean容器
      * @date 4/12/19
      * @param:
      * @return:
@@ -109,13 +99,10 @@ public  abstract  class AbstractServiceDiscover{
         }
 
 
-        serviceNames.forEach((v)->{
-            log.debug("Field: {},class={}",v.getName(),v.getType().getName());
-        });
 
         for(Field serviceName:serviceNames){
             String className = serviceName.getType().getName();
-            log.debug("RpcReference 注解类："+className);
+            log.debug("@RpcReference class："+className);
 
             try{
                 Class clazz = Class.forName(className);
@@ -133,34 +120,22 @@ public  abstract  class AbstractServiceDiscover{
 
                 for(Field field : fields){
                     if(field.getType().getName().equals(className)){
-                        log.debug("匹配成功！");
+                        log.debug("set bean to the controler field");
                         field.setAccessible(true);
                         field.set(controllerBean,bean);
 
                     }
                 }
-
-
-                log.debug("controller = " + controllerClazz.getName() + controllerBean);
-
-                log.debug("创建代理对象成功[{}],bena={}",className,bean.getClass().getName());
+                log.debug("create proxy object [{}] success ,bena={}",className,bean.getClass().getName());
             }
             catch(Exception ex){
-                log.error("创建代理对象失败[{}]:{}",className,ex);
+                log.error("create proxy object[{}] fail:{}",className,ex);
             }
 
         }
     }
 
-    public void test(){
-        TestDemo demo = new TestDemo();
-        DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory) context.getAutowireCapableBeanFactory();
-        listableBeanFactory.registerSingleton("demo",demo);
 
-        TestDemo demo1 = (TestDemo) listableBeanFactory.getBean("demo");
-
-        log.debug("ssssss");
-    }
 
     public  abstract  void registerService();
 

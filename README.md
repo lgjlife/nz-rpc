@@ -54,6 +54,9 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
              ├─── RpcService   注解在服务提供端接口实现类上，用于标示该类为消费者提供服务
                    
          ├─── common/  
+         
+         ├─── constans/
+            ├─── RpcClientConstans
                 
          ├─── discover/
             ├─── AbstractServiceDiscover        服务注册与发现抽象类    

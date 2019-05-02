@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.zk.ZkCreateConfig;
 import com.nz.rpc.zk.ZookeeperPath;
-import com.utils.serialization.AbstractSerialize;
-import com.utils.serialization.FastjsonSerializeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.BeansException;
@@ -26,7 +24,7 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
     public void queryService() {
         throw  new UnsupportedOperationException();
     }
-    private AbstractSerialize serialize = FastjsonSerializeUtil.getSingleton();
+
     /**
      *功能描述
      * @author lgj

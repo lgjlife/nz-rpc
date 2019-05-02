@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
@@ -65,16 +66,22 @@ public class ZkCli {
        try{
 
            if (false == checkExists(config.getPath())) {
-               log.debug("目录{}不存在，创建目录....", config.getPath());
+               log.debug("path [{}] not exist ，create path ....", config.getPath());
                String result  =  client.create()
                        .creatingParentsIfNeeded()
                        .withMode((config == null?CreateMode.PERSISTENT:config.getCreateMode()))
                        .forPath(config.getPath());
-               log.debug("创建[{}]结果　result = ",config.getPath(),result);
+               if(result == null){
+                   log.debug("create [{}] fail,maybe the path is exist! ",config.getPath());
+               }
+               else {
+                   log.debug("create [{}] success! ",config.getPath());
+               }
+
                return result;
 
            } else {
-               log.debug("目录{}已经存在,获取目录信息", config.getPath());
+               log.debug("create [{}] fail,maybe the path is exist! ",config.getPath());
            }
 
 
@@ -133,10 +140,32 @@ public class ZkCli {
             return  paths;
         }
         catch(Exception ex){
-            log.error("获取[{}]子路径失败",path,ex);
+            log.error("get [{}] child fail!",path,ex);
             return  new ArrayList<>();
         }
 
     }
+
+    /**
+     *功能描述
+     * @author lgj
+     * @Description  添加监听器
+     * @date 4/30/19
+     * @param: 　eventHandler: 监听器处理函数
+     * 　　　　　path：　监听路径
+     * @return:
+     *
+    */
+    public  void setListener(ListenerEventHandler eventHandler,String path){
+        try{
+            TreeCache treeCache = new TreeCache(this.client,path);
+            treeCache.getListenable().addListener(new ZkListener(eventHandler));
+            treeCache.start();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
 
 }

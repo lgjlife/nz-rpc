@@ -16,25 +16,13 @@ public class ZkClientTest {
         ZkClient zkClient = ZkClientFatory.zkClient();
 
         ZkCreateConfig config =  ZkCreateConfig.builder()
-                .createMode(CreateMode.PERSISTENT)
-                .path("/node/demo")
+                .createMode(CreateMode.EPHEMERAL)
+                .path("/node/demo2")
                 .build();
 
         String result = zkClient.createPath(config);
-        try{
 
-            while (true){
-              //  Thread.sleep(10000);
-             //   Stat stat = zkClient.setData("/node/demo","aa"+new Random().nextInt(100));
-             //   System.out.println(stat);
-             //   Object object = zkClient.getData("/node/demo",String.class);
-             //   System.out.println(object);
 
-            }
-        }
-        catch(Exception ex){
-            log.error(ex.getMessage());
-        }
 
 
 
