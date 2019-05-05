@@ -1,7 +1,6 @@
 package com.nz.rpc.interceptor.impl;
 
 import com.nz.rpc.constans.RpcClientConstans;
-import com.nz.rpc.context.ClientContext;
 import com.nz.rpc.interceptor.Interceptor;
 import com.nz.rpc.invocation.client.ClientInvocation;
 import com.nz.rpc.msg.ClientMessageHandler;
@@ -13,15 +12,8 @@ import com.nz.rpc.uid.UidProducer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.CompletableFuture;
 
 
-/**
- *功能描述
- * @author lgj
- * @Description   客户端请求责任链处理
- * @date 5/6/19
-*/
 @Slf4j
 public class RpcClientRequestInterceptor implements Interceptor {
 
@@ -44,28 +36,14 @@ public class RpcClientRequestInterceptor implements Interceptor {
 
         NettyMessage nettyMessage = buildNettyMessage(request);
 
-        long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
-
         result = handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
                 invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT),
                 nettyMessage);
-
-        if(ClientContext.isAsync(invocation.getMethod())){
-            //异步请求
-            ClientContext.setCompletableFuture(id,new CompletableFuture());
-            return new Object();
+        if(log.isInfoEnabled()){
+            log.info("request result =[{}]",result);
         }
 
-        else {
-            result = handler.getServerResponseResult(id);
-            if(log.isInfoEnabled()){
-                log.info("request result =[{}]",result);
-            }
-
-            return result;
-
-        }
-
+        return result;
     }
 
     private NettyMessage buildNettyMessage(RpcRequest request){
@@ -78,12 +56,6 @@ public class RpcClientRequestInterceptor implements Interceptor {
     }
 
 
-    /**
-     *功能描述 
-     * @author lgj
-     * @Description 创建请求对象
-     * @date 5/6/19
-    */
     private RpcRequest buildRequest(Method method, Object[] args){
         String[]   classes = new String[args.length];
 

@@ -9,12 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- *功能描述
- * @author lgj
- * @Description 超时处理
- * @date 5/6/19
-*/
 @Slf4j
 public class TimeOutInterceptor implements Interceptor {
 
