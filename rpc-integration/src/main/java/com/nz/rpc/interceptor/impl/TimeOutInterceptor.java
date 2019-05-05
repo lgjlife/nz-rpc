@@ -31,9 +31,11 @@ public class TimeOutInterceptor implements Interceptor {
         if(result != null){
             try{
                 lock.lock();
-                log.info("function[{}]  last-avr =[{}],delta=[{}],nums=[{}]",invocation.getMethod().getName(),
-                        avr.get(),delta,nums.get());
-                System.out.println(nums.get()+ "  " + delta + "  " + avr.get());
+                if(log.isInfoEnabled()){
+                    log.info("function[{}]  last-avr =[{}],delta=[{}],nums=[{}]",invocation.getMethod().getName(),
+                            avr.get(),delta,nums.get());
+                }
+             //   System.out.println(nums.get()+ "  " + delta + "  " + avr.get());
                 float avrNew = MathUtil.calcAverage(avr.get(),delta,nums.addAndGet(1));
                 avr.set((long)(avrNew));
             }

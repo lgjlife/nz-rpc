@@ -6,9 +6,10 @@ spring:
 # logger
 logging:
   level:
-    com.nz.rpc: debug
+    com: error
+   # com.nz.rpc: debug
     #com.nz.rpc.netty.server.handler.HeartbeatResponseHandler: info
-    com.nz.rpc.netty.coder.MsgCoder: info
+    #com.nz.rpc.netty.coder.MsgCoder: info
 server:
   port: 8464
 nzrpc:

@@ -20,8 +20,11 @@ public class ServerChannelInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
-        log.debug("接收到客户端消息:"+msg);
+        if(log.isDebugEnabled()){
+            log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
+            log.debug("接收到客户端消息:"+msg);
+        }
+
        /* NettyMessage nettyMessage = (NettyMessage)msg;
         Header header =  new Header();
         header.setType(MessageType.APP_REQUEST_TYPE);

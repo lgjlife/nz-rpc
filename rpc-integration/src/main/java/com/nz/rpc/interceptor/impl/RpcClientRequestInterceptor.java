@@ -39,7 +39,10 @@ public class RpcClientRequestInterceptor implements Interceptor {
         result = handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
                 invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT),
                 nettyMessage);
-        log.info("request result =[{}]",result);
+        if(log.isInfoEnabled()){
+            log.info("request result =[{}]",result);
+        }
+
         return result;
     }
 

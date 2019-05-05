@@ -19,7 +19,7 @@ public class ServerMessageHandler {
 
     private static  ServerMessageHandler serverMessageHandler = new ServerMessageHandler();
 
-    private  static  ThreadPoolExecutor executorService = new TraceExecutorService(1000,1000,
+    private  static  ThreadPoolExecutor executorService = new TraceExecutorService(100,100,
             1000, TimeUnit.MICROSECONDS,
             new LinkedBlockingQueue<Runnable>(),
      new ThreadPoolExecutor.CallerRunsPolicy());

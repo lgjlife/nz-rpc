@@ -23,7 +23,10 @@ public class HeartbeatResponseHandler extends ChannelInboundHandlerAdapter {
 
         if( (message.getHeader() != null)
             &&(message.getHeader().getType() == MessageType.HEARTBEAT_REQUEST_TYPE)){
-            log.debug("recv HeartbeatResponse [{}-{}]",ctx.channel().remoteAddress(),ctx.channel().id());
+            if(log.isDebugEnabled()){
+                log.debug("recv HeartbeatResponse [{}-{}]",ctx.channel().remoteAddress(),ctx.channel().id());
+            }
+
             NettyMessage nettyMessage = new NettyMessage();
             Header header =  new Header();
             header.setType(MessageType.HEARTBEAT_RESPONSE_TYPE);
@@ -45,16 +48,24 @@ public class HeartbeatResponseHandler extends ChannelInboundHandlerAdapter {
 
         if(evt instanceof IdleStateEvent){
             IdleStateEvent event = (IdleStateEvent)evt;
-            log.debug("userEventTriggered....[{}]",event.state());
+            if(log.isDebugEnabled()){
+                log.debug("userEventTriggered....[{}]",event.state());
+            }
+
             if (event.state()== IdleState.READER_IDLE){
-                log.debug("close channel :{}" ,ctx.channel());
+                if(log.isDebugEnabled()){
+                    log.debug("close channel :{}" ,ctx.channel());
+                }
+
                 ChannelFuture channelFuture = ctx.channel().close();
                 channelFuture.addListener(new GenericFutureListener<Future<? super Void>>() {
                     @Override
                     public void operationComplete(Future<? super Void> future) throws Exception {
                         Channel channel  = channelFuture.channel();
+                        if(log.isDebugEnabled()){
+                            log.info("channel[{}] state [{}]",channel.remoteAddress(),channel.isActive());
+                        }
 
-                        log.info("channel[{}] state [{}]",channel.remoteAddress(),channel.isActive());
                     }
                 });
             }

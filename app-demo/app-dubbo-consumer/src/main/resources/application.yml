@@ -1,0 +1,17 @@
+server:
+  port: 8583
+spring:
+  application:
+    name: dubbo-consumer
+
+logging:
+  level:
+    com.dubbo: debug
+
+dubbo:
+  application:
+    name: dubbo-cunsumer
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  consumer:
+    timeout:

@@ -30,8 +30,6 @@ public class FastJsonSerializeUtilTest {
             timeUtil1.start();
             result  = serialize.deserialize(serByte,NettyMessage.class);
             timeUtil1.end();
-
-
         }
         System.out.println("序列化时间："+ timeUtil.getAvrTimeUs() + " Us");
         System.out.println("反序列化时间："+ timeUtil1.getAvrTimeUs() + " Us");
