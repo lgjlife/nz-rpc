@@ -60,9 +60,6 @@ public class TestRequest {
                             successCount.incrementAndGet();
                         }
                         endCyclicBarrier.await();
-
-
-
                     }
                     catch(Exception ex){
                         log.error(ex.getMessage());
@@ -73,7 +70,6 @@ public class TestRequest {
                             log.error(e.getMessage());
                         }
                     }
-                    //System.out.println("back out thread!");
                 }
             }.start();
         }
@@ -87,6 +83,15 @@ public class TestRequest {
     }
 
 
+    /**
+     *功能描述
+     * @author lgj
+     * @Description 数据准备
+     * @date 5/5/19
+     * @param:
+     * @return:
+     *
+    */
     @PostConstruct
     public void init(){
         urlMap.put("nzrpc","http://localhost:8112/demo");
