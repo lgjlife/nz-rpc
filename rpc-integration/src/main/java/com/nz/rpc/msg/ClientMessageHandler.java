@@ -1,6 +1,7 @@
 package com.nz.rpc.msg;
 
 import com.nz.rpc.constans.RpcClientConstans;
+import com.nz.rpc.context.ClientContext;
 import com.nz.rpc.discover.ProviderConfig;
 import com.nz.rpc.discover.ProviderConfigContainer;
 import com.nz.rpc.invocation.client.ClientInvocation;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -99,11 +101,10 @@ public class ClientMessageHandler {
             //发送消息
             ChannelFuture future = channel.writeAndFlush(nettyMessage);
             requestLock.put(id,new RequestLock());
-            return getServerResponseResult(host,port,nettyMessage);
+
+            return null;
+            // return getServerResponseResult(host,port,nettyMessage);
         }
-
-
-
     }
 
     /**
@@ -115,9 +116,9 @@ public class ClientMessageHandler {
      * @return:
      *
     */
-    private Object getServerResponseResult(String host,String port,NettyMessage nettyMessage){
+    public Object getServerResponseResult( long id){
 
-        long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
+        //long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
 
         ReentrantLock lock = requestLock.get(id).getLock();
 
@@ -154,26 +155,37 @@ public class ClientMessageHandler {
 
     /**
      *功能描述 
-     * @author lgj
+     * @author lgj　
      * @Description
-     * @date 4/25/19
-    */
+     * @date 4/25/19　
+     * @See　　
+     * */
     public void recvResponse(RpcResponse response){
         log.info("response = "+response);
         long id = response.getResponseId();
-        ReentrantLock lock = requestLock.get(id).getLock();
-        Condition condition = requestLock.get(id).getCondition();
-        try{
-            lock.lock();
-            resultMap.put(id,response);
-            condition.signalAll();
+        CompletableFuture future = ClientContext.getCompletableFuture(id);
+        if(future != null){
+            //不是异步请求
+            future.complete(response.getResult());
+            ClientContext.removeCompletableFuture(id);
         }
-        catch(Exception ex){
-            log.error(ex.getMessage());
+        else {
+            //同步请求处理
+            ReentrantLock lock = requestLock.get(id).getLock();
+            Condition condition = requestLock.get(id).getCondition();
+            try{
+                lock.lock();
+                resultMap.put(id,response);
+                condition.signalAll();
+            }
+            catch(Exception ex){
+                log.error(ex.getMessage());
+            }
+            finally{
+                lock.unlock();
+            }
         }
-        finally{
-            lock.unlock();
-        }
+
 
     }
 
