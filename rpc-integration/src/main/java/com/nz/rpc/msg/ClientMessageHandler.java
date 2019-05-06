@@ -156,26 +156,29 @@ public class ClientMessageHandler {
     /**
      *功能描述 
      * @author lgj　
-     * @Description
+     * @Description 响应回调函数
      * @date 4/25/19　
      * @See　　
      * */
-    public void recvResponse(RpcResponse response){
-        log.info("response = "+response);
-        long id = response.getResponseId();
-        CompletableFuture future = ClientContext.getCompletableFuture(id);
+    public void responseCallback(RpcResponse response){
+        if(log.isInfoEnabled()){
+            log.info("response = "+response);
+        }
+
+        long requestId = response.getResponseId();
+        CompletableFuture future = ClientContext.getCompletableFuture(requestId);
         if(future != null){
-            //不是异步请求
+            //是异步请求
             future.complete(response.getResult());
-            ClientContext.removeCompletableFuture(id);
+            ClientContext.removeCompletableFuture(requestId);
         }
         else {
             //同步请求处理
-            ReentrantLock lock = requestLock.get(id).getLock();
-            Condition condition = requestLock.get(id).getCondition();
+            ReentrantLock lock = requestLock.get(requestId).getLock();
+            Condition condition = requestLock.get(requestId).getCondition();
             try{
                 lock.lock();
-                resultMap.put(id,response);
+                resultMap.put(requestId,response);
                 condition.signalAll();
             }
             catch(Exception ex){

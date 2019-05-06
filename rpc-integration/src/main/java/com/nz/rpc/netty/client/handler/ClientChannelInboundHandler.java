@@ -51,7 +51,7 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
         log.debug("recv data from [{}]/r/n[{}]",ctx.channel().remoteAddress(),msg);
         NettyMessage  nettyMessage = (NettyMessage)msg;
         ClientMessageHandler clientMessageHandler = ClientMessageHandler.getInstance();
-        clientMessageHandler.recvResponse((RpcResponse) nettyMessage.getBody());
+        clientMessageHandler.responseCallback((RpcResponse) nettyMessage.getBody());
         super.channelRead(ctx, msg);
     }
 

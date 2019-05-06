@@ -3,12 +3,13 @@ package app.provider.service.impl;
 
 import com.app.common.service.DemoService;
 import com.nz.rpc.anno.RpcService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Random;
 
-
+@Slf4j
 @RpcService
 @Service
 public class DemoServiceImpl  implements DemoService {
@@ -19,6 +20,13 @@ public class DemoServiceImpl  implements DemoService {
     }
 
     public  String setName(String name, Long id){
+        try{
+
+            Thread.sleep(3000);
+        }
+        catch(Exception ex){
+            log.error(ex.getMessage());
+        }
         return  "DemoServiceImpl  queryName :" + name +":"
                 +id
                 + new Date().toString()

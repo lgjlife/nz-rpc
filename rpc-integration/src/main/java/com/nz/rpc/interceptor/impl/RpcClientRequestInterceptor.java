@@ -52,7 +52,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
 
         if(ClientContext.isAsync(invocation.getMethod())){
             //异步请求
-            ClientContext.setCompletableFuture(id,new CompletableFuture());
+            CompletableFuture future = ClientContext.createCompletableFuture(id);
             return new Object();
         }
 
