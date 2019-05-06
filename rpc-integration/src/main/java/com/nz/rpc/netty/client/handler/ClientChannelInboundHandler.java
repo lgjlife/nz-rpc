@@ -1,6 +1,7 @@
 package com.nz.rpc.netty.client.handler;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.nz.rpc.msg.ClientMessageHandler;
 import com.nz.rpc.msg.RpcResponse;
 import com.nz.rpc.netty.message.NettyMessage;
@@ -51,7 +52,17 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
         log.debug("recv data from [{}]/r/n[{}]",ctx.channel().remoteAddress(),msg);
         NettyMessage  nettyMessage = (NettyMessage)msg;
         ClientMessageHandler clientMessageHandler = ClientMessageHandler.getInstance();
-        clientMessageHandler.responseCallback((RpcResponse) nettyMessage.getBody());
+
+        Object body = nettyMessage.getBody();
+        RpcResponse response = null;
+        if(JSONObject.class.isAssignableFrom(body.getClass())){
+            response = JSONObject.parseObject(body.toString(),RpcResponse.class);
+        }
+        else {
+            response = (RpcResponse)body;
+        }
+
+        clientMessageHandler.responseCallback(response);
         super.channelRead(ctx, msg);
     }
 

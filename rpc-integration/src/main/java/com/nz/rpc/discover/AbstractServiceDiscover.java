@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -113,6 +114,10 @@ public  abstract  class AbstractServiceDiscover{
                 Object bean =  listableBeanFactory.getBean(classToBeanName(className));
 
                 Class controllerClazz = serviceName.getDeclaringClass();
+              /*  Iterator<String> iterator = listableBeanFactory.getBeanNamesIterator();
+                while (iterator.hasNext()){
+                    System.out.println(iterator.next());
+                }*/
 
                 Object controllerBean = listableBeanFactory.getBean(classToBeanName(controllerClazz.getName()));
 

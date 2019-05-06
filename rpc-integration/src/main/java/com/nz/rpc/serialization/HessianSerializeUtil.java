@@ -7,12 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
 
 
 @Slf4j
 public class HessianSerializeUtil extends AbstractSerialize {
-
-
 
     public <T> byte[] serialize(T obj) {
 
@@ -50,4 +50,18 @@ public class HessianSerializeUtil extends AbstractSerialize {
         }
 
     }
+
+    public static void main(String args[]){
+
+        AsyncFuture future = new HessianSerializeUtil().new AsyncFuture();
+
+        AbstractSerialize serializeUtil = new HessianSerializeUtil();
+        serializeUtil.serialize(future);
+    }
+
+    class AsyncFuture<T> extends CompletableFuture<T> implements Serializable {
+
+
+    }
+
 }

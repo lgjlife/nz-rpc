@@ -34,6 +34,22 @@ public class RpcClientRequestInterceptor implements Interceptor {
         this.handler = handler;
     }
 
+    interface Parent<T>{
+
+    }
+
+    class Son<T> implements Parent<T>{
+
+
+
+    }
+
+    public static void main(String args[]){
+        System.out.println(Parent.class.isAssignableFrom(Son.class));;
+
+
+    }
+
     @Override
     public Object intercept(ClientInvocation invocation) throws Exception {
 
@@ -50,18 +66,19 @@ public class RpcClientRequestInterceptor implements Interceptor {
                 invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT),
                 nettyMessage);
 
-        if(ClientContext.isAsync(invocation.getMethod())){
+        if( CompletableFuture.class.isAssignableFrom(invocation.getMethod().getReturnType())){
             //异步请求
+            log.info("异步请求");
             CompletableFuture future = ClientContext.createCompletableFuture(id);
-            return new Object();
-        }
 
-        else {
+            return future;
+        }
+        else{
+            log.info("同步请求");
             result = handler.getServerResponseResult(id);
             if(log.isInfoEnabled()){
                 log.info("request result =[{}]",result);
             }
-
             return result;
 
         }
@@ -80,7 +97,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
 
 
     /**
-     *功能描述 
+     *功能描述
      * @author lgj
      * @Description 创建请求对象
      * @date 5/6/19

@@ -17,7 +17,6 @@ import java.util.Random;
 public class DemoController {
 
 
-    private String data = "122";
     @RpcReference
     private UserService userService;
 

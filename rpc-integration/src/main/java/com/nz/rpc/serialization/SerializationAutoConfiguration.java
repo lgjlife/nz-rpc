@@ -19,6 +19,6 @@ public class SerializationAutoConfiguration {
 
     @Bean
     public  AbstractSerialize serialize(){
-        return SerializationCreate.create("hessian");
+        return SerializationCreate.create(rpcProperties.getSerialization());
     }
 }

@@ -8,7 +8,7 @@ nzrpc:
     address: "127.0.0.1:2181"
   netty:
     port: 8122
-  serialization: "hessian"
+  serialization: hessian
   uid:
     type: custom
     macId: 123
@@ -18,7 +18,7 @@ nzrpc:
 # logger
 logging:
   level:
-    com: error
+    com: debug
 #    com.nz.rpc: debug
  #   com.nz.rpc.msg.ClientMessageHandler: error
   #  com.nz.rpc.netty.coder.MsgCoder: error

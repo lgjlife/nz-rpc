@@ -9,10 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Slf4j
 public class ServerMessageHandler {
@@ -88,7 +85,10 @@ public class ServerMessageHandler {
                 Method method = clzImpl.getDeclaredMethod(request.getMethodName(),paramTypes);
 
                Object result =  method.invoke(bean,request.getParameters());
-
+               if(CompletableFuture.class.isAssignableFrom(result.getClass())){
+                   //异步调用
+                   result =  ((CompletableFuture) result).get();
+               }
                log.debug("method [{}] done ![{}]",method,result);
                return result;
             }

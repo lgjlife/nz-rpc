@@ -1,6 +1,7 @@
 package com.nz.rpc.netty.server.handler;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.nz.rpc.msg.RpcRequest;
 import com.nz.rpc.msg.ServerMessageHandler;
 import com.nz.rpc.netty.message.MessageType;
@@ -35,7 +36,15 @@ public class ServerChannelInboundHandler extends ChannelInboundHandlerAdapter {
         NettyMessage nettyMessage =  (NettyMessage)  msg;
         if((nettyMessage!=null) && (nettyMessage.getHeader().getType() == MessageType.APP_REQUEST_TYPE)){
 
-            RpcRequest request = (RpcRequest)(nettyMessage.getBody());
+            Object body = nettyMessage.getBody();
+            RpcRequest request = null;
+            if(JSONObject.class.isAssignableFrom(body.getClass())){
+
+                request = JSONObject.parseObject(body.toString(),RpcRequest.class);
+            }
+            else {
+                request = (RpcRequest)body;
+            }
             ServerMessageHandler.getInstance().submit(ctx,request);
      /*       NettyMessage  message = new NettyMessage();
             Header header = new Header();

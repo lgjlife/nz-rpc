@@ -6,7 +6,9 @@ spring:
 # logger
 logging:
   level:
-    com: error
+    com: debug
+    com.nz.rpc.netty.coder.MsgCoder: info
+    com.nz.rpc.netty.server.handler.HeartbeatResponseHandler: info
    # com.nz.rpc: debug
     #com.nz.rpc.netty.server.handler.HeartbeatResponseHandler: info
     #com.nz.rpc.netty.coder.MsgCoder: info
@@ -24,3 +26,4 @@ nzrpc:
   nettyServer:
     bossTheads: 2
     workerTheads: 8
+  serialization: hessian

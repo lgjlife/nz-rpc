@@ -169,8 +169,15 @@ public class ClientMessageHandler {
         CompletableFuture future = ClientContext.getCompletableFuture(requestId);
         if(future != null){
             //是异步请求
-            future.complete(response.getResult());
-            ClientContext.removeCompletableFuture(requestId);
+           /// CompletableFuture responseFuture = (CompletableFuture)response.getResult();
+            try{
+                future.complete(response.getResult());
+                ClientContext.removeCompletableFuture(requestId);
+            }
+            catch(Exception ex){
+                log.error(ex.getMessage());
+            }
+
         }
         else {
             //同步请求处理

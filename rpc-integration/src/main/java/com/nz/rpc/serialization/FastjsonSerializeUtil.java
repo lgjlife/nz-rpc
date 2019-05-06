@@ -1,6 +1,7 @@
 package com.nz.rpc.serialization;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.nz.rpc.msg.RpcRequest;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
@@ -64,9 +65,19 @@ public class FastjsonSerializeUtil  extends AbstractSerialize {
         message.setBody(request);
 
 
-        JacksonSerializeUtil serializeUtil = new JacksonSerializeUtil();
+        AbstractSerialize serializeUtil = new FastjsonSerializeUtil();
+        byte[] data = serializeUtil.serialize(message);
+        NettyMessage nettyMessage = serializeUtil.deserialize(data,NettyMessage.class);
+        Object object = nettyMessage.getBody();
+        System.out.println(JSONObject.class.isAssignableFrom(object.getClass()));
+        System.out.println(object.getClass().getName());
 
-        try{
+        JSONObject jsonObject = (JSONObject)object;
+        System.out.println(jsonObject);
+        RpcRequest request1 = JSONObject.parseObject(jsonObject.toString(),RpcRequest.class);
+
+        System.out.println(request1);
+     /*   try{
             String json = JSON.toJSONString(message);
             NettyMessage nettyMessage = (NettyMessage)JSON.parseObject(json,Object.class);
             System.out.println(nettyMessage);
@@ -74,7 +85,7 @@ public class FastjsonSerializeUtil  extends AbstractSerialize {
         }
         catch(Exception ex){
             System.out.println(ex);
-        }
+        }*/
 
 
 
