@@ -37,7 +37,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
 
 
     @Override
-    public Object intercept(ClientInvocation invocation) throws RuntimeException {
+    public Object intercept(ClientInvocation invocation) throws Exception {
 
         Object result = null;
         log.debug("RpcClientRequestInterceptor start ....");

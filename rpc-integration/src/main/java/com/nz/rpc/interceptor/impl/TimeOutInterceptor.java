@@ -28,7 +28,7 @@ public class TimeOutInterceptor implements Interceptor {
 
     private static final long TIME_OUT = 8000000;
     @Override
-    public Object intercept(ClientInvocation invocation) throws RuntimeException {
+    public Object intercept(ClientInvocation invocation) throws Exception {
 
         log.debug("TimeOutInterceptor start ....");
 
