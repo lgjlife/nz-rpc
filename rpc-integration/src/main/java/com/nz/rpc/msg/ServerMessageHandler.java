@@ -35,8 +35,6 @@ public class ServerMessageHandler {
     public static  ServerMessageHandler getInstance(){
         return  serverMessageHandler;
     }
-
-
     public   void submit(ChannelHandlerContext ctx,RpcRequest request){
         Future<?> future = executorService.submit(new RequestHandler(ctx,request));
         log.debug("executorService = {}",executorService.toString());

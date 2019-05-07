@@ -2,6 +2,7 @@ package com.nz.rpc.loadbalance;
 
 
 import com.nz.rpc.discover.ProviderConfig;
+import com.nz.rpc.loadbalance.exception.LoadbalanceException;
 
 import java.util.List;
 
@@ -13,5 +14,19 @@ import java.util.List;
 */
 public interface LoadbalanceStrategy {
 
-    public ProviderConfig select(List<ProviderConfig> configs, Object object) throws Exception;
+    default  public ProviderConfig select(List<ProviderConfig> configs, Object object) throws Exception{
+
+        if((configs == null) || (configs.isEmpty())){
+            throw new LoadbalanceException("Loadbalance fail!,No provider can select! ");
+        }
+        if(configs.size() == 1){
+            return configs.get(0);
+        }
+
+        return doSelect(configs,object);
+
+    }
+
+    ProviderConfig doSelect(List<ProviderConfig> configs, Object object) throws Exception;
+
 }
