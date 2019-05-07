@@ -10,6 +10,6 @@ import com.nz.rpc.invocation.client.ClientInvocation;
 */
 public interface Interceptor {
 
-    Object intercept(ClientInvocation invocation) throws Exception;
+    Object intercept(ClientInvocation invocation) throws RuntimeException;
 
 }

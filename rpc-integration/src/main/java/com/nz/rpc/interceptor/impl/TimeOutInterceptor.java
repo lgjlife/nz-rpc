@@ -26,9 +26,12 @@ public class TimeOutInterceptor implements Interceptor {
 
     ReentrantLock lock = new ReentrantLock();
 
-    private static final long TIME_OUT = 20000000;
+    private static final long TIME_OUT = 8000000;
     @Override
-    public Object intercept(ClientInvocation invocation) throws Exception {
+    public Object intercept(ClientInvocation invocation) throws RuntimeException {
+
+        log.debug("TimeOutInterceptor start ....");
+
         long start = System.nanoTime()/1000;
         Object result = invocation.executeNext();
 
@@ -56,10 +59,11 @@ public class TimeOutInterceptor implements Interceptor {
             System.out.println("result == null-----------------------------------");
         }
 
-        if(TIME_OUT < (delta)){
+        if(delta > TIME_OUT){
             String message  = new StringBuilder().append("request [")
                     .append(invocation.getMethod().getName())
-                    .append("] request timeout ! max = ")
+                    .append("] request timeout ! request  time is  = ")
+                    .append(delta)
                     .toString();
             throw new RequestTimeOutException(message);
         }

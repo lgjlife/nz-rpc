@@ -19,6 +19,10 @@ nzrpc:
 logging:
   level:
     com: debug
+    org: debug
+    org.apache.zookeeper: error
+    org.apache.tomcat: error
+    org.apache.coyote: error
 #    com.nz.rpc: debug
  #   com.nz.rpc.msg.ClientMessageHandler: error
   #  com.nz.rpc.netty.coder.MsgCoder: error

@@ -33,7 +33,7 @@ public class ClientMessageHandler {
     private LoadbalanceStrategy  loadbalanceStrategy;
 
     private Map<Long,RpcResponse> resultMap = new ConcurrentHashMap<>();
-    private static  final int requestTimeoutMs = 30000;
+    private static  final int requestTimeoutMs = 10000;
     private Map<Long,RequestLock> requestLock = new ConcurrentHashMap<>();
 
     public static ClientMessageHandler getInstance() {
@@ -100,6 +100,7 @@ public class ClientMessageHandler {
         else {
             //发送消息
             ChannelFuture future = channel.writeAndFlush(nettyMessage);
+
             requestLock.put(id,new RequestLock());
 
             return null;

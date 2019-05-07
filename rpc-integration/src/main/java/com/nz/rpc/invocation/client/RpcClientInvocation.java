@@ -35,7 +35,7 @@ public class RpcClientInvocation implements ClientInvocation {
     }
 
     @Override
-    public Object executeNext() throws Exception {
+    public Object executeNext() throws RuntimeException {
         Object result = null;
         if (index < interceptors.size()){
             result =  interceptors.get(index++).intercept(this);

@@ -49,17 +49,23 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
         @Override
         public void addHandler(ChildData data) {
 
-            log.debug("");
+            log.debug("ListenerEventHandlerImpl　addHandler");
             queryService();
         }
 
         @Override
         public void removeHandler(ChildData data) {
+            log.debug("ListenerEventHandlerImpl　removeHandler");
+
+            String removePath = data.getPath();
+            log.debug("removePath = " + removePath);
             queryService();
         }
 
         @Override
         public void updateHandler(ChildData data) {
+            log.debug("ListenerEventHandlerImpl　updateHandler");
+
             queryService();
         }
     }

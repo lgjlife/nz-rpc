@@ -7,7 +7,7 @@ public interface ClientInvocation {
 
     Method getMethod();
     Object[] getArgs();
-    Object executeNext() throws Exception;
+    Object executeNext() throws RuntimeException;
     Map<String, String> getAttachments();
 
 }

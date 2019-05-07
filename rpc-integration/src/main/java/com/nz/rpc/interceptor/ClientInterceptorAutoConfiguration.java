@@ -2,6 +2,7 @@ package com.nz.rpc.interceptor;
 
 
 import com.nz.rpc.context.ClientContext;
+import com.nz.rpc.interceptor.impl.ClusterFaultToleranceInterceptor;
 import com.nz.rpc.interceptor.impl.RpcClientRequestInterceptor;
 import com.nz.rpc.interceptor.impl.ServiceSelectInterceptor;
 import com.nz.rpc.interceptor.impl.TimeOutInterceptor;
@@ -27,8 +28,13 @@ public class ClientInterceptorAutoConfiguration {
         InterceptorChain interceptorChain = new InterceptorChain();
 
         try{
-            interceptorChain.addFirst("TimeOutInterceptor",new TimeOutInterceptor());
+            //集群容错处理
+            interceptorChain.addFirst("ClusterFaultToleranceInterceptor",new ClusterFaultToleranceInterceptor());
+            //超时处理
+            interceptorChain.addAfter("ClusterFaultToleranceInterceptor","TimeOutInterceptor",new TimeOutInterceptor());
+            //负载均衡处理
             interceptorChain.addLast("ServiceSelectInterceptor",new ServiceSelectInterceptor(handler));
+            //数据RPC发送处理
             interceptorChain.addAfter("ServiceSelectInterceptor","RpcClientRequestInterceptor",new RpcClientRequestInterceptor(uidProducer,handler));
             ClientContext.interceptors = interceptorChain.getInterceptor();
         }

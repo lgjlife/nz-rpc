@@ -5,8 +5,6 @@ import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class InterceptorChainTest {
 
     InterceptorChain interceptorChain;
@@ -77,7 +75,7 @@ public class InterceptorChainTest {
 @Data
 class MyInterceptor implements Interceptor{
     @Override
-    public Object intercept(ClientInvocation invocation) throws Exception {
+    public Object intercept(ClientInvocation invocation) throws RuntimeException {
         return null;
     }
 }

@@ -34,26 +34,14 @@ public class RpcClientRequestInterceptor implements Interceptor {
         this.handler = handler;
     }
 
-    interface Parent<T>{
 
-    }
-
-    class Son<T> implements Parent<T>{
-
-
-
-    }
-
-    public static void main(String args[]){
-        System.out.println(Parent.class.isAssignableFrom(Son.class));;
-
-
-    }
 
     @Override
-    public Object intercept(ClientInvocation invocation) throws Exception {
+    public Object intercept(ClientInvocation invocation) throws RuntimeException {
 
         Object result = null;
+        log.debug("RpcClientRequestInterceptor start ....");
+
         //log.info("正在执行RpcRequestInterceptor....");
         //准备消息
         RpcRequest request = buildRequest(invocation.getMethod(),invocation.getArgs());
