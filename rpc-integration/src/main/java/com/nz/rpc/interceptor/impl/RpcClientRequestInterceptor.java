@@ -76,7 +76,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
     private NettyMessage buildNettyMessage(RpcRequest request){
         NettyMessage nettyMessage = new NettyMessage();
         Header header = new Header();
-        header.setType(MessageType.APP_REQUEST_TYPE);
+        header.setType(MessageType.APP_REQUEST_TYPE.getValue());
         nettyMessage.setHeader(header);
         nettyMessage.setBody(request);
         return  nettyMessage;

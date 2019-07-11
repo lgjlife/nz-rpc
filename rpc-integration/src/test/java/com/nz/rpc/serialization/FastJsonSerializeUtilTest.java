@@ -7,7 +7,7 @@ import org.junit.Test;
 public class FastJsonSerializeUtilTest {
 
     @Test
-    public void testFastJsonSerialize(){
+    public void testFastJsonSerialize() throws Exception{
 
         AbstractSerialize serialize = new ProtostuffSerializeUtil();
 
@@ -71,9 +71,15 @@ class MyThread extends  Thread{
     @Override
     public void run() {
 
-        NettyMessage result = null;
-        byte[]  serByte = serialize.serialize(message);
-        result  = serialize.deserialize(serByte,NettyMessage.class);
+        try{
+            NettyMessage result = null;
+            byte[]  serByte = serialize.serialize(message);
+            result  = serialize.deserialize(serByte,NettyMessage.class);
+        }
+        catch(Exception ex){
+
+        }
+
 
     }
 }

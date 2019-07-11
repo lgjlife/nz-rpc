@@ -27,6 +27,6 @@ public interface LoadbalanceStrategy {
 
     }
 
-    ProviderConfig doSelect(List<ProviderConfig> configs, Object object) throws Exception;
+    ProviderConfig doSelect(List<ProviderConfig> configs, Object object) ;
 
 }

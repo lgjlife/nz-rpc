@@ -10,7 +10,7 @@ public class JdkSerializeUtil extends AbstractSerialize {
 
 
 
-    public <T> byte[] serialize(T obj) {
+    public <T> byte[] serialize(T obj)  throws Exception{
 
         if (obj  == null){
             throw new NullPointerException();
@@ -28,7 +28,7 @@ public class JdkSerializeUtil extends AbstractSerialize {
         return new byte[0];
     }
 
-    public <T> T deserialize(byte[] data, Class<T> clazz) {
+    public <T> T deserialize(byte[] data, Class<T> clazz) throws Exception {
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
 
         try {

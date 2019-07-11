@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TimeInterceptor implements Interceptor {
 
     @Override
-    public Object intercept(ClientInvocation invocation) throws RuntimeException {
+    public Object intercept(ClientInvocation invocation) throws Exception {
 
         log.info("正在执行TimeInterceptor....");
         long start = System.currentTimeMillis();

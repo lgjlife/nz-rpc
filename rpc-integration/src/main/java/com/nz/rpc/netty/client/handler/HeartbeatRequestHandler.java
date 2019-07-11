@@ -36,7 +36,7 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
+        log.info("");
        // ScheduledFuture futureTask  = ctx.executor().scheduleAtFixedRate(new HeartbeatRequestHandler.HeartbeatTask(ctx),0,heartbeatRateTimeSecond, TimeUnit.SECONDS);
       //  futureTaskMap.put(getAddress(ctx),futureTask);
         super.channelActive(ctx);
@@ -47,8 +47,8 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
         NettyMessage message = (NettyMessage)msg;
         if((message.getHeader() != null)
-           &&(message.getHeader().getType() == MessageType.HEARTBEAT_RESPONSE_TYPE)){
-          //  log.debug("接收到[{}]的心跳响应消息",getAddress(ctx));
+           &&(message.getHeader().getType() == MessageType.HEARTBEAT_RESPONSE_TYPE.getValue())){
+            log.debug("接收到[{}]的心跳响应消息",getAddress(ctx));
           //  timeOutCount.put(getAddress(ctx),0);
 
         }
@@ -132,8 +132,9 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
             }
             else if (event.state()== IdleState.WRITER_IDLE){
+                log.debug("写空闲事件发生，向[{}]发送心跳数据",ctx.channel().remoteAddress());
                 NettyMessage nettyMessage = buildHeartbeatMessage();
-                ctx.writeAndFlush(nettyMessage);
+                ctx.channel().writeAndFlush(nettyMessage);
             }
         }
         else {
@@ -154,7 +155,7 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
     private NettyMessage buildHeartbeatMessage(){
         NettyMessage nettyMessage = new NettyMessage();
         Header header = new Header();
-        header.setType(MessageType.HEARTBEAT_REQUEST_TYPE);
+        header.setType(MessageType.HEARTBEAT_REQUEST_TYPE.getValue());
         nettyMessage.setHeader(header);
         return  nettyMessage;
     }

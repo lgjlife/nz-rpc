@@ -1,5 +1,6 @@
 package com.nz.rpc.serialization;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nz.rpc.msg.RpcRequest;
 import com.nz.rpc.netty.message.Header;
@@ -10,13 +11,13 @@ import com.nz.rpc.serialization.anno.SerializationException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class JacksonSerializeUtil   {
+public class JacksonSerializeUtil  extends AbstractSerialize {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
 
    // @Override
-    public <T> byte[] serialize(T obj) throws SerializationException {
+    public <T> byte[] serialize(T obj)   throws Exception{
         if(obj == null){
             return new byte[0];
         }
@@ -55,14 +56,14 @@ public class JacksonSerializeUtil   {
         RpcRequest request = new RpcRequest();
 
         header.setCrcCode(1234);
-        header.setType(MessageType.APP_RESPONE_TYPE);
+        header.setType(MessageType.APP_RESPONE_TYPE.getValue());
         header.setLength(100);
-        header.setSessionId(200);
+        header.setSessionID(200);
 
         Map<String,Object> map = new LinkedHashMap<>();
 
         map.put("demoKey",(Object)"demoValue");
-        header.setAttachment(map);
+     //   header.setAttachment(map);
 
 
         request.setInterfaceName("com.demo");

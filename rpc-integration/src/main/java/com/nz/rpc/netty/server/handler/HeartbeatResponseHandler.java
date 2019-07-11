@@ -22,14 +22,14 @@ public class HeartbeatResponseHandler extends ChannelInboundHandlerAdapter {
         NettyMessage message = (NettyMessage)msg;
 
         if( (message.getHeader() != null)
-            &&(message.getHeader().getType() == MessageType.HEARTBEAT_REQUEST_TYPE)){
+            &&(message.getHeader().getType() == MessageType.HEARTBEAT_REQUEST_TYPE.getValue())){
             if(log.isDebugEnabled()){
                 log.debug("recv HeartbeatResponse [{}-{}]",ctx.channel().remoteAddress(),ctx.channel().id());
             }
 
             NettyMessage nettyMessage = new NettyMessage();
             Header header =  new Header();
-            header.setType(MessageType.HEARTBEAT_RESPONSE_TYPE);
+            header.setType(MessageType.HEARTBEAT_RESPONSE_TYPE.getValue());
             nettyMessage.setHeader(header);
 
             ctx.channel().writeAndFlush(nettyMessage);

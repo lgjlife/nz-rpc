@@ -32,18 +32,28 @@ public class NettyClient {
 
     private List<String> connectingServer = new CopyOnWriteArrayList<String>();
 
-
+    private RpcProperties rpcProperties;
 
 
     public NettyClient(RpcProperties rpcProperties){
+
+        this.rpcProperties =  rpcProperties;
+
+
+
+    }
+
+    public void init(){
+
         group = new NioEventLoopGroup(rpcProperties.getNettyClient().getWorkerTheads(),
                 new DefaultThreadFactory("client1", true));
         bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.SO_SNDBUF,1024*1024)
+                .option(ChannelOption.SO_RCVBUF,1024*1024)
                 .handler(new NettyChannelHandler());
-
     }
 
     public void  connect(SocketAddress remoteAddress){

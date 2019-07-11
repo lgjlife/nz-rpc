@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class HessianSerializeUtil extends AbstractSerialize {
 
-    public <T> byte[] serialize(T obj) {
+    public <T> byte[] serialize(T obj)  throws Exception{
 
         if (obj  == null){
             throw new NullPointerException();
@@ -33,7 +33,7 @@ public class HessianSerializeUtil extends AbstractSerialize {
 
     }
 
-    public <T> T deserialize(byte[] data, Class<T> clazz) {
+    public <T> T deserialize(byte[] data, Class<T> clazz)  throws Exception{
 
         if (data == null){
             throw  new  NullPointerException();
@@ -51,7 +51,7 @@ public class HessianSerializeUtil extends AbstractSerialize {
 
     }
 
-    public static void main(String args[]){
+    public static void main(String args[]) throws Exception{
 
         AsyncFuture future = new HessianSerializeUtil().new AsyncFuture();
 

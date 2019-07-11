@@ -2,7 +2,6 @@ package com.nz.rpc.loadbalance;
 
 
 import com.nz.rpc.discover.ProviderConfig;
-import com.nz.rpc.loadbalance.exception.LoadbalanceException;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,14 +15,7 @@ import java.util.List;
 */
 public class LeastActiveLoadbalanceStrategy implements  LoadbalanceStrategy{
 
-    public ProviderConfig select(List<ProviderConfig> configs, Object object)throws Exception{
-
-        if(configs == null){
-            throw  new NullPointerException();
-        }
-        if(configs.size() == 0){
-            throw  new LoadbalanceException("Load balance fail! The configs have 0 config ");
-        }
+    public ProviderConfig doSelect(List<ProviderConfig> configs, Object object){
 
         ProviderConfig[] registryConfigs= new ProviderConfig[configs.size()];
         configs.toArray(registryConfigs);

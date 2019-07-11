@@ -24,7 +24,7 @@ public class ProtostuffSerializeUtil  extends AbstractSerialize {
 
 
 
-    public   <T> byte[] serialize(T obj) {
+    public   <T> byte[] serialize(T obj)  throws Exception{
 
         if (obj  == null){
             throw new NullPointerException();
@@ -41,7 +41,7 @@ public class ProtostuffSerializeUtil  extends AbstractSerialize {
         return data;
     }
 
-    public <T> T deserialize(byte[] data, Class<T> clazz) {
+    public <T> T deserialize(byte[] data, Class<T> clazz)  throws Exception{
         Schema<T> schema = getSchema(clazz);
         T obj = schema.newMessage();
         ProtostuffIOUtil.mergeFrom(data, obj, schema);

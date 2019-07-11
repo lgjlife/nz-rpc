@@ -1,0 +1,113 @@
+{
+  "groups": [
+    {
+      "name": "lock",
+      "type": "com.nz.rpc.lock.LockProperties",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
+      "name": "nzrpc",
+      "type": "com.nz.rpc.properties.RpcProperties",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "lock.host",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
+      "name": "lock.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.max-wait",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.password",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
+      "name": "lock.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.lock.LockProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "lock.user-name",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
+      "name": "lock.zookeeper-adress",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.lock.LockProperties"
+    },
+    {
+      "name": "nzrpc.netty-client",
+      "type": "com.nz.rpc.netty.client.properties.NettyClientProperties",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.netty-server",
+      "type": "com.nz.rpc.netty.server.properties.NettyServerProperties",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.nhost",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.nport",
+      "type": "java.lang.Integer",
+      "sourceType": "com.nz.rpc.properties.RpcProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "nzrpc.proxy-type",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.scan-package",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.serialization",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.uid",
+      "type": "com.nz.rpc.uid.UidProperties",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
+      "name": "nzrpc.zookeeper-adress",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    }
+  ],
+  "hints": []
+}

@@ -17,14 +17,14 @@ public class NettyMessageBuilder {
         RpcRequest request = new RpcRequest();
 
         header.setCrcCode(1234);
-        header.setType(MessageType.APP_RESPONE_TYPE);
+        header.setType(MessageType.APP_RESPONE_TYPE.getValue());
         header.setLength(100);
-        header.setSessionId(200);
+        header.setSessionID(200);
 
         Map<String,Object> map = new LinkedHashMap<>();
 
         map.put("demoKey",(Object)"demoValue");
-        header.setAttachment(map);
+        //header.setAttachment(map);
 
 
         request.setInterfaceName("com.demo");

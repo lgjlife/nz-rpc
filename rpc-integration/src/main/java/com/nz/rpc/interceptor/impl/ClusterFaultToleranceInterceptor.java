@@ -1,8 +1,11 @@
 package com.nz.rpc.interceptor.impl;
 
 import com.nz.rpc.interceptor.Interceptor;
+import com.nz.rpc.interceptor.exception.RequestTimeOutException;
 import com.nz.rpc.invocation.client.ClientInvocation;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
 
 /**
  *功能描述
@@ -50,6 +53,18 @@ public class ClusterFaultToleranceInterceptor implements Interceptor {
             result = invocation.executeNext();
         }
         catch(Exception ex){
+
+            if(ex instanceof RequestTimeOutException){
+                //请求超时
+                //服务端关闭channel，或者服务端宕机
+                //服务端执行任务超时
+            }
+            else if(ex instanceof IOException){
+                //IO异常,服务拒绝请求
+            }
+            else {
+                //服务端执行任务出现异常
+            }
             log.error("Cluster is Fault!!!" + ex.getMessage());
         }
 

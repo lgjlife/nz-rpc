@@ -16,6 +16,6 @@ import java.io.Serializable;
 public class RpcResponse implements Serializable {
 
     private Long responseId;  //对应请求id
-    private Exception exception; //失败抛出的异常
+    private Exception exception; //失败抛出的异常0
     private Object result;   //结果
 }

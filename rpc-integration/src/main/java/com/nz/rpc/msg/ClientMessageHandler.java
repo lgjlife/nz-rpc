@@ -130,8 +130,16 @@ public class ClientMessageHandler {
             boolean flag = condition.await(requestTimeoutMs, TimeUnit.MILLISECONDS);
             if(flag){
                 //请求响应成功
-                log.debug("server response []",resultMap.get(id).getResult());
-                result = resultMap.get(id).getResult();
+                RpcResponse response = resultMap.get(id);
+                log.debug("server response [{}]",response);
+                resultMap.remove(id);
+                Exception ex;
+                if(( ex = response.getException()) != null){
+                    log.error("服务端执行请求出现错误!"+ex.getMessage());
+                    throw ex;
+                }
+                result = response.getResult();
+
             }
             else {
                 //请求响应超时
@@ -139,7 +147,7 @@ public class ClientMessageHandler {
                 //关闭channel
                 //nettyClient.removeChannel(host,Integer.valueOf(port));
                 //发起重新连接
-                //nettyClient.connect(host,Integer.valueOf(port));
+               // nettyClient.connect(host,Integer.valueOf(port));
 
                 result = null;
             }
@@ -162,15 +170,14 @@ public class ClientMessageHandler {
      * @See　　
      * */
     public void responseCallback(RpcResponse response){
-        if(log.isInfoEnabled()){
-            log.info("response = "+response);
-        }
+
 
         long requestId = response.getResponseId();
         CompletableFuture future = ClientContext.getCompletableFuture(requestId);
         if(future != null){
             //是异步请求
            /// CompletableFuture responseFuture = (CompletableFuture)response.getResult();
+            log.info("异步请求 response = "+response);
             try{
                 future.complete(response.getResult());
                 ClientContext.removeCompletableFuture(requestId);
@@ -182,6 +189,7 @@ public class ClientMessageHandler {
         }
         else {
             //同步请求处理
+            log.info("同步请求 response = "+response);
             ReentrantLock lock = requestLock.get(requestId).getLock();
             Condition condition = requestLock.get(requestId).getCondition();
             try{

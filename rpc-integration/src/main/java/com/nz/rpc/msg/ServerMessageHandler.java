@@ -57,11 +57,11 @@ public class ServerMessageHandler {
 
             try{
                 Object result = doInvoke(request);
-                buildNettyMessage(result,null);
+                nettyMessage =   buildNettyMessage(result,null);
             }
             catch(Exception ex){
                 log.error(ex.getMessage());
-                buildNettyMessage(null,ex);
+                nettyMessage = buildNettyMessage(null,ex);
             }
             ctx.writeAndFlush(nettyMessage);
 
@@ -79,7 +79,7 @@ public class ServerMessageHandler {
         private NettyMessage buildNettyMessage(Object result,Exception ex){
             NettyMessage  nettyMessage = new NettyMessage();
             Header header = new Header();
-            header.setType(MessageType.APP_RESPONE_TYPE);
+            header.setType(MessageType.APP_RESPONE_TYPE.getValue());
             nettyMessage.setHeader(header);
             RpcResponse response = new RpcResponse();
             response.setResponseId(request.getRequestId());

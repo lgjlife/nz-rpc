@@ -8,7 +8,7 @@ import org.junit.Test;
 public class JdkSerializeUtilTest {
 
     @Test
-    public void testJdkSerialize(){
+    public void testJdkSerialize() throws Exception{
 
         AbstractSerialize serialize = new JdkSerializeUtil();
 
