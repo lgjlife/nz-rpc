@@ -8,13 +8,17 @@ import com.nz.rpc.uid.UidProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RestController
 public class DemoController {
+
+    private AtomicInteger successCount = new AtomicInteger(0);
 
 
     @RpcReference
@@ -27,12 +31,28 @@ public class DemoController {
     @Autowired
     private UidProducer uidProducer;
 
+
+    @RequestMapping("/reset")
+    public void reset(){
+        successCount.set(0);
+    }
+
     @GetMapping("/demo")
     public  String  demo(){
+
         log.debug("/demo");
-        String reslut = demoService.setName(13546L);
+
+        String reslut = null;
+
+        reslut = demoService.setName(13546L);
+        if(reslut != null){
+            successCount.incrementAndGet();
+        }
         log.debug(reslut);
-        return reslut;
+
+
+
+        return successCount+":"+reslut;
 
 
 

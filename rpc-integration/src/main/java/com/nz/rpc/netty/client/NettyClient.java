@@ -10,7 +10,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -65,48 +64,61 @@ public class NettyClient {
 
         String key = getKey(host,port);
 
-        if(connectingServer.contains(key)){
-            return;
-        }
-        connectingServer.add(key);
+        synchronized (channelCache){
+            Channel channel = channelCache.get(key);
+            if(channel != null){
+                log.debug("channel isActive state = " + channel.isActive());
+                if((channel.isActive())){
 
-        try {
-            log.debug("conect to [{}:{}].....",host,port);
-
-            ChannelFuture channelFuture = bootstrap.connect(host, port);
-
-            channelFuture.addListener(new GenericFutureListener(){
-                @Override
-                public void operationComplete(Future future) throws Exception {
-                    log.debug("connect to  [{}:{}] state [{}]",host,port,future.isSuccess());
-                    if(future.isSuccess() == false){
-                        channelCache.remove(key);
-                        new Thread(){
-                            @Override
-                            public void run() {
-                                try{
-                                    Thread.sleep(reConnectIntervalTimeMs);
-                                    connect(host,port);
-                                }
-                                catch(Exception ex){
-                                    log.error(ex.getMessage());
-                                }
-                            }
-                        }.start();
-                    }
-                    else {
-                        channelCache.put(key,channelFuture.channel());
-                        connectingServer.remove(key);
-                    }
-
+                    return;
                 }
+            }
 
-            } );
 
-        } catch (Exception ex) {
-            log.debug("connect to [{}:{}] fail , reconnect again !",host,port);
+            //channel 不存在或者 channel处于激活状态，则创建连接
+            try {
+                log.debug("conect to [{}:{}].....",host,port);
+                 bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
+                    @Override
+                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                        log.debug("connect to  [{}:{}] state [{}]",host,port,channelFuture.isSuccess());
+                        if(channelFuture.isSuccess() == false){
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    try{
+                                        Thread.sleep(reConnectIntervalTimeMs);
+                                        connect(host,port);
+                                    }
+                                    catch(Exception ex){
+                                        log.error(ex.getMessage());
+                                    }
+                                }
+                            }.start();
+                        }
+                        else {
+                            channelCache.put(key,channelFuture.channel());
+                        }
+
+                    }
+
+                } );
+
+            } catch (Exception ex) {
+                log.debug("connect to [{}:{}] fail , reconnect again !",host,port);
+            }
         }
 
+    }
+    public void removeConnectServer(String host,int port){
+        String key = getKey(host,port);
+        synchronized (connectingServer){
+
+            if(connectingServer.contains(key)){
+                connectingServer.remove(key);
+                return;
+            }
+        }
     }
 
     public Channel getChannel(String host,int port){

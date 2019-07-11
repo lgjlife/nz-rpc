@@ -63,7 +63,8 @@ public class RpcClientRequestInterceptor implements Interceptor {
         }
         else{
             log.info("同步请求");
-            result = handler.getServerResponseResult(id);
+
+            result = handler.getServerResponseResult( invocation,id);
             if(log.isInfoEnabled()){
                 log.info("request result =[{}]",result);
             }

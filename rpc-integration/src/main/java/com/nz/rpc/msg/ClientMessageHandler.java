@@ -33,7 +33,7 @@ public class ClientMessageHandler {
     private LoadbalanceStrategy  loadbalanceStrategy;
 
     private Map<Long,RpcResponse> resultMap = new ConcurrentHashMap<>();
-    private static  final int requestTimeoutMs = 10000;
+    private static  final int requestTimeoutMs = 1000;
     private Map<Long,RequestLock> requestLock = new ConcurrentHashMap<>();
 
     public static ClientMessageHandler getInstance() {
@@ -117,22 +117,22 @@ public class ClientMessageHandler {
      * @return:
      *
     */
-    public Object getServerResponseResult( long id){
+    public Object getServerResponseResult( ClientInvocation invocation,long requestId){
 
         //long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
 
-        ReentrantLock lock = requestLock.get(id).getLock();
+        ReentrantLock lock = requestLock.get(requestId).getLock();
 
-        Condition condition =  requestLock.get(id).getCondition();
+        Condition condition =  requestLock.get(requestId).getCondition();
         Object result = null;
         try{
             lock.lock();
             boolean flag = condition.await(requestTimeoutMs, TimeUnit.MILLISECONDS);
             if(flag){
                 //请求响应成功
-                RpcResponse response = resultMap.get(id);
+                RpcResponse response = resultMap.get(requestId);
                 log.debug("server response [{}]",response);
-                resultMap.remove(id);
+                resultMap.remove(requestId);
                 Exception ex;
                 if(( ex = response.getException()) != null){
                     log.error("服务端执行请求出现错误!"+ex.getMessage());
@@ -144,10 +144,15 @@ public class ClientMessageHandler {
             else {
                 //请求响应超时
                 log.error("server response time out,removeChannel and reconnect...");
+
+                String host = invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST);
+                Integer port = Integer.valueOf(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT));
+
                 //关闭channel
                 //nettyClient.removeChannel(host,Integer.valueOf(port));
                 //发起重新连接
-               // nettyClient.connect(host,Integer.valueOf(port));
+                nettyClient.getConnectingServer();
+                nettyClient.connect(host,port);
 
                 result = null;
             }

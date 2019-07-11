@@ -35,14 +35,6 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("");
-       // ScheduledFuture futureTask  = ctx.executor().scheduleAtFixedRate(new HeartbeatRequestHandler.HeartbeatTask(ctx),0,heartbeatRateTimeSecond, TimeUnit.SECONDS);
-      //  futureTaskMap.put(getAddress(ctx),futureTask);
-        super.channelActive(ctx);
-    }
-
-    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
         NettyMessage message = (NettyMessage)msg;
@@ -64,40 +56,6 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.debug("HeartbeatRequestHandler exceptionCaught");
         super.exceptionCaught(ctx, cause);
-    }
-
-    private  class   HeartbeatTask implements  Runnable{
-
-        private  ChannelHandlerContext ctx;
-
-        public HeartbeatTask(ChannelHandlerContext ctx) {
-            this.ctx = ctx;
-        }
-
-        @Override
-        public void run() {
-
-            Integer count = timeOutCount.get(getAddress(ctx));
-
-            if((count != null)&&((++count)*heartbeatRateTimeSecond > heartbeatTimeOutSecond)){
-                log.debug("与[{}]已经断开连接",getAddress(ctx));
-                ScheduledFuture future = futureTaskMap.get(getAddress(ctx));
-                NettyContext.getNettyClient().connect(ctx.channel().remoteAddress());
-                future.cancel(true);
-                futureTaskMap.remove(getAddress(ctx));
-                ctx.channel().close();
-
-            }
-            else {
-                count = (count==null)?1:count;
-
-                timeOutCount.put(getAddress(ctx),count);
-                log.debug("给[{}]发送心跳消息",getAddress(ctx));
-                NettyMessage nettyMessage = buildHeartbeatMessage();
-                ctx.writeAndFlush(nettyMessage);
-            }
-
-        }
     }
 
     /**

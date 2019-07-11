@@ -18,7 +18,9 @@ nzrpc:
 # logger
 logging:
   level:
-    com: debug
+    com.nz: debug
+    org: error
+
 #    com.nz.rpc: debug
  #   com.nz.rpc.msg.ClientMessageHandler: error
   #  com.nz.rpc.netty.coder.MsgCoder: error
