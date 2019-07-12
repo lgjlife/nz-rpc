@@ -1,6 +1,7 @@
 package com.nz.rpc.cluster;
 
 import com.nz.rpc.invocation.client.ClientInvocation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *功能描述 
@@ -8,9 +9,13 @@ import com.nz.rpc.invocation.client.ClientInvocation;
  * @Description  集群容错处理
  * @date 5/8/19
 */
+@Slf4j
 public class FailoverClusterFault implements ClusterFault {
 
     public  Object doHandle(ClientInvocation invocation,Exception ex){
+        log.error("Failover:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
+
+
         return null;
     }
 }

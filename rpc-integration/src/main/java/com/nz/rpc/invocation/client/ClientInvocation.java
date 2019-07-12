@@ -9,5 +9,6 @@ public interface ClientInvocation {
     Object[] getArgs();
     Object executeNext() throws Exception;
     Map<String, String> getAttachments();
+    void resetIndex();
 
 }

@@ -14,8 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FailsaveClusterFault implements ClusterFault {
 
+
+
     public  Object doHandle(ClientInvocation invocation,Exception ex){
-        log.error("Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
+        log.error("Failsave:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
+
         return null;
     }
 }

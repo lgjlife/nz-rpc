@@ -58,4 +58,9 @@ public class RpcClientInvocation implements ClientInvocation {
     public Map<String, String> getAttachments() {
         return attachments;
     }
+
+    @Override
+    public void resetIndex() {
+        index = 0;
+    }
 }

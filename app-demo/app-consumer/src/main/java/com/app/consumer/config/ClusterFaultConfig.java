@@ -3,7 +3,7 @@ package com.app.consumer.config;
 import com.app.common.service.DemoService;
 import com.nz.rpc.cluster.AbstractClusterFaultConfig;
 import com.nz.rpc.cluster.ClusterFault;
-import com.nz.rpc.cluster.FailsaveClusterFault;
+import com.nz.rpc.cluster.FailbackClusterFault;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public class ClusterFaultConfig extends AbstractClusterFaultConfig {
     @Override
     public Map<String, Class<? extends ClusterFault>> config() {
         Map<String, Class<? extends ClusterFault>> configs = new HashMap<>();
-        configs.put(DemoService.class.getName(), FailsaveClusterFault.class);
+        configs.put(DemoService.class.getName(), FailbackClusterFault.class);
         return configs;
     }
 }
