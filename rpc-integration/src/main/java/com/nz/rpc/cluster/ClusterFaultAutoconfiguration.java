@@ -27,7 +27,11 @@ public class ClusterFaultAutoconfiguration {
     }
 
     @Bean
-    ClusterFault failfastClusterFaultTolerance(){
+    public ClusterFault failfastClusterFaultTolerance(){
        return new FailfastClusterFault();
+    }
+    @Bean
+    public FailsaveClusterFault failsaveClusterFault(){
+        return new FailsaveClusterFault();
     }
 }
