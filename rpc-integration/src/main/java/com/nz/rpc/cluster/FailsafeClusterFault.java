@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 */
 
 @Slf4j
-public class FailsaveClusterFault implements ClusterFault {
+public class FailsafeClusterFault implements ClusterFault {
 
 
 

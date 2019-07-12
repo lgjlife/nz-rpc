@@ -32,8 +32,8 @@ public class ClusterFaultAutoconfiguration {
     }
 
     @Bean
-    public FailsaveClusterFault failsaveClusterFault(){
-        return new FailsaveClusterFault();
+    public FailsafeClusterFault failsaveClusterFault(){
+        return new FailsafeClusterFault();
     }
 
     @Bean

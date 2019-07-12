@@ -1,6 +1,7 @@
 package com.nz.rpc.invocation.client;
 
 import com.nz.rpc.context.ClientContext;
+import com.nz.rpc.exception.MessageSendFailException;
 import com.nz.rpc.interceptor.Interceptor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,9 @@ public class RpcClientInvocation implements ClientInvocation {
         Object result = null;
         if (index < interceptors.size()){
             result =  interceptors.get(index++).intercept(this);
+        }
+        else {
+            throw new MessageSendFailException("No server can be to send the request message!");
         }
         return result;
     }

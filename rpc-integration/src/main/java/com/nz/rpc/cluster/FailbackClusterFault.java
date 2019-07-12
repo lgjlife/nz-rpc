@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 @Slf4j
 public class FailbackClusterFault implements ClusterFault {
 
+    //重试间隔
     private static final long RETRY_FAILED_PERIOD = 5 * 1000;
     private final ScheduledExecutorService retryExecutorService= Executors.newSingleThreadScheduledExecutor();
     private Map<String,ScheduledFuture> futureMap = new ConcurrentHashMap<>();
@@ -48,6 +49,7 @@ public class FailbackClusterFault implements ClusterFault {
             }
         },RETRY_FAILED_PERIOD,RETRY_FAILED_PERIOD, TimeUnit.MILLISECONDS);
         futureMap.put(uid,future);
+
         return null;
     }
 

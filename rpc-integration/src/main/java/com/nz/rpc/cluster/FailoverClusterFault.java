@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 public class FailoverClusterFault implements ClusterFault {
 
     public  Object doHandle(ClientInvocation invocation,Exception ex){
-        log.error("Failover:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
 
+        log.error("Failover:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
 
         return null;
     }
