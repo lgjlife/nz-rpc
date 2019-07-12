@@ -1,7 +1,6 @@
 package com.nz.rpc.properties;
 
 
-import com.nz.rpc.loadbalance.LoadbalanceType;
 import com.nz.rpc.netty.client.properties.NettyClientProperties;
 import com.nz.rpc.netty.server.properties.NettyServerProperties;
 import com.nz.rpc.uid.UidProperties;
@@ -67,7 +66,7 @@ public class RpcProperties {
 
     private NettyServerProperties nettyServer = new NettyServerProperties();
 
-    private String loadbalance =  LoadbalanceType.POLLING_LOADBALANCE;
+
 
 
 }

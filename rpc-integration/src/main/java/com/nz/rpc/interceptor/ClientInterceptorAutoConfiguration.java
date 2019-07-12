@@ -1,6 +1,7 @@
 package com.nz.rpc.interceptor;
 
 
+import com.nz.rpc.cluster.ClusterFaultHandler;
 import com.nz.rpc.context.ClientContext;
 import com.nz.rpc.interceptor.impl.ClusterFaultToleranceInterceptor;
 import com.nz.rpc.interceptor.impl.RpcClientRequestInterceptor;
@@ -27,12 +28,15 @@ public class ClientInterceptorAutoConfiguration {
     @Autowired
     private LoadbanlanceHandler loadbanlanceHandler;
 
+    @Autowired
+    private ClusterFaultHandler clusterFaultHandler;
+
     @Bean
     public InterceptorChain interceptorChain(){
         InterceptorChain interceptorChain = new InterceptorChain();
         try{
             //集群容错处理
-            interceptorChain.addFirst("ClusterFaultToleranceInterceptor",new ClusterFaultToleranceInterceptor());
+            interceptorChain.addFirst("ClusterFaultToleranceInterceptor",clusterFaultToleranceInterceptor());
             //超时处理
             interceptorChain.addAfter("ClusterFaultToleranceInterceptor","TimeOutInterceptor",new TimeOutInterceptor());
             //负载均衡处理
@@ -47,11 +51,20 @@ public class ClientInterceptorAutoConfiguration {
         return interceptorChain;
     }
 
+    @Bean
     public ServiceSelectInterceptor serviceSelectInterceptor(){
 
         ServiceSelectInterceptor serviceSelectInterceptor = new ServiceSelectInterceptor();
         serviceSelectInterceptor.setLoadbanlanceHandler(loadbanlanceHandler);
         return serviceSelectInterceptor;
     }
+
+    @Bean
+    ClusterFaultToleranceInterceptor clusterFaultToleranceInterceptor(){
+        ClusterFaultToleranceInterceptor clusterFaultToleranceInterceptor = new ClusterFaultToleranceInterceptor();
+        clusterFaultToleranceInterceptor.setClusterFaultHandler(clusterFaultHandler);
+        return clusterFaultToleranceInterceptor;
+    }
+
 }
 

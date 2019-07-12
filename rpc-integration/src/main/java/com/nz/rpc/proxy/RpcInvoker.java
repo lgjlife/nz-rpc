@@ -50,12 +50,11 @@ public class RpcInvoker implements InvocationHandler, MethodInterceptor {
     }
 
     public Object doIncoke(Method method, Object[] args) throws Throwable{
-
-
         ClientInvocation clientInvocation = new RpcClientInvocation(method,args);
         Object result = clientInvocation.executeNext();
         return result;
     }
+
 
 
 }

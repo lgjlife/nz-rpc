@@ -14,11 +14,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ *功能描述 
+ * @author lgj
+ * @Description   负载均衡处理
+ * @date 7/12/19
+*/
 @Slf4j
 public class LoadbanlanceHandler {
 
     private ApplicationContext context;
-    private Map<String,LoadbalanceStrategy> loadbalanceStrategieBeans;
+    //随机负载均衡策略类
+    private final Class defaultLoadbalanceStrategy = PollingLoadbalanceStrategy.class;
 
     private Map<String,Class<? extends LoadbalanceStrategy>> serviceLoadbanlanceStrategy = new ConcurrentHashMap<>();
 
@@ -56,12 +63,13 @@ public class LoadbanlanceHandler {
     private LoadbalanceStrategy getLoadbalanceStrategy(String interfaceName){
             Class strategyClass = serviceLoadbanlanceStrategy.get(interfaceName);
 
+            //用户没有配置，获取默认
             if(strategyClass==null){
-                return context.getBean(PollingLoadbalanceStrategy.class);
+                return (LoadbalanceStrategy)context.getBean(defaultLoadbalanceStrategy);
             }
             LoadbalanceStrategy  loadbalanceStrategy = (LoadbalanceStrategy)context.getBean(strategyClass);
             if(loadbalanceStrategy == null){
-                return context.getBean(PollingLoadbalanceStrategy.class);
+                return (LoadbalanceStrategy)context.getBean(defaultLoadbalanceStrategy);
             }
             return loadbalanceStrategy;
     }

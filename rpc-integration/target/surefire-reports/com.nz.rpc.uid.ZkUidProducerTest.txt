@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.nz.rpc.uid.ZkUidProducerTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 126.179 s - in com.nz.rpc.uid.ZkUidProducerTest
