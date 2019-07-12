@@ -1,12 +1,11 @@
 spring:
   application:
     name: rpc-provider-1
-  banner:
-    location: banner.txt
 # logger
 logging:
   level:
     com.nz.rpc: debug
+    app: debug
 server:
   port: 8466
 nzrpc:

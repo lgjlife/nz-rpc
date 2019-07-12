@@ -30,12 +30,11 @@ public class TimeOutInterceptor implements Interceptor {
     @Override
     public Object intercept(ClientInvocation invocation) throws Exception {
 
-        log.debug("TimeOutInterceptor start ....");
-
         long start = System.nanoTime()/1000;
         Object result = invocation.executeNext();
 
         long end = System.nanoTime()/1000;
+        //微秒
         long delta = end -start;
         if(result != null){
             try{
@@ -47,6 +46,7 @@ public class TimeOutInterceptor implements Interceptor {
              //   System.out.println(nums.get()+ "  " + delta + "  " + avr.get());
                 float avrNew = MathUtil.calcAverage(avr.get(),delta,nums.addAndGet(1));
                 avr.set((long)(avrNew));
+                log.debug("THis Request avr time is [{}]ms",avrNew/1000);
             }
             catch(Exception ex){
                 log.error(ex.getMessage());

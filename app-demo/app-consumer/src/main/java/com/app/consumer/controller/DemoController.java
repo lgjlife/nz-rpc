@@ -18,7 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RestController
 public class DemoController {
 
+    private AtomicInteger allCount = new AtomicInteger(0);
     private AtomicInteger successCount = new AtomicInteger(0);
+    private AtomicInteger failCount = new AtomicInteger(0);
 
 
     @RpcReference
@@ -34,7 +36,9 @@ public class DemoController {
 
     @RequestMapping("/reset")
     public void reset(){
+        allCount.set(0);
         successCount.set(0);
+        failCount.set(0);
     }
 
     @GetMapping("/demo")
@@ -43,16 +47,27 @@ public class DemoController {
         log.debug("/demo");
 
         String reslut = null;
+        allCount.incrementAndGet();
 
+        long startTime = System.currentTimeMillis();
         reslut = demoService.setName(13546L);
+        long endTime = System.currentTimeMillis();
         if(reslut != null){
             successCount.incrementAndGet();
         }
-        log.debug(reslut);
+        else {
+            failCount.incrementAndGet();
+        }
+        //log.debug(reslut);
 
 
+        reslut = "allCount=" + allCount + ","
+                +  " successCount=" + successCount + ","
+                +  " failCount=" + failCount + ","
+                + "  time = "+ (endTime-startTime);
 
-        return successCount+":"+reslut;
+        log.debug("DemoController reslut = " + reslut);
+        return reslut;
 
 
 

@@ -2,7 +2,7 @@ package com.nz.rpc.interceptor.impl;
 
 import com.nz.rpc.interceptor.Interceptor;
 import com.nz.rpc.invocation.client.ClientInvocation;
-import com.nz.rpc.msg.ClientMessageHandler;
+import com.nz.rpc.loadbalance.LoadbanlanceHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,25 +15,24 @@ import lombok.extern.slf4j.Slf4j;
 public class ServiceSelectInterceptor implements Interceptor {
 
 
-    private  ClientMessageHandler handler;
-    public ServiceSelectInterceptor(ClientMessageHandler handler) {
-        this.handler = handler;
-    }
+
+    private LoadbanlanceHandler loadbanlanceHandler;
+
+
 
     @Override
     public Object intercept(ClientInvocation invocation) throws Exception {
 
         log.debug("ServiceSelectInterceptor start ....");
-        try{
-            handler.serviceSelect(invocation);
-        }
-        catch(Exception ex){
-            log.error(ex.getMessage());
-
-            return null;
-        }
-
+        //负载均衡选择Server
+        loadbanlanceHandler.serviceSelect(invocation);
         Object result = invocation.executeNext();
         return result;
+    }
+
+
+
+    public void setLoadbanlanceHandler(LoadbanlanceHandler loadbanlanceHandler) {
+        this.loadbanlanceHandler = loadbanlanceHandler;
     }
 }

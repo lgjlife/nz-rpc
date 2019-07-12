@@ -14,9 +14,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -28,10 +26,10 @@ import java.util.concurrent.ScheduledFuture;
 @Slf4j
 public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
-    private Map<String,Integer> timeOutCount = new HashMap<>();
-    private Map<String,ScheduledFuture> futureTaskMap = new HashMap<>();
-    private static final  int heartbeatRateTimeSecond = 20;
-    private static final   int heartbeatTimeOutSecond = 50;
+    private final int MAX_HEARTBEAT_FAIL_COUNT = 3;
+
+    private ConcurrentHashMap<String,Integer> maxHeartbeatFailCountRecords = new ConcurrentHashMap<String, Integer>();
+
 
 
     @Override
@@ -73,6 +71,10 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
         if(evt instanceof IdleStateEvent){
             IdleStateEvent event = (IdleStateEvent)evt;
             //log.debug("userEventTriggered....[{}]",event.state());
+
+            Channel channel  = ctx.channel();
+            Integer failCount = maxHeartbeatFailCountRecords.get(channel.remoteAddress().toString());
+
 
 
             if (event.state()== IdleState.READER_IDLE){

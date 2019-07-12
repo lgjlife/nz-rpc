@@ -50,7 +50,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
 
         long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
 
-        result = handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
+        handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
                 invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT),
                 nettyMessage);
 

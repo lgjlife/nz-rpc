@@ -2,10 +2,8 @@ package com.nz.rpc.msg;
 
 import com.nz.rpc.constans.RpcClientConstans;
 import com.nz.rpc.context.ClientContext;
-import com.nz.rpc.discover.ProviderConfig;
-import com.nz.rpc.discover.ProviderConfigContainer;
+import com.nz.rpc.exception.MessageSendFailException;
 import com.nz.rpc.invocation.client.ClientInvocation;
-import com.nz.rpc.loadbalance.LoadbalanceStrategy;
 import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.netty.message.NettyMessage;
 import io.netty.channel.Channel;
@@ -13,15 +11,21 @@ import io.netty.channel.ChannelFuture;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ *功能描述 
+ * @author lgj
+ * @Description 客户端消息处理类
+ * @date 7/12/19
+*/
 @Data
 @Slf4j
 public class ClientMessageHandler {
@@ -30,46 +34,20 @@ public class ClientMessageHandler {
     private static ClientMessageHandler instance= new ClientMessageHandler();
 
     private NettyClient nettyClient;
-    private LoadbalanceStrategy  loadbalanceStrategy;
+
 
     private Map<Long,RpcResponse> resultMap = new ConcurrentHashMap<>();
-    private static  final int requestTimeoutMs = 1000;
+    private static  final int requestTimeoutMs = 5000;
     private Map<Long,RequestLock> requestLock = new ConcurrentHashMap<>();
+
+    //消息缓存列表
+    private Queue<Message> messagesCache = new ConcurrentLinkedQueue<>();
+
 
     public static ClientMessageHandler getInstance() {
         return instance;
     }
-    /**
-     *功能描述
-     * @author lgj
-     * @Description 　负载均衡-选择服务提供者
-     * @date 4/25/19
-     * @param:
-     * @return:
-     *
-    */
-    public void serviceSelect(ClientInvocation invocation) throws Exception{
 
-        //获取消费者
-        Map<String, ProviderConfig> configMap = ProviderConfigContainer.getConfigMap();
-        List<ProviderConfig> registryConfigLists = new ArrayList<>();
-        configMap.forEach((k,v)->{
-            if(v.getInterfaceName().equals(invocation.getMethod().getDeclaringClass().getName())){
-                registryConfigLists.add(v);
-            }
-        });
-        //
-        log.debug("服务提供者信息:{}",registryConfigLists);
-
-        //负载均衡处理
-        ProviderConfig registryConfig =  loadbalanceStrategy.select(registryConfigLists,null);
-        log.debug("负载均衡选择结果 = " + registryConfig);
-
-        invocation.getAttachments().put(RpcClientConstans.NETTY_REQUEST_HOST,registryConfig.getHost());
-        invocation.getAttachments().put(RpcClientConstans.NETTY_REQUEST_PORT,registryConfig.getPort().toString());
-
-
-    }
 
     /**
      *功能描述
@@ -80,7 +58,7 @@ public class ClientMessageHandler {
      * @return:
      *
     */
-    public Object sendRequest(String host,String port,NettyMessage nettyMessage){
+    public void sendRequest(String host,String port,NettyMessage nettyMessage) throws Exception{
         log.debug("sendRequest [{}]-[{}]-[{}]",host,port,nettyMessage);
 
         long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
@@ -88,23 +66,14 @@ public class ClientMessageHandler {
         Channel channel = nettyClient.getChannel(host,
                 Integer.valueOf(port));
         if(channel == null){
-            log.debug("sendRequest:channel is null,reconnect ....");
-            new  Thread(){
-                @Override
-                public void run() {
-                    nettyClient.connect(host,Integer.valueOf(port));
-                }
-            }.start();
-            return null;
+            log.debug("Server [{}]-[{}] unconnect!",host,port);
+            throw new MessageSendFailException();
         }
         else {
             //发送消息
             ChannelFuture future = channel.writeAndFlush(nettyMessage);
-
             requestLock.put(id,new RequestLock());
 
-            return null;
-            // return getServerResponseResult(host,port,nettyMessage);
         }
     }
 
@@ -151,7 +120,6 @@ public class ClientMessageHandler {
                 //关闭channel
                 //nettyClient.removeChannel(host,Integer.valueOf(port));
                 //发起重新连接
-                nettyClient.getConnectingServer();
                 nettyClient.connect(host,port);
 
                 result = null;
@@ -225,6 +193,58 @@ public class ClientMessageHandler {
             this.lock = new ReentrantLock();
             this.condition = lock.newCondition();
 
+        }
+    }
+
+    @Data
+
+    private class Message{
+
+        private String host;
+        private int port;
+        private NettyMessage nettyMessage;
+
+        public Message(String host, int port, NettyMessage nettyMessage) {
+            this.host = host;
+            this.port = port;
+            this.nettyMessage = nettyMessage;
+        }
+    }
+    private class MessageSendTask implements Runnable{
+
+
+
+        @Override
+        public void run() {
+            while (true){
+
+                Message message =  messagesCache.poll();
+
+
+
+
+            }
+        }
+
+
+        public void sendMessage( Message message){
+            log.debug("sendRequest [{}]-[{}]-[{}]",message.getHost(),message.getPort(),message.getNettyMessage());
+
+            long id = ((RpcRequest)message.getNettyMessage().getBody()).getRequestId();
+
+            Channel channel = nettyClient.getChannel(message.getHost(),
+                    Integer.valueOf(message.getPort()));
+            if(channel == null){
+                log.debug("Server [{}]-[{}] unconnect!",message.getHost(),message.getPort());
+                //连接失败，放入
+                messagesCache.add(message);
+            }
+            else {
+                //发送消息
+                ChannelFuture future = channel.writeAndFlush(message.getNettyMessage());
+
+                requestLock.put(id,new RequestLock());
+            }
         }
     }
 

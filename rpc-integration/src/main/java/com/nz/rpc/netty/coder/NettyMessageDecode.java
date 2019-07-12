@@ -33,7 +33,8 @@ public class NettyMessageDecode extends LengthFieldBasedFrameDecoder {
             log.info("byteBuf is null!");
             return null;
         }
-
+        log.debug("readerIndex={},writerIndex={},readableByte={}",
+                byteBuf.readerIndex(),byteBuf.writerIndex(),byteBuf.readableBytes());
        if(byteBuf.readableBytes() > (MessageIndex.lengthIndex+4)){
 
             int lengthIndex = byteBuf.readerIndex()+MessageIndex.lengthIndex;
@@ -45,11 +46,15 @@ public class NettyMessageDecode extends LengthFieldBasedFrameDecoder {
 
            if( byteBuf.readableBytes() < messageLength ){
 
-                log.debug("readableBytes is less then 100,return!++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",byteBuf.readableBytes() );
+                log.debug("readableBytes is not enougth to be a data packege++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",byteBuf.readableBytes() );
                 return null;
             }
 
         }
+       else {
+           log.debug("readableBytes is not enougth to be a data packege++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",byteBuf.readableBytes() );
+           return null;
+       }
 
         NettyMessage nettyMessage = new NettyMessage();
 

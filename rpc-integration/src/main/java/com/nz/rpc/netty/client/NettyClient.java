@@ -14,6 +14,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ public class NettyClient {
     private EventLoopGroup group ;
     private Bootstrap bootstrap ;
     private static  Map<String, Channel> channelCache = new ConcurrentHashMap<>();
+
+    //重连间隔时间
     private static final  int reConnectIntervalTimeMs = 5000;
 
     private List<String> connectingServer = new CopyOnWriteArrayList<String>();
@@ -49,7 +52,7 @@ public class NettyClient {
         bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.TCP_NODELAY, false)
                 .option(ChannelOption.SO_SNDBUF,1024*1024)
                 .option(ChannelOption.SO_RCVBUF,1024*1024)
                 .handler(new NettyChannelHandler());
@@ -59,7 +62,21 @@ public class NettyClient {
 
         connect(parseToHost(remoteAddress),parseToPort(remoteAddress));
     }
+    public void  connect(InetAddress inetHost, int inetPort){
 
+    }
+
+    /**
+     *功能描述 
+     * @author lgj
+     * @Description  连接到端口
+     * @date 7/12/19
+     * @param:  
+     * 
+     * @return: 
+     * 
+     *
+    */
     public void connect(String host,int port){
 
         String key = getKey(host,port);
@@ -67,58 +84,52 @@ public class NettyClient {
         synchronized (channelCache){
             Channel channel = channelCache.get(key);
             if(channel != null){
-                log.debug("channel isActive state = " + channel.isActive());
+                log.debug("Channel[{}] has been active",channel);
                 if((channel.isActive())){
 
                     return;
                 }
             }
-
-
             //channel 不存在或者 channel处于激活状态，则创建连接
-            try {
-                log.debug("conect to [{}:{}].....",host,port);
-                 bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
-                    @Override
-                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                        log.debug("connect to  [{}:{}] state [{}]",host,port,channelFuture.isSuccess());
-                        if(channelFuture.isSuccess() == false){
-                            new Thread(){
-                                @Override
-                                public void run() {
-                                    try{
-                                        Thread.sleep(reConnectIntervalTimeMs);
-                                        connect(host,port);
-                                    }
-                                    catch(Exception ex){
-                                        log.error(ex.getMessage());
-                                    }
+
+            log.debug("conect to [{}:{}].....",host,port);
+             bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
+                @Override
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    log.debug("connect to  [{}:{}] state [{}]",host,port,channelFuture.isSuccess());
+
+                    Channel channel = channelFuture.channel();
+                    if(channel.isActive()){
+                        channelCache.put(key,channelFuture.channel());
+                    }
+                    else {
+                        log.warn("Can not to connect to Server[{}:{}]!",host,port);
+                        new Thread(){
+                            @Override
+                            public void run() {
+                            try{
+                                Thread.sleep(reConnectIntervalTimeMs);
+                                String key = getKey(host,port);
+                                Channel channel = channelCache.get(key);
+                                if((channel != null)&&(channel.isActive())){
+                                    log.debug("Channel[{}] has been active",channel);
+                                    return;
                                 }
-                            }.start();
-                        }
-                        else {
-                            channelCache.put(key,channelFuture.channel());
-                        }
+                                connect(host,port);
+                            }
+                            catch(Exception ex){
+                                log.error("Conect to [{}:{}] Exception:{}",host,port,ex);
+                                ex.printStackTrace();
+                            }
+                            }
+                        }.start();
 
                     }
+                }
 
-                } );
-
-            } catch (Exception ex) {
-                log.debug("connect to [{}:{}] fail , reconnect again !",host,port);
-            }
+            } );
         }
 
-    }
-    public void removeConnectServer(String host,int port){
-        String key = getKey(host,port);
-        synchronized (connectingServer){
-
-            if(connectingServer.contains(key)){
-                connectingServer.remove(key);
-                return;
-            }
-        }
     }
 
     public Channel getChannel(String host,int port){

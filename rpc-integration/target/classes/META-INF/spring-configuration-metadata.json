@@ -63,6 +63,11 @@
       "sourceType": "com.nz.rpc.lock.LockProperties"
     },
     {
+      "name": "nzrpc.loadbalance",
+      "type": "java.lang.String",
+      "sourceType": "com.nz.rpc.properties.RpcProperties"
+    },
+    {
       "name": "nzrpc.netty-client",
       "type": "com.nz.rpc.netty.client.properties.NettyClientProperties",
       "sourceType": "com.nz.rpc.properties.RpcProperties"

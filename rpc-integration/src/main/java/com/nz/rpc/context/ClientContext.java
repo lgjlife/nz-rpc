@@ -26,6 +26,8 @@ public class ClientContext {
     */
     private static Map<Long,CompletableFuture> futureMap = new ConcurrentHashMap<>();
 
+    //private static Map<String,String>
+
 
 
     /**

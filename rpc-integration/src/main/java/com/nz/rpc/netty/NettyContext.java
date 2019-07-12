@@ -1,7 +1,6 @@
 package com.nz.rpc.netty;
 
 import com.nz.rpc.netty.client.NettyClient;
-import com.nz.rpc.serialization.AbstractSerialize;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class NettyContext {
 
-    private static AbstractSerialize serialize ;
+    //private static AbstractSerialize serialize ;
 
     private static NettyClient nettyClient;
 
@@ -17,13 +16,13 @@ public class NettyContext {
 
 
 
-    public static AbstractSerialize getSerialize() {
+    /*public static AbstractSerialize getSerialize() {
         return serialize;
     }
-
-    public static void setSerialize(AbstractSerialize serialize) {
+*/
+    /*public static void setSerialize(AbstractSerialize serialize) {
         NettyContext.serialize = serialize;
-    }
+    }*/
 
     public static NettyClient getNettyClient() {
         return nettyClient;

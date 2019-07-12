@@ -55,9 +55,17 @@ public class TestRequest {
                     try{
 
                         startCyclicBarrier.await();
-                        String result = restTemplate.getForObject(urlMap.get(type),String.class);
+
+                        long startTime = System.currentTimeMillis();
+                        String result = new RestTemplate().getForObject(urlMap.get(type),String.class);
+                        long endTime = System.currentTimeMillis();
                         if(result != null){
+                            log.info("success:[{}]",(endTime-startTime));
                             successCount.incrementAndGet();
+
+                        }
+                        else {
+                            log.info("fail:[{}]",(endTime-startTime));
                         }
                         endCyclicBarrier.await();
                     }

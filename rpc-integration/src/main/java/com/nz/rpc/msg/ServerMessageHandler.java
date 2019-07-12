@@ -22,10 +22,11 @@ public class ServerMessageHandler {
 
     private static  ServerMessageHandler serverMessageHandler = new ServerMessageHandler();
 
+    //处理线程池定义
     private  static  ThreadPoolExecutor executorService = new TraceExecutorService(100,100,
-            1000, TimeUnit.MICROSECONDS,
-            new LinkedBlockingQueue<Runnable>(),
-     new ThreadPoolExecutor.CallerRunsPolicy());
+                                                                        1000, TimeUnit.MICROSECONDS,
+                                                                                     new LinkedBlockingQueue<Runnable>(),
+                                                                                      new ThreadPoolExecutor.CallerRunsPolicy());
 
 
     private ServerMessageHandler(){
@@ -35,12 +36,30 @@ public class ServerMessageHandler {
     public static  ServerMessageHandler getInstance(){
         return  serverMessageHandler;
     }
+    
+    /**
+     *功能描述 
+     * @author lgj
+     * @Description 提交任务到线程池
+     * @date 7/12/19
+     * @param:  
+     * 
+     * @return: 
+     * 
+     *
+    */
     public   void submit(ChannelHandlerContext ctx,RpcRequest request){
         Future<?> future = executorService.submit(new RequestHandler(ctx,request));
         log.debug("executorService = {}",executorService.toString());
     }
 
 
+    /**
+     *功能描述 
+     * @author lgj
+     * @Description  线程池任务类
+     * @date 7/12/19
+    */
     class RequestHandler implements  Runnable{
 
         private  ChannelHandlerContext ctx;
@@ -114,6 +133,9 @@ public class ServerMessageHandler {
             Method method = clzImpl.getDeclaredMethod(request.getMethodName(),paramTypes);
 
             Object result =  method.invoke(bean,request.getParameters());
+
+            //异步调用处理
+            //判断返回值是否是CompletableFuture类型
             if(CompletableFuture.class.isAssignableFrom(result.getClass())){
                 //异步调用
                 result =  ((CompletableFuture) result).get();

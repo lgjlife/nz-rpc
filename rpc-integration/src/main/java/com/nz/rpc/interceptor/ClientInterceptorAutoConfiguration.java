@@ -6,6 +6,7 @@ import com.nz.rpc.interceptor.impl.ClusterFaultToleranceInterceptor;
 import com.nz.rpc.interceptor.impl.RpcClientRequestInterceptor;
 import com.nz.rpc.interceptor.impl.ServiceSelectInterceptor;
 import com.nz.rpc.interceptor.impl.TimeOutInterceptor;
+import com.nz.rpc.loadbalance.LoadbanlanceHandler;
 import com.nz.rpc.msg.ClientMessageHandler;
 import com.nz.rpc.uid.UidProducer;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +24,19 @@ public class ClientInterceptorAutoConfiguration {
     @Autowired
     private ClientMessageHandler handler;
 
+    @Autowired
+    private LoadbanlanceHandler loadbanlanceHandler;
+
     @Bean
     public InterceptorChain interceptorChain(){
         InterceptorChain interceptorChain = new InterceptorChain();
-
         try{
             //集群容错处理
             interceptorChain.addFirst("ClusterFaultToleranceInterceptor",new ClusterFaultToleranceInterceptor());
             //超时处理
             interceptorChain.addAfter("ClusterFaultToleranceInterceptor","TimeOutInterceptor",new TimeOutInterceptor());
             //负载均衡处理
-            interceptorChain.addLast("ServiceSelectInterceptor",new ServiceSelectInterceptor(handler));
+            interceptorChain.addLast("ServiceSelectInterceptor",serviceSelectInterceptor());
             //数据RPC发送处理
             interceptorChain.addAfter("ServiceSelectInterceptor","RpcClientRequestInterceptor",new RpcClientRequestInterceptor(uidProducer,handler));
             ClientContext.interceptors = interceptorChain.getInterceptor();
@@ -41,8 +44,14 @@ public class ClientInterceptorAutoConfiguration {
         catch(Exception ex){
             log.error(ex.getMessage());
         }
-
-
         return interceptorChain;
     }
+
+    public ServiceSelectInterceptor serviceSelectInterceptor(){
+
+        ServiceSelectInterceptor serviceSelectInterceptor = new ServiceSelectInterceptor();
+        serviceSelectInterceptor.setLoadbanlanceHandler(loadbanlanceHandler);
+        return serviceSelectInterceptor;
+    }
 }
+

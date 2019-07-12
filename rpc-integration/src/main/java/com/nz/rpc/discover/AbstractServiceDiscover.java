@@ -15,7 +15,6 @@ import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -114,10 +113,7 @@ public  abstract  class AbstractServiceDiscover{
                 Object bean =  listableBeanFactory.getBean(classToBeanName(className));
 
                 Class controllerClazz = serviceName.getDeclaringClass();
-              /*  Iterator<String> iterator = listableBeanFactory.getBeanNamesIterator();
-                while (iterator.hasNext()){
-                    System.out.println(iterator.next());
-                }*/
+
 
                 Object controllerBean = listableBeanFactory.getBean(classToBeanName(controllerClazz.getName()));
 
@@ -128,7 +124,6 @@ public  abstract  class AbstractServiceDiscover{
                         log.debug("set bean to the controler field");
                         field.setAccessible(true);
                         field.set(controllerBean,bean);
-
                     }
                 }
                 log.debug("create proxy object [{}] success ,bena={}",className,bean.getClass().getName());
@@ -174,11 +169,6 @@ public  abstract  class AbstractServiceDiscover{
         return  beanName;
     }
 
-    public static void main(String args[]){
-
-        String result = classToBeanName("com.app.common.service.ZserService");
-        System.out.println(result);
-    }
 
 
 }

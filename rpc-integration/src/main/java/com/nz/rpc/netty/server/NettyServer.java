@@ -51,7 +51,9 @@ public class NettyServer {
             //用于设置服务端
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.SO_BACKLOG, 2048)
+                    .option(ChannelOption.TCP_NODELAY, false)
+                    .option(ChannelOption.SO_SNDBUF,1024*1024)
+                    .option(ChannelOption.SO_RCVBUF,1024*1024)
                     .childHandler(new ChildChannelHandler());
             //绑定端口，同步等待成功
             log.debug("正在绑定端口:[{}]",port);
@@ -69,6 +71,7 @@ public class NettyServer {
                         log.debug("绑定端口:[{}]失败,channel状态[{}]",port,channel.isActive());
                         System.exit(1);
                     }
+
                 }
             });
 

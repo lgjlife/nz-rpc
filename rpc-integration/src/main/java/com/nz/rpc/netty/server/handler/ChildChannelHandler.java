@@ -27,7 +27,7 @@ public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
         pipeline.addLast(new NettyMessageDecode(1024*1024,9, 4));
 
-        pipeline.addLast(new IdleStateHandler(25, 0, 0, TimeUnit.SECONDS));
+        pipeline.addLast(new IdleStateHandler(75, 0, 0, TimeUnit.SECONDS));
         pipeline.addLast(new HeartbeatResponseHandler());
 
 
