@@ -2,7 +2,11 @@
 !.mvn/wrapper/maven-wrapper.jar
 
 .out
-
+target
+.lst
+.log
+.jar
+rm
 ### STS ###
 .apt_generated
 .classpath
