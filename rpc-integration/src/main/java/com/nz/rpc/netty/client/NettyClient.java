@@ -14,11 +14,12 @@ import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
@@ -29,10 +30,13 @@ public class NettyClient {
     private Bootstrap bootstrap ;
     private static  Map<String, Channel> channelCache = new ConcurrentHashMap<>();
 
+    private List<String> connectingAddress = new CopyOnWriteArrayList<>();
+
+
     //重连间隔时间
     private static final  int reConnectIntervalTimeMs = 5000;
 
-    private List<String> connectingServer = new CopyOnWriteArrayList<String>();
+    private Set<String> connectingServer = new ConcurrentSkipListSet<String>();
 
     private RpcProperties rpcProperties;
 
@@ -62,75 +66,63 @@ public class NettyClient {
 
         connect(parseToHost(remoteAddress),parseToPort(remoteAddress));
     }
-    public void  connect(InetAddress inetHost, int inetPort){
 
-    }
-
-    /**
-     *功能描述 
-     * @author lgj
-     * @Description  连接到端口
-     * @date 7/12/19
-     * @param:  
-     * 
-     * @return: 
-     * 
-     *
-    */
     public void connect(String host,int port){
+
+        if((rpcProperties.getNhost().equals(host)) && (rpcProperties.getNport() == port)){
+            log.warn("Cannot  connect to youself!");
+            return;
+        }
 
         String key = getKey(host,port);
 
-        synchronized (channelCache){
+        synchronized (connectingAddress){
             Channel channel = channelCache.get(key);
-            if(channel != null){
-                log.debug("Channel[{}] has been active",channel);
-                if((channel.isActive())){
 
+            //host$port正在连接状态
+            if(connectingAddress.contains(key)){
+                log.warn("Serere [{}:{}] is connecting",host,port);
+                return;
+
+            }
+            else if(channel != null){
+                //host$port连接成功状态
+                log.debug("Channel state isActive= [{}],isOpen= [{}],isRegistered= [{}],",
+                        channel.isActive(),channel.isOpen(),channel.isRegistered());
+                if(channel.isActive()){
+                    log.debug("Channel[{}] has been active",channel);
                     return;
                 }
+
+
             }
-            //channel 不存在或者 channel处于激活状态，则创建连接
+             {
+                log.debug("Connecting to Serere [{}:{}]",host,port);
+                connectingAddress.add(key);
+                bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
 
-            log.debug("conect to [{}:{}].....",host,port);
-             bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
-                @Override
-                public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                    log.debug("connect to  [{}:{}] state [{}]",host,port,channelFuture.isSuccess());
+                    @Override
+                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                        Channel channel = channelFuture.channel();
 
-                    Channel channel = channelFuture.channel();
-                    if(channel.isActive()){
-                        channelCache.put(key,channelFuture.channel());
+                        if(channel.isActive()){
+                            log.debug("Server[{}] connect success",channel);
+                            connectingAddress.remove(key);
+                            channelCache.put(key,channel);
+                            return;
+                        }else {
+                            log.warn("Connecting to Serere [{}:{}] fail!!,Try reconect!!",host,port);
+                            connectingAddress.remove(key);
+                            Thread.sleep(reConnectIntervalTimeMs);
+                            connect(host, port);
+                        }
                     }
-                    else {
-                        log.warn("Can not to connect to Server[{}:{}]!",host,port);
-                        new Thread(){
-                            @Override
-                            public void run() {
-                            try{
-                                Thread.sleep(reConnectIntervalTimeMs);
-                                String key = getKey(host,port);
-                                Channel channel = channelCache.get(key);
-                                if((channel != null)&&(channel.isActive())){
-                                    log.debug("Channel[{}] has been active",channel);
-                                    return;
-                                }
-                                connect(host,port);
-                            }
-                            catch(Exception ex){
-                                log.error("Conect to [{}:{}] Exception:{}",host,port,ex);
-                                ex.printStackTrace();
-                            }
-                            }
-                        }.start();
-
-                    }
-                }
-
-            } );
+                });
+            }
         }
-
     }
+
+
 
     public Channel getChannel(String host,int port){
         Channel channel = channelCache.get(host + ":" + port);

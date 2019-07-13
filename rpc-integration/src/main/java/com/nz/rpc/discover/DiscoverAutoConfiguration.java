@@ -1,6 +1,7 @@
 package com.nz.rpc.discover;
 
 
+import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.properties.RpcProperties;
 import com.nz.rpc.proxy.RpcProxyFactory;
 import com.nz.rpc.zk.ZkCli;
@@ -28,6 +29,9 @@ public class DiscoverAutoConfiguration {
     @Autowired
     public  RpcProxyFactory rpcProxyFactory;
 
+
+    @Autowired
+    private NettyClient nettyClient;
 
 
 
@@ -71,7 +75,7 @@ public class DiscoverAutoConfiguration {
         discover.setZkCli(zkCli);
         discover.setContext(context);
         discover.setProperties(rpcProperties);
-
+        discover.setNettyClient(nettyClient);
         discover.queryService();
 
 

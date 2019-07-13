@@ -51,7 +51,7 @@
     <Loggers>
         <!-- root是默认的logger，也是所有logger的父级logger，如果需要，可以在这里配置一个文件appender以打印外部组件日志 -->
 
-        <AsyncRoot name="com" level="DEBUG">
+        <AsyncRoot  level="DEBUG">
             <AppenderRef ref="Console" />
         </AsyncRoot>
 

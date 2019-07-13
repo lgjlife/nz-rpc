@@ -1,6 +1,7 @@
 package com.nz.rpc.discover;
 
 import com.alibaba.fastjson.JSON;
+import com.nz.rpc.netty.client.NettyClient;
 import com.nz.rpc.zk.ListenerEventHandler;
 import com.nz.rpc.zk.ZkCli;
 import com.nz.rpc.zk.ZookeeperPath;
@@ -8,10 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.recipes.cache.ChildData;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
 public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
+
+
+    private NettyClient nettyClient;
 
     public ZookeeperServiceDiscover(ZkCli zkCli) {
         super(zkCli);
@@ -25,6 +30,15 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
         throw  new UnsupportedOperationException();
     }
 
+    /**
+     *功能描述 
+     * @author lgj
+     * @Description  从zookzeeper中获取服务信息
+     * @date 7/13/19
+     * @param: 
+     * @return:  
+     *
+    */
     @Override
     public void queryService() {
 
@@ -42,9 +56,35 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
                 ProviderConfigContainer.putConfig(registryConfig);
             }
         }
-
-
+        connectServer(ProviderConfigContainer.getConfigMap());
     }
+
+    /**
+     *功能描述 
+     * @author lgj
+     * @Description  从zk中获取到服务信息后，连接到服务server
+     * @date 7/13/19
+    */
+    private void connectServer(Map<String, ProviderConfig> configMap){
+
+        if(configMap == null){
+            log.info("configMap = null");
+        }
+
+
+        configMap.forEach((key,config)->{
+
+            log.info("config = " + config);
+            if(config == null){
+                log.info("config = null");
+            }
+            else {
+                nettyClient.connect(config.getHost(),config.getPort());
+            }
+
+        });
+    }
+
 
     class ListenerEventHandlerImpl implements ListenerEventHandler {
 
@@ -70,5 +110,10 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
             queryService();
         }
+    }
+
+
+    public void setNettyClient(NettyClient nettyClient) {
+        this.nettyClient = nettyClient;
     }
 }
