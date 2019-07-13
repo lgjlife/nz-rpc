@@ -51,12 +51,12 @@ public class NettyServer {
             //用于设置服务端
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.TCP_NODELAY, false)
-                    .option(ChannelOption.SO_SNDBUF,1024*1024)
+                    //.option(ChannelOption.TCP_NODELAY, false)
+                    //.option(ChannelOption.SO_SNDBUF,1024*1024)
                     .option(ChannelOption.SO_RCVBUF,1024*1024)
                     .childHandler(new ChildChannelHandler());
             //绑定端口，同步等待成功
-            log.debug("正在绑定端口:[{}]",port);
+            log.debug("Binding the port[{}].....",port);
             ChannelFuture channelFuture = serverBootstrap.bind(port);
             Channel channel = channelFuture.channel();
 
@@ -65,10 +65,10 @@ public class NettyServer {
                 public void operationComplete(ChannelFuture future) throws Exception {
                     Channel channel = future.channel();
                     if(channel.isActive()){
-                        log.debug("绑定端口:[{}]成功,channel状态[{}]",port,channel.isActive());
+                        log.debug("Binding the port:[{}] successs,channel state [{}]",port,channel.isActive());
                     }
                     else {
-                        log.debug("绑定端口:[{}]失败,channel状态[{}]",port,channel.isActive());
+                        log.debug("Binding the port:[{}]fail,channel state [{}]",port,channel.isActive());
                         System.exit(1);
                     }
 
@@ -77,7 +77,7 @@ public class NettyServer {
 
 
         } catch (Exception ex) {
-            log.error("服务端绑定端口[{}]失败！",port,ex);
+            log.error("Binding the port:[{}]fail,ex={}！",port,ex);
             System.exit(1);
         } finally {
             log.info("shutdownGracefully....");

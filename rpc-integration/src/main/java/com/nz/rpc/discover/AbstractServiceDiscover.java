@@ -14,9 +14,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *功能描述
@@ -58,13 +56,18 @@ public  abstract  class AbstractServiceDiscover{
 
         Map<String, Object> providers = context.getBeansWithAnnotation(RpcService.class);
         if(providers != null){
-            providers.forEach((k,v)->{
-                Class[] interfaces = v.getClass().getInterfaces();
-                log.debug("{}:providers clz = {},Interfaces = {}",k,v.getClass().getName(),interfaces);
+            providers.forEach((beanName,bean)->{
+                Class[] interfaces = bean.getClass().getInterfaces();
+                log.debug("{}:providers clz = {},Interfaces = {}",beanName,bean.getClass().getName(),interfaces);
 
-                //存在多个接口的情况
+                //存在多个接口实现类，使用linst存储的情况
                 for(Class inter:interfaces){
-                    NettyContext.getLocalServiceImplMap().put(inter.getName(),v.getClass().getName());
+                    List<String> serviceImplLists = NettyContext.getLocalServiceImplMap().get(inter.getName());
+                    if(serviceImplLists == null){
+                        serviceImplLists = new ArrayList<>();
+                    }
+                    serviceImplLists.add(bean.getClass().getName());
+                    NettyContext.getLocalServiceImplMap().put(inter.getName(),serviceImplLists);
                 }
 
             });

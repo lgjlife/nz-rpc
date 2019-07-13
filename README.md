@@ -18,6 +18,7 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 ## 基本特性
 
 * 模块配置成SpringBoot Starter，引入POM依赖即可
+* 每一个节点既可以作为服务消费者，也可以作为服务提供者
 * 接入简单，通过添加注解[RpcReference](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fanno%2FRpcReference.java)和[RpcService](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fanno%2FRpcService.java),即可零配置启动。
 * 使用zookeeper实现服务注册与发现
 * 服务提供者，服务消费者，服务注册中心之间为长连接
@@ -30,10 +31,10 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 * 对端关闭则释放本端连接资源
 * 动态代理支持JDK和CGLIB方式，默认为JDK方式，可配置
 * 序列化支持JDK,Fastjson,Protostuff,Hessian方式,默认为Hessian方式，可配置
-* 服务容错策略: failfaste,failsafe,failback
+* 服务容错策略: failfast快速失败,failsafe安全失败,failback失败定时重试
 * 通过责任链设计模式实现请求过程的链式处理，包括集群容错处理，超时处理，负载均衡选择，请求发送，各个功能间无耦合，扩展方便
 * 请求支持同步请求和异步请求，异步请求的返回值需为CompletableFuture类型
-* 负载均衡实现：随机,加权随机,轮轮询，加权轮询，最小时间法
+* 负载均衡实现：随机,加权随机,轮轮询，加权轮询，最小时间法,一致性Hash
 * 全局唯一ID实现，雪花算法、redis生成、zookeeper生成
 * 分布式锁实现:redis/zookeeper实现
 

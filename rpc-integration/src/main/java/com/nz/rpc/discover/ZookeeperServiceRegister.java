@@ -52,7 +52,7 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
      * 功能描述
      *
      * @author lgj
-     * @Description 注册应用信息
+     * @Description 注册服务应用信息
      * @date 1/26/19
      * @param:
      * @return:

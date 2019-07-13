@@ -120,7 +120,7 @@ public class ServerMessageHandler {
         private  Object doInvoke(RpcRequest request) throws Exception{
 
             log.debug("request = " + request);
-            String clzImplName = NettyContext.getLocalServiceImplMap().get(request.getInterfaceName());
+            String clzImplName = NettyContext.getLocalServiceImpl(request.getInterfaceName());
             Class clzImpl = Class.forName(clzImplName);
 
             Object bean = clzImpl.newInstance();

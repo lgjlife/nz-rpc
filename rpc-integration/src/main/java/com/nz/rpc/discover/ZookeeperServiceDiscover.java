@@ -15,6 +15,7 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
     public ZookeeperServiceDiscover(ZkCli zkCli) {
         super(zkCli);
+        //添加监听器
         zkCli.setListener(new ListenerEventHandlerImpl(),ZookeeperPath.rootPath);
 
     }
@@ -27,6 +28,7 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
     @Override
     public void queryService() {
 
+        log.debug("Query the server info from the zookeeper!");
         List<String> interfacePaths =  zkCli.getChildren(ZookeeperPath.rootPath);
         for(String interfacePath:interfacePaths){
             List<String> providersConfigs  =  zkCli.getChildren(ZookeeperPath.rootPath
@@ -36,7 +38,7 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
             for(String providersConfig:providersConfigs){
                 ProviderConfig registryConfig = JSON.parseObject(providersConfig, ProviderConfig.class);
-                log.debug("服务提供者信息　registryConfig = " + registryConfig );
+                log.debug("The server registryConfig = " + registryConfig );
                 ProviderConfigContainer.putConfig(registryConfig);
             }
         }
