@@ -15,38 +15,36 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.SocketAddress;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ *功能描述 
+ * @author lgj
+ * @Description  nertty操作客户端
+ * @date 7/14/19
+*/
 @Slf4j
 @Data
 public class NettyClient {
 
     private EventLoopGroup group ;
     private Bootstrap bootstrap ;
+
+    //channel缓存 key : host&port
     private static  Map<String, Channel> channelCache = new ConcurrentHashMap<>();
-
-    private List<String> connectingAddress = new CopyOnWriteArrayList<>();
-
-
     //重连间隔时间
     private static final  int reConnectIntervalTimeMs = 5000;
-
+    //value: host&port 正在连接状态的Server  host&port
     private Set<String> connectingServer = new ConcurrentSkipListSet<String>();
 
     private RpcProperties rpcProperties;
 
 
     public NettyClient(RpcProperties rpcProperties){
-
         this.rpcProperties =  rpcProperties;
-
-
-
     }
 
     public void init(){
@@ -67,8 +65,22 @@ public class NettyClient {
         connect(parseToHost(remoteAddress),parseToPort(remoteAddress));
     }
 
+    /**
+     *功能描述 
+     * @author lgj
+     * @Description 连接到端口
+     * @date 7/13/19
+     * @param: 
+     * @return:  
+     *
+    */
     public void connect(String host,int port){
 
+        if(host == null){
+            throw  new NullPointerException("Host["+host+"] is null,Connect fail!");
+        }
+
+        //如果和本应用的host&port一致，则拒绝执行连接
         if((rpcProperties.getNhost().equals(host)) && (rpcProperties.getNport() == port)){
             log.warn("Cannot  connect to youself!");
             return;
@@ -76,63 +88,57 @@ public class NettyClient {
 
         String key = getKey(host,port);
 
-        synchronized (connectingAddress){
+        synchronized (connectingServer){
             Channel channel = channelCache.get(key);
-
-            //host$port正在连接状态
-            if(connectingAddress.contains(key)){
+            //host&port正在连接状态
+            if(connectingServer.contains(key)){
                 log.warn("Serere [{}:{}] is connecting",host,port);
                 return;
 
             }
             else if(channel != null){
-                //host$port连接成功状态
-                log.debug("Channel state isActive= [{}],isOpen= [{}],isRegistered= [{}],",
+                //host&port连接成功状态
+                log.debug("Channel state isActive= [{}],isOpen= [{}],isRegistered= [{}]",
                         channel.isActive(),channel.isOpen(),channel.isRegistered());
                 if(channel.isActive()){
-                    log.debug("Channel[{}] has been active",channel);
+                    log.debug("Channel[{}] has been active！Don't neet to connect!",channel);
                     return;
                 }
-
-
             }
-             {
-                log.debug("Connecting to Serere [{}:{}]",host,port);
-                connectingAddress.add(key);
-                bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
-
-                    @Override
-                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                        Channel channel = channelFuture.channel();
-
-                        if(channel.isActive()){
-                            log.debug("Server[{}] connect success",channel);
-                            connectingAddress.remove(key);
-                            channelCache.put(key,channel);
-                            return;
-                        }else {
-                            log.warn("Connecting to Serere [{}:{}] fail!!,Try reconect!!",host,port);
-                            connectingAddress.remove(key);
-                            Thread.sleep(reConnectIntervalTimeMs);
-                            connect(host, port);
-                        }
+            log.debug("Connecting to Serere [{}:{}]",host,port);
+            connectingServer.add(key);
+            bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
+                @Override
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    Channel channel = channelFuture.channel();
+                    if(channel.isActive()){
+                        log.debug("Server[{}] connect success",channel);
+                        connectingServer.remove(key);
+                        channelCache.put(key,channel);
+                        return;
+                    }else {
+                        log.warn("Connecting to Serere [{}:{}] fail!!,Try reconect!!",host,port);
+                        connectingServer.remove(key);
+                        Thread.sleep(reConnectIntervalTimeMs);
+                        connect(host, port);
                     }
-                });
-            }
+                }
+            });
+
         }
     }
 
 
 
     public Channel getChannel(String host,int port){
-        Channel channel = channelCache.get(host + ":" + port);
+        Channel channel = channelCache.get(getKey(host,port));
         log.debug("channelCache len =[{}]",channelCache.size());
 
         if(channel == null){
             this.connect(host,port);
         }
 
-        return channelCache.get(host + ":" + port);
+        return channelCache.get(getKey(host,port));
     }
 
     public void removeChannel(String host,int port){
@@ -140,7 +146,7 @@ public class NettyClient {
 
         Channel channel =  channelCache.get(key);
         if(channel != null){
-            channelCache.remove(host + ":" + port);
+            channelCache.remove(getKey(host,port));
             channel.close();
         }
 
@@ -166,7 +172,7 @@ public class NettyClient {
 
     private  String getKey(String host,int port){
 
-        return  new StringBuilder().append(host).append(":").append(port).toString();
+        return  new StringBuilder().append(host).append("&").append(port).toString();
     }
 
 }

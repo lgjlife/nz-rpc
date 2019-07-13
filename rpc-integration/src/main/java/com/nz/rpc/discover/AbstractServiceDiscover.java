@@ -57,6 +57,7 @@ public  abstract  class AbstractServiceDiscover{
         Map<String, Object> providers = context.getBeansWithAnnotation(RpcService.class);
         if(providers != null){
             providers.forEach((beanName,bean)->{
+
                 Class[] interfaces = bean.getClass().getInterfaces();
                 log.debug("{}:providers clz = {},Interfaces = {}",beanName,bean.getClass().getName(),interfaces);
 
@@ -143,8 +144,6 @@ public  abstract  class AbstractServiceDiscover{
     public  abstract  void registerService();
 
     public  abstract  void queryService();
-
-
 
     /**
      *功能描述

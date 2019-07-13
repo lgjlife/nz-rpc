@@ -66,8 +66,9 @@ public class ClientMessageHandler {
         Channel channel = nettyClient.getChannel(host,
                 Integer.valueOf(port));
         if(channel == null){
-            log.debug("Server [{}]-[{}] unconnect!",host,port);
-            throw new MessageSendFailException();
+            log.error("Server [{}]-[{}] unconnect!",host,port);
+            nettyClient.connect(host,Integer.valueOf(port));
+            throw new MessageSendFailException("Server [" + host + "]-[" + port + "] unconnect!");
         }
         else {
             //发送消息

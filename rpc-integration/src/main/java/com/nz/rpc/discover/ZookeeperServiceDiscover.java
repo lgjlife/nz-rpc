@@ -45,17 +45,28 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
         log.debug("Query the server info from the zookeeper!");
         List<String> interfacePaths =  zkCli.getChildren(ZookeeperPath.rootPath);
         for(String interfacePath:interfacePaths){
-            List<String> providersConfigs  =  zkCli.getChildren(ZookeeperPath.rootPath
+            List<String> serverPaths  =  zkCli.getChildren(ZookeeperPath.rootPath
                     +  ZookeeperPath.separator
                     +  interfacePath
                     +  ZookeeperPath.providersPath);
 
-            for(String providersConfig:providersConfigs){
-                ProviderConfig registryConfig = JSON.parseObject(providersConfig, ProviderConfig.class);
-                log.debug("The server registryConfig = " + registryConfig );
-                ProviderConfigContainer.putConfig(registryConfig);
-            }
+            serverPaths.forEach(serverPath->{
+                List<String> providersConfigs = zkCli.getChildren(ZookeeperPath.rootPath
+                        +  ZookeeperPath.separator
+                        +  interfacePath
+                        +  ZookeeperPath.providersPath
+                        +  ZookeeperPath.separator
+                        +  serverPath);
+
+
+                for(String providersConfig:providersConfigs){
+                    ProviderConfig registryConfig = JSON.parseObject(providersConfig, ProviderConfig.class);
+                    log.debug("The server registryConfig = " + registryConfig );
+                    ProviderConfigContainer.putConfig(registryConfig);
+                }
+            });
         }
+        log.info("ConfigMap = "+ProviderConfigContainer.getConfigMap());
         connectServer(ProviderConfigContainer.getConfigMap());
     }
 

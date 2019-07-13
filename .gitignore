@@ -1,12 +1,14 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
-.out
+*.out
 target
-.lst
-.log
-.jar
+*.lst
+*.log
+*.jar
 rm
+logs
+/logs
 ### STS ###
 .apt_generated
 .classpath

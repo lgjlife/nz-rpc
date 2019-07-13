@@ -20,6 +20,7 @@ public class ProviderConfig implements Serializable{
 
     //请求接口名称
     private String interfaceName;
+    private String implName;
     //请求方法
     private String[] methods;
     //应用名称

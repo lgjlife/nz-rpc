@@ -20,6 +20,11 @@ import java.lang.reflect.Method;
 @Slf4j
 public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
 
+
+    public ZookeeperServiceRegister() {
+        addShutdownHook();
+    }
+
     @Override
     public void queryService() {
         throw  new UnsupportedOperationException();
@@ -41,13 +46,15 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
         this.providerDiscover();
 
         if(NettyContext.getLocalServiceImplMap() != null){
-            NettyContext.getLocalServiceImplMap().forEach((k,v)->{
-                log.debug("注册接口 {}", k);
-                registerConfig(k, context.getId());
+            NettyContext.getLocalServiceImplMap().forEach((interfaceName,implNames)->{
+                log.debug("注册接口 {}", interfaceName);
+                implNames.forEach((implName)->{
+                    registerConfig1(interfaceName,implName);
+                });
+
             });
         }
     }
-
     /**
      * 功能描述
      *
@@ -57,10 +64,10 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
      * @param:
      * @return:
      */
-    private void registerConfig(String serviceClass, String appName) {
+    private void registerConfig1(String interfaceName,String implName) {
 
-        String regPath = getPath(serviceClass);
-
+        String regPath = getPath(interfaceName);
+        regPath = regPath + "/" + properties.getNhost()+":"+properties.getNport();
         try {
 
             //获取注册信息
@@ -68,9 +75,10 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
 
             config.setHost(properties.getNhost());
             config.setPort(properties.getNport());
-            config.setApplication(appName);
-            config.setInterfaceName(serviceClass);
-            Class clz = Class.forName(serviceClass);
+            config.setApplication(context.getId());
+            config.setImplName(implName);
+            config.setInterfaceName(interfaceName);
+            Class clz = Class.forName(interfaceName);
             Method[] methods = clz.getDeclaredMethods();
             String[] methodNames = new String[methods.length];
             for (int i = 0; i < methods.length; i++) {
@@ -89,7 +97,7 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
             zkCli.createPath(zkCreateConfig);
 
         } catch (Exception ex) {
-           log.error("注册服务失败 {}",ex);
+            log.error("注册服务失败 {}",ex);
         }
     }
 
@@ -97,5 +105,35 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
         return ZookeeperPath.rootPath + "/" + serviceClass + ZookeeperPath.providersPath;
     }
 
+    /**
+     *功能描述
+     * @author lgj
+     * @Description  添加应用关闭时的回调函数，用于删除zk节点
+     * @date 7/14/19
+     * @param:
+     * @return:
+     *
+    */
+    private void addShutdownHook(){
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+                log.info("关闭关闭");
+
+                NettyContext.getLocalServiceImplMap().forEach((interfaceName,implNames)->{
+                    String deletePath = getPath(interfaceName);
+                    deletePath = deletePath + "/" + properties.getNhost()+":"+properties.getNport();
+
+                    if(zkCli.checkExists(deletePath)){
+                        log.debug("deletePath[{}] exists",deletePath);
+                        zkCli.deleteNodeAndChildren(deletePath);
+                        return;
+                    }
+                    log.warn("deletePath[{}] not exists",deletePath);
+
+                });
+            }
+        });
+    }
 
 }

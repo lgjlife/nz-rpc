@@ -123,6 +123,16 @@ public class ZkCli {
         return  null;
     }
 
+    public Stat deleteNodeAndChildren(String path){
+        try{
+            client.delete().deletingChildrenIfNeeded().forPath(path);
+        }
+        catch(Exception ex){
+            log.error("path [{}] delete fail! exception! {}",path,ex.getMessage());
+        }
+        return null;
+    }
+
     public  int getVersion(String path){
         try{
             return  client.setData().forPath(path,new byte[0]).getVersion();

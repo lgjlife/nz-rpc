@@ -120,7 +120,7 @@ public class TimeOutInterceptor implements Interceptor {
          *
         */
         private void reset(){
-            if(nums.incrementAndGet()>10){
+            if(nums.incrementAndGet()>50){
                 avr.set(0);
                 nums.set(0);
                 max.set(0);
