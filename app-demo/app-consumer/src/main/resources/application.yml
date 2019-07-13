@@ -18,8 +18,8 @@ nzrpc:
 # logger
 logging:
   level:
-    com.nz: debug
-    com.app.consumer.controller: debug
+    com: debug
+    #com.app.consumer.controller: debug
     org: error
 
 #    com.nz.rpc: debug

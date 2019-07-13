@@ -2,14 +2,14 @@
 
 ## 说明
 nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socket通信框架。使用Zookeeper作为注册中心。
-* 服务提供者启动时会向服务注册中心注册相关信息[注册信息](https://github.com/lgjlife/nz-rpc/blob/master/rpc-support%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Frpcsupport%2Futils%2FRegistryConfig.java)
+* 服务提供者启动时会向服务注册中心注册相关信息[注册信息](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fdiscover%2FProviderConfig.java)
 * 消费者启动时，会获取注册信息，并缓存在应用中
 * 消费者会监听注册信息的变化，比如服务提供者上线，并进行更新。
 * 服务调用不经过注册中心，运行过程中注册中心宕机不影响服务调用。
 
-目前仅支持SpringBoot应用，提供端和消费端只要引入注解[@RpcService](https://github.com/lgjlife/nz-rpc/blob/master/rpc-support%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Frpcsupport%2Fannotation%2FRpcService.java)和[@RpcReference](https://github.com/lgjlife/nz-rpc/blob/master/rpc-support%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Frpcsupport%2Fannotation%2FRpcReference.java)，并在application.yml中进行端口和IP配置，即可轻易使用，详细可参见如下<a href="#use">使用说明</a>
+目前仅支持SpringBoot应用，提供端和消费端只要引入注解[@RpcService](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fanno%2FRpcService.java)和[@RpcReference](https://github.com/lgjlife/nz-rpc/blob/master/rpc-integration%2Fsrc%2Fmain%2Fjava%2Fcom%2Fnz%2Frpc%2Fanno%2FRpcReference.java)，并在application.yml中进行端口和IP配置，即可轻易使用，详细可参见如下<a href="#use">使用说明</a>
 
-*模块说明*
+*整体架构图*
 
 ![](https://github.com/lgjlife/nz-rpc/blob/master/doc/1.png)
     
@@ -38,6 +38,12 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 * 全局唯一ID实现，雪花算法、redis生成、zookeeper生成
 * 分布式锁实现:redis/zookeeper实现
 
+## 性能测试
+使用Jmeter进行性能测试
+jvm参数：-server -Xms1024m -Xmx1024m -Xmn800m -XX:MetaspaceSize=800m -XX:MaxMetaspaceSize=1000m
+1.日志等级为(debug)的情况下，单次请求在4ms左右，并发在500时，平均响应时间为50ms左右，并发在5000时，平均响应时间已经升到600ms左右。
+2.日志等级为(error)的情况下,即使并发到10000，平均响应时间也是在5ms左右。
+3.日志框架更换为log4j2，使用异步方式打印日志，5000并发情况下单个请求平均耗时在10ms内
 ## 模块介绍
 
 
@@ -45,7 +51,7 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
  
      ├──── rpc-integration  rpc实现框架
 
-     ├──── app-demo   使用demo
+     ├──── app-demo   使用demo        
 
         ├────── app-common    用于存放demo公共接口
 
@@ -54,6 +60,11 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
         ├────── app-provider  既是消费者又是服务提供者
          
         ├────── app-provider1 服务提供者
+        
+        ├────── app-dubbo-consumer  dubbo 消费者
+               
+        ├────── app-dubbo-provider  dubbo 提供者
+                
 
 ## 类说明
 

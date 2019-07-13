@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -47,23 +46,25 @@ public class DemoController {
         log.debug("/demo");
 
         String reslut = null;
-        allCount.incrementAndGet();
 
         long startTime = System.currentTimeMillis();
         reslut = demoService.setName(13546L);
         long endTime = System.currentTimeMillis();
         if(reslut != null){
+            allCount.incrementAndGet();
             successCount.incrementAndGet();
         }
         else {
-            failCount.incrementAndGet();
+            allCount.incrementAndGet();
         }
         //log.debug(reslut);
 
-
+        int fail = allCount.get() - successCount.get();
+        double percent = (successCount.get()*1.0*100/allCount.get());
         reslut = "allCount=" + allCount + ","
                 +  " successCount=" + successCount + ","
-                +  " failCount=" + failCount + ","
+                +  " failCount=" + (fail) + ",   "
+                + String.format("%.2f",percent)+"%"
                 + "  time = "+ (endTime-startTime);
 
         log.debug("DemoController reslut = " + reslut);
@@ -72,6 +73,8 @@ public class DemoController {
 
 
     }
+
+
 
     @GetMapping("/uid")
     public  String  demo1(){
@@ -84,30 +87,10 @@ public class DemoController {
     }
 
     public static void main(String args[]){
-
-        int n = 50000;
-        int[] arr =  new int[n];
-
-        for(int i = 0; i< n; i++){
-            arr[i] = new Random().nextInt(10000);
-        }
-
-
-        System.out.println("type1 = " + func1(arr));
-        System.out.println("type2 = " + func2(arr));
-        System.out.println("type3 = " + func3(arr));
-
+        System.out.println(String.format("%.2f",145.23456));
     }
 
-    static  float func1(int[] arr){
-        float sum = 0 ;
-        for(int i = 0; i<arr.length; i++){
 
-            sum+=arr[i];
-        }
-
-        return sum/arr.length;
-    }
 
     /*******************************************************************************
      * Function Name  : calc_average

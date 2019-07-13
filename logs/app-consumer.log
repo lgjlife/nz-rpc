@@ -1,0 +1,272 @@
+19:23:38.437 [background-preinit  ] DEBUG org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+19:23:38.532 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+19:23:38.533 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.engine.resolver.TraverseAllTraversableResolver as ValidatorFactory-scoped traversable resolver.
+19:23:38.533 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+19:23:38.533 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+19:23:38.533 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+19:23:39.412 [main                ] INFO  com.app.consumer.AppConsumerApplication - Starting AppConsumerApplication on lgj-Lenovo-G470 with PID 22544 (/home/lgj/aProject/aRealPrj/nz-rpc/app-demo/app-consumer/target/classes started by lgj in /home/lgj/aProject/aRealPrj/nz-rpc)
+19:23:39.412 [main                ] DEBUG com.app.consumer.AppConsumerApplication - Running with Spring Boot v2.1.2.RELEASE, Spring v5.1.4.RELEASE
+19:23:39.414 [main                ] INFO  com.app.consumer.AppConsumerApplication - No active profile set, falling back to default profiles: default
+19:23:41.352 [main                ] DEBUG com.nz.rpc.zk.ZkCli            - zookeeper[127.0.0.1:2181] client start....,state = STARTED
+19:23:41.358 [main                ] DEBUG com.nz.rpc.uid.UidProducerAutoConfiguration - uid 生成方式:custom
+19:23:41.826 [main                ] DEBUG com.nz.rpc.cluster.ClusterFaultHandler - clusterMap = {com.app.common.service.DemoService=class com.nz.rpc.cluster.FailbackClusterFault}
+19:23:41.835 [main                ] DEBUG com.nz.rpc.proxy.ProxySelector - ProxySelector 动态代理：jdk
+19:23:41.840 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceRegister - ServiceRegistry setApplicationContext..
+19:23:42.437 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - @RpcReference class：com.app.common.service.UserService
+19:23:42.438 [main                ] INFO  com.nz.rpc.proxy.JdkProxyCreate - use jdk dynamic proxy : UserService
+19:23:42.438 [main                ] DEBUG com.nz.rpc.proxy.JdkProxyCreate - getClassLoader = sun.misc.Launcher$AppClassLoader@18b4aac2 getInterfaces  =   [Ljava.lang.Class;@2d9de284
+19:23:42.438 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - set bean to the controler field
+19:23:42.438 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - create proxy object [com.app.common.service.UserService] success ,bena=com.sun.proxy.$Proxy75
+19:23:42.438 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - @RpcReference class：com.app.common.service.PersonService
+19:23:42.439 [main                ] INFO  com.nz.rpc.proxy.JdkProxyCreate - use jdk dynamic proxy : PersonService
+19:23:42.439 [main                ] DEBUG com.nz.rpc.proxy.JdkProxyCreate - getClassLoader = sun.misc.Launcher$AppClassLoader@18b4aac2 getInterfaces  =   [Ljava.lang.Class;@71039ce1
+19:23:42.439 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - set bean to the controler field
+19:23:42.439 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - create proxy object [com.app.common.service.PersonService] success ,bena=com.sun.proxy.$Proxy76
+19:23:42.439 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - @RpcReference class：com.app.common.service.DemoService
+19:23:42.439 [main                ] INFO  com.nz.rpc.proxy.JdkProxyCreate - use jdk dynamic proxy : DemoService
+19:23:42.440 [main                ] DEBUG com.nz.rpc.proxy.JdkProxyCreate - getClassLoader = sun.misc.Launcher$AppClassLoader@18b4aac2 getInterfaces  =   [Ljava.lang.Class;@31ab4859
+19:23:42.440 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - set bean to the controler field
+19:23:42.440 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - create proxy object [com.app.common.service.DemoService] success ,bena=com.sun.proxy.$Proxy77
+19:23:42.470 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.476 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.476 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.554 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.554 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.556 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.556 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.557 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.557 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.557 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.557 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.559 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.560 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.561 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.561 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.561 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.563 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.564 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.565 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.566 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.566 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.567 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.568 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.570 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.570 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.570 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.572 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.573 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.574 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.574 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.574 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.576 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.577 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.578 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.578 [main                ] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework
+19:23:42.578 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.578 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.580 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.581 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.582 [main                ] DEBUG io.netty.channel.MultithreadEventLoopGroup - -Dio.netty.eventLoopThreads: 8
+19:23:42.582 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.582 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.582 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.584 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.585 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.586 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.586 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.586 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.587 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.588 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.590 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.590 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:23:42.590 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:23:42.591 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:23:42.593 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.593 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:23:42.607 [main                ] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.noKeySetOptimization: false
+19:23:42.607 [main                ] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.selectorAutoRebuildThreshold: 512
+19:23:42.611 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - -Dio.netty.noUnsafe: false
+19:23:42.611 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - Java version: 8
+19:23:42.612 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.theUnsafe: available
+19:23:42.613 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.copyMemory: available
+19:23:42.613 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Buffer.address: available
+19:23:42.614 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - direct buffer constructor: available
+19:23:42.615 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Bits.unaligned: available, true
+19:23:42.615 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable prior to Java9
+19:23:42.615 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.DirectByteBuffer.<init>(long, int): available
+19:23:42.615 [main                ] DEBUG io.netty.util.internal.PlatformDependent - sun.misc.Unsafe: available
+19:23:42.615 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.tmpdir: /tmp (java.io.tmpdir)
+19:23:42.616 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+19:23:42.617 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.maxDirectMemory: 2317352960 bytes
+19:23:42.617 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.uninitializedArrayAllocationThreshold: -1
+19:23:42.619 [main                ] DEBUG io.netty.util.internal.CleanerJava6 - java.nio.ByteBuffer.cleaner(): available
+19:23:42.619 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.noPreferDirect: false
+19:23:42.620 [main                ] DEBUG io.netty.util.internal.PlatformDependent - org.jctools-core.MpscChunkedArrayQueue: available
+19:23:42.650 [main                ] DEBUG com.nz.rpc.loadbalance.LoadbanlanceHandler - serviceLoadbanlanceStrategy = {com.app.common.service.DemoService=class com.nz.rpc.loadbalance.PollingLoadbalanceStrategy}
+19:23:42.677 [main                ] DEBUG com.nz.rpc.netty.server.NettyServer - Server bind to port[8122]
+19:23:42.680 [main                ] DEBUG com.nz.rpc.netty.server.NettyServer - Binding the port[8122].....
+19:23:42.689 [main                ] DEBUG io.netty.channel.DefaultChannelId - -Dio.netty.processId: 22544 (auto-detected)
+19:23:42.691 [main                ] DEBUG io.netty.util.NetUtil          - -Djava.net.preferIPv4Stack: false
+19:23:42.691 [main                ] DEBUG io.netty.util.NetUtil          - -Djava.net.preferIPv6Addresses: false
+19:23:42.693 [main                ] DEBUG io.netty.util.NetUtil          - Loopback interface: lo (lo, 0:0:0:0:0:0:0:1%lo)
+19:23:42.694 [main                ] DEBUG io.netty.util.NetUtil          - /proc/sys/net/core/somaxconn: 128
+19:23:42.695 [main                ] DEBUG io.netty.channel.DefaultChannelId - -Dio.netty.machineId: 7c:e9:d3:ff:fe:64:43:16 (auto-detected)
+19:23:42.700 [main                ] DEBUG io.netty.util.internal.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+19:23:42.700 [main                ] DEBUG io.netty.util.internal.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+19:23:42.708 [main                ] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.level: simple
+19:23:42.708 [main                ] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.targetRecords: 4
+19:23:42.753 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.numHeapArenas: 8
+19:23:42.753 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.numDirectArenas: 8
+19:23:42.753 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.pageSize: 8192
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.maxOrder: 11
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.chunkSize: 16777216
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.tinyCacheSize: 512
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.smallCacheSize: 256
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.normalCacheSize: 64
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.cacheTrimInterval: 8192
+19:23:42.754 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.useCacheForAllThreads: true
+19:23:42.763 [main                ] DEBUG io.netty.buffer.ByteBufUtil    - -Dio.netty.allocator.type: pooled
+19:23:42.763 [main                ] DEBUG io.netty.buffer.ByteBufUtil    - -Dio.netty.threadLocalDirectBufferSize: 0
+19:23:42.763 [main                ] DEBUG io.netty.buffer.ByteBufUtil    - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+19:23:42.771 [main                ] INFO  com.nz.rpc.netty.server.NettyServer - shutdownGracefully....
+19:23:42.775 [server1-3-1         ] DEBUG com.nz.rpc.netty.server.NettyServer - Binding the port:[8122] successs,channel state [true]
+19:23:42.933 [main                ] INFO  com.app.consumer.config.ServerConfig - 127.0.1.1
+19:23:42.934 [main                ] INFO  com.app.consumer.config.ServerConfig - 127.0.1.1 : 8112
+19:23:42.936 [main                ] INFO  com.app.consumer.AppConsumerApplication - Started AppConsumerApplication in 5.741 seconds (JVM running for 8.341)
+19:24:09.580 [background-preinit  ] DEBUG org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+19:24:09.605 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+19:24:09.606 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.engine.resolver.TraverseAllTraversableResolver as ValidatorFactory-scoped traversable resolver.
+19:24:09.606 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+19:24:09.607 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+19:24:09.607 [background-preinit  ] DEBUG org.hibernate.validator.internal.engine.ValidatorFactoryImpl - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+19:24:10.227 [main                ] INFO  com.app.consumer.AppConsumerApplication - Starting AppConsumerApplication on lgj-Lenovo-G470 with PID 22725 (/home/lgj/aProject/aRealPrj/nz-rpc/app-demo/app-consumer/target/classes started by lgj in /home/lgj/aProject/aRealPrj/nz-rpc)
+19:24:10.227 [main                ] DEBUG com.app.consumer.AppConsumerApplication - Running with Spring Boot v2.1.2.RELEASE, Spring v5.1.4.RELEASE
+19:24:10.237 [main                ] INFO  com.app.consumer.AppConsumerApplication - No active profile set, falling back to default profiles: default
+19:24:12.202 [main                ] DEBUG com.nz.rpc.zk.ZkCli            - zookeeper[127.0.0.1:2181] client start....,state = STARTED
+19:24:12.208 [main                ] DEBUG com.nz.rpc.uid.UidProducerAutoConfiguration - uid 生成方式:custom
+19:24:12.715 [main                ] DEBUG com.nz.rpc.cluster.ClusterFaultHandler - clusterMap = {com.app.common.service.DemoService=class com.nz.rpc.cluster.FailbackClusterFault}
+19:24:12.727 [main                ] DEBUG com.nz.rpc.proxy.ProxySelector - ProxySelector 动态代理：jdk
+19:24:12.731 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceRegister - ServiceRegistry setApplicationContext..
+19:24:13.366 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - @RpcReference class：com.app.common.service.UserService
+19:24:13.366 [main                ] INFO  com.nz.rpc.proxy.JdkProxyCreate - use jdk dynamic proxy : UserService
+19:24:13.366 [main                ] DEBUG com.nz.rpc.proxy.JdkProxyCreate - getClassLoader = sun.misc.Launcher$AppClassLoader@18b4aac2 getInterfaces  =   [Ljava.lang.Class;@29c59b6e
+19:24:13.367 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - set bean to the controler field
+19:24:13.367 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - create proxy object [com.app.common.service.UserService] success ,bena=com.sun.proxy.$Proxy75
+19:24:13.367 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - @RpcReference class：com.app.common.service.PersonService
+19:24:13.367 [main                ] INFO  com.nz.rpc.proxy.JdkProxyCreate - use jdk dynamic proxy : PersonService
+19:24:13.367 [main                ] DEBUG com.nz.rpc.proxy.JdkProxyCreate - getClassLoader = sun.misc.Launcher$AppClassLoader@18b4aac2 getInterfaces  =   [Ljava.lang.Class;@213835b6
+19:24:13.367 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - set bean to the controler field
+19:24:13.367 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - create proxy object [com.app.common.service.PersonService] success ,bena=com.sun.proxy.$Proxy76
+19:24:13.367 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - @RpcReference class：com.app.common.service.DemoService
+19:24:13.367 [main                ] INFO  com.nz.rpc.proxy.JdkProxyCreate - use jdk dynamic proxy : DemoService
+19:24:13.368 [main                ] DEBUG com.nz.rpc.proxy.JdkProxyCreate - getClassLoader = sun.misc.Launcher$AppClassLoader@18b4aac2 getInterfaces  =   [Ljava.lang.Class;@2bdcfcf
+19:24:13.368 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - set bean to the controler field
+19:24:13.368 [main                ] DEBUG com.nz.rpc.discover.AbstractServiceDiscover - create proxy object [com.app.common.service.DemoService] success ,bena=com.sun.proxy.$Proxy77
+19:24:13.391 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.397 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.397 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.464 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.464 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.466 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.466 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.468 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.468 [main                ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.468 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.468 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.470 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.471 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.472 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.472 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.472 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.473 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.474 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.475 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.475 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.475 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.477 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.477 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.479 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.479 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.479 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.483 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.484 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.485 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.485 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.485 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.486 [main                ] DEBUG io.netty.util.internal.logging.InternalLoggerFactory - Using SLF4J as the default logging framework
+19:24:13.490 [main                ] DEBUG io.netty.channel.MultithreadEventLoopGroup - -Dio.netty.eventLoopThreads: 8
+19:24:13.490 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.491 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.492 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.492 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.492 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.494 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.495 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.496 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.496 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.496 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.499 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.500 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.501 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.501 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.501 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.502 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.503 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.505 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.505 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - ListenerEventHandlerImpl　addHandler
+19:24:13.505 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - Query the server info from the zookeeper!
+19:24:13.506 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.PersonService, methods=[queryPerson, doSomeThing], application=rpc-provider, weight=0, callTime=0)
+19:24:13.507 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.DemoService, methods=[setName, setName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.508 [Curator-TreeCache-0 ] DEBUG com.nz.rpc.discover.ZookeeperServiceDiscover - The server registryConfig = ProviderConfig(host=127.0.0.1, port=8121, interfaceName=com.app.common.service.UserService, methods=[queryName, queryName], application=rpc-provider, weight=0, callTime=0)
+19:24:13.520 [main                ] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.noKeySetOptimization: false
+19:24:13.521 [main                ] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.selectorAutoRebuildThreshold: 512
+19:24:13.526 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - -Dio.netty.noUnsafe: false
+19:24:13.526 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - Java version: 8
+19:24:13.527 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.theUnsafe: available
+19:24:13.528 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.copyMemory: available
+19:24:13.529 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Buffer.address: available
+19:24:13.529 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - direct buffer constructor: available
+19:24:13.530 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Bits.unaligned: available, true
+19:24:13.530 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable prior to Java9
+19:24:13.531 [main                ] DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.DirectByteBuffer.<init>(long, int): available
+19:24:13.531 [main                ] DEBUG io.netty.util.internal.PlatformDependent - sun.misc.Unsafe: available
+19:24:13.531 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.tmpdir: /tmp (java.io.tmpdir)
+19:24:13.531 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+19:24:13.532 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.maxDirectMemory: 2317352960 bytes
+19:24:13.533 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.uninitializedArrayAllocationThreshold: -1
+19:24:13.534 [main                ] DEBUG io.netty.util.internal.CleanerJava6 - java.nio.ByteBuffer.cleaner(): available
+19:24:13.534 [main                ] DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.noPreferDirect: false
+19:24:13.535 [main                ] DEBUG io.netty.util.internal.PlatformDependent - org.jctools-core.MpscChunkedArrayQueue: available
+19:24:13.562 [main                ] DEBUG com.nz.rpc.loadbalance.LoadbanlanceHandler - serviceLoadbanlanceStrategy = {com.app.common.service.DemoService=class com.nz.rpc.loadbalance.PollingLoadbalanceStrategy}
+19:24:13.583 [main                ] DEBUG com.nz.rpc.netty.server.NettyServer - Server bind to port[8122]
+19:24:13.586 [main                ] DEBUG com.nz.rpc.netty.server.NettyServer - Binding the port[8122].....
+19:24:13.592 [main                ] DEBUG io.netty.channel.DefaultChannelId - -Dio.netty.processId: 22725 (auto-detected)
+19:24:13.594 [main                ] DEBUG io.netty.util.NetUtil          - -Djava.net.preferIPv4Stack: false
+19:24:13.594 [main                ] DEBUG io.netty.util.NetUtil          - -Djava.net.preferIPv6Addresses: false
+19:24:13.596 [main                ] DEBUG io.netty.util.NetUtil          - Loopback interface: lo (lo, 0:0:0:0:0:0:0:1%lo)
+19:24:13.596 [main                ] DEBUG io.netty.util.NetUtil          - /proc/sys/net/core/somaxconn: 128
+19:24:13.597 [main                ] DEBUG io.netty.channel.DefaultChannelId - -Dio.netty.machineId: 7c:e9:d3:ff:fe:64:43:16 (auto-detected)
+19:24:13.601 [main                ] DEBUG io.netty.util.internal.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+19:24:13.601 [main                ] DEBUG io.netty.util.internal.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+19:24:13.607 [main                ] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.level: simple
+19:24:13.607 [main                ] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.targetRecords: 4
+19:24:13.623 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.numHeapArenas: 8
+19:24:13.623 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.numDirectArenas: 8
+19:24:13.623 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.pageSize: 8192
+19:24:13.623 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.maxOrder: 11
+19:24:13.623 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.chunkSize: 16777216
+19:24:13.623 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.tinyCacheSize: 512
+19:24:13.623 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.smallCacheSize: 256
+19:24:13.624 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.normalCacheSize: 64
+19:24:13.624 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+19:24:13.624 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.cacheTrimInterval: 8192
+19:24:13.624 [main                ] DEBUG io.netty.buffer.PooledByteBufAllocator - -Dio.netty.allocator.useCacheForAllThreads: true
+19:24:13.631 [main                ] DEBUG io.netty.buffer.ByteBufUtil    - -Dio.netty.allocator.type: pooled
+19:24:13.631 [main                ] DEBUG io.netty.buffer.ByteBufUtil    - -Dio.netty.threadLocalDirectBufferSize: 0
+19:24:13.631 [main                ] DEBUG io.netty.buffer.ByteBufUtil    - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+19:24:13.642 [main                ] INFO  com.nz.rpc.netty.server.NettyServer - shutdownGracefully....
+19:24:13.644 [server1-3-1         ] DEBUG com.nz.rpc.netty.server.NettyServer - Binding the port:[8122] successs,channel state [true]
+19:24:13.809 [main                ] INFO  com.app.consumer.config.ServerConfig - 127.0.1.1
+19:24:13.810 [main                ] INFO  com.app.consumer.config.ServerConfig - 127.0.1.1 : 8112
+19:24:13.813 [main                ] INFO  com.app.consumer.AppConsumerApplication - Started AppConsumerApplication in 4.978 seconds (JVM running for 6.489)

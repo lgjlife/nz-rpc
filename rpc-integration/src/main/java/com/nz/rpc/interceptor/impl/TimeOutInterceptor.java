@@ -2,6 +2,7 @@ package com.nz.rpc.interceptor.impl;
 
 import com.nz.rpc.interceptor.Interceptor;
 import com.nz.rpc.invocation.client.ClientInvocation;
+import com.nz.rpc.uid.UidProducer;
 import com.nz.rpc.utils.MathUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 public class TimeOutInterceptor implements Interceptor {
 
+    private UidProducer uidProducer ;
     private Map<String,RequestAvrTime> avrTimeMap = new ConcurrentHashMap<>();
 
     @Override

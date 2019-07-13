@@ -4,8 +4,8 @@ spring:
 # logger
 logging:
   level:
-    com.nz.rpc: debug
-    app: debug
+    com.nz.rpc: error
+    app: error
 server:
   port: 8466
 nzrpc:

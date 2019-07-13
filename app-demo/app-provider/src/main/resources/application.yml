@@ -7,9 +7,6 @@ spring:
 logging:
   level:
     com: debug
-    com.nz.rpc.netty.coder.MsgCoder: info
-    com.nz.rpc.netty.server.handler.HeartbeatResponseHandler: info
-
    # com.nz.rpc: debug
     #com.nz.rpc.netty.server.handler.HeartbeatResponseHandler: info
     #com.nz.rpc.netty.coder.MsgCoder: info
