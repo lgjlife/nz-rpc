@@ -43,11 +43,9 @@ nzRpc是一个基于netty和zookeeper的RPC框架，使用netty作为底层socke
 
 jvm参数：-server -Xms1024m -Xmx1024m -Xmn800m -XX:MetaspaceSize=800m -XX:MaxMetaspaceSize=1000m
 
-1.日志等级为(debug)的情况下，单次请求在4ms左右，并发在500时，平均响应时间为50ms左右，并发在5000时，平均响应时间已经升到600ms左右。
+10万并发线程请求下的响应时间(更新于2019-07-26)
+![](https://github.com/lgjlife/nz-rpc/blob/master/doc/responsetime.png)
 
-2.日志等级为(error)的情况下,即使并发到10000，平均响应时间也是在5ms左右。
-
-3.日志框架更换为log4j2，使用异步方式打印日志，5000并发情况下单个请求平均耗时在10ms内
 ## 模块介绍
 
 
