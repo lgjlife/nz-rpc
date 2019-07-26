@@ -57,7 +57,7 @@
     </Appenders>
     <Loggers>
         <!-- root是默认的logger，也是所有logger的父级logger，如果需要，可以在这里配置一个文件appender以打印外部组件日志 -->
-        <AsyncRoot name="com" level="DEBUG">
+        <AsyncRoot level="DEBUG">
             <AppenderRef ref="Console" />
         </AsyncRoot>
         <!-- 应用日志，采用异步模式，name根据实际的包名修改；生产环境中additivity建议设置为false以避免在root logger中重复打印 -->

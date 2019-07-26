@@ -49,7 +49,7 @@ public class TimeOutInterceptor implements Interceptor {
             requestAvrTime.print();
         }
         else {
-            System.out.println("result == null-----------------------------------");
+           log.error("result = null-----------------------------------");
         }
         return result;
     }

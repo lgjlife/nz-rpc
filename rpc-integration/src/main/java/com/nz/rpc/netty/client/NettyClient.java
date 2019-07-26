@@ -58,6 +58,8 @@ public class NettyClient {
                 .option(ChannelOption.SO_SNDBUF,1024*1024)
                 .option(ChannelOption.SO_RCVBUF,1024*1024)
                 .handler(new NettyChannelHandler());
+
+        shutdownHandler();
     }
 
     public void  connect(SocketAddress remoteAddress){
@@ -173,6 +175,34 @@ public class NettyClient {
     private  String getKey(String host,int port){
 
         return  new StringBuilder().append(host).append("&").append(port).toString();
+    }
+
+    /*
+     *功能描述 应用关闭处理
+     * @author lgj
+     * @Description
+     * @date 7/26/19
+     * @param:
+     * @return:  void
+     *
+     */
+    private void shutdownHandler(){
+
+        new Thread(){
+
+            @Override
+            public void run() {
+                Runtime.getRuntime().addShutdownHook(new Thread(){
+
+                    @Override
+                    public void run() {
+                        log.info("系统Netty-Client正在关闭应用！");
+                        group.shutdownGracefully();
+                    }
+                });
+
+            }
+        }.start();
     }
 
 }

@@ -15,6 +15,8 @@ import java.io.Serializable;
 @Data
 public class Header implements Serializable {
 
+    //魔数，用于标识消息的开头
+    private  long magic;
     //消息类型
     private Byte type;
     //全局唯一id

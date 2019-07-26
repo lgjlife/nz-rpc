@@ -23,7 +23,7 @@ public class ServerMessageHandler {
     private static  ServerMessageHandler serverMessageHandler = new ServerMessageHandler();
 
     //处理线程池定义
-    private  static  ThreadPoolExecutor executorService = new TraceExecutorService(100,100,
+    private  static  ThreadPoolExecutor executorService = new TraceExecutorService(10,10,
                                                                         1000, TimeUnit.MICROSECONDS,
                                                                                      new LinkedBlockingQueue<Runnable>(),
                                                                                       new ThreadPoolExecutor.CallerRunsPolicy());

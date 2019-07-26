@@ -22,11 +22,13 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
         }
         ByteBuf byteBuf =  Unpooled.buffer();// new PooledByteBufAllocator().directBuffer();//
         log.info("NettyMessageEncoder 发送解析 ： nettyMessage = " + nettyMessage);
-
+     //   byteBuf.writeLong(nettyMessage.getHeader().getMagic());
         byteBuf.writeByte(nettyMessage.getHeader().getType());
         byteBuf.writeLong(nettyMessage.getHeader().getSessionID());
         byteBuf.writeInt(nettyMessage.getHeader().getLength());
         byteBuf.writeInt(nettyMessage.getHeader().getCrcCode());
+
+
 
 
         byteBuf =  MessageBodyUtil.encoder(nettyMessage.getBody(),byteBuf);
@@ -40,4 +42,6 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
         log.debug("==================encode end==================");
 
     }
+
+
 }

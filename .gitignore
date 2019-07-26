@@ -8,6 +8,7 @@ target
 *.jar
 rm
 logs
+*.out
 /logs
 ### STS ###
 .apt_generated

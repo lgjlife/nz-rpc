@@ -118,8 +118,6 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override
             public void run() {
-                log.info("关闭关闭");
-
                 NettyContext.getLocalServiceImplMap().forEach((interfaceName,implNames)->{
                     String deletePath = getPath(interfaceName);
                     deletePath = deletePath + "/" + properties.getNhost()+":"+properties.getNport();

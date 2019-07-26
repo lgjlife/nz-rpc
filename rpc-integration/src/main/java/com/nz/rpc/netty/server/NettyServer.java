@@ -35,6 +35,7 @@ public class NettyServer {
         workerGroup = new NioEventLoopGroup(rpcProperties.getNettyServer().getWorkerTheads(),
                 new DefaultThreadFactory("server2", true));
 
+        shutdownHandler();
 
     }
 
@@ -80,9 +81,37 @@ public class NettyServer {
             log.error("Binding the port:[{}]fail,ex={}！",port,ex);
             System.exit(1);
         } finally {
-            log.info("shutdownGracefully....");
+           // log.info("shutdownGracefully....");
             //  bossGroup.shutdownGracefully();
             //  workerGroup.shutdownGracefully();
         }
+    }
+    /*
+     *功能描述 应用关闭处理
+     * @author lgj
+     * @Description
+     * @date 7/26/19
+     * @param:
+     * @return:  void
+     *
+     */
+    private void shutdownHandler(){
+
+        new Thread(){
+
+            @Override
+            public void run() {
+                Runtime.getRuntime().addShutdownHook(new Thread(){
+
+                    @Override
+                    public void run() {
+                        log.info("系统Netty-Server正在关闭应用！");
+                        bossGroup.shutdownGracefully();
+                        workerGroup.shutdownGracefully();
+                    }
+                });
+
+            }
+        }.start();
     }
 }

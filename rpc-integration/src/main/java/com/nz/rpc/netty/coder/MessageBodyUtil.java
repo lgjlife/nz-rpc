@@ -20,7 +20,7 @@ public class MessageBodyUtil {
 
         try{
             byte[] bodyByte =  serialize.serialize(body);
-            log.debug("bodyLength = {},readerIndex={},writerIndex={}" ,bodyByte.length,byteBuf.readerIndex(),byteBuf.writerIndex());
+          //  log.debug("bodyLength = {},readerIndex={},writerIndex={}" ,bodyByte.length,byteBuf.readerIndex(),byteBuf.writerIndex());
             byteBuf.writeInt(bodyByte.length);
             byteBuf.writeBytes(bodyByte);
         }
@@ -34,10 +34,10 @@ public class MessageBodyUtil {
 
     public static <T> T decoder(ByteBuf byteBuf,Class<T> clazz){
 
-        log.debug("readerIndex={},writerIndex={}",byteBuf.readerIndex(),byteBuf.writerIndex());
+      //  log.debug("readerIndex={},writerIndex={}",byteBuf.readerIndex(),byteBuf.writerIndex());
         int bodyLength = byteBuf.readInt();
 
-        log.debug("body长度 = {},readerIndex={},writerIndex={}" ,bodyLength,byteBuf.readerIndex(),byteBuf.writerIndex());
+       // log.debug("body长度 = {},readerIndex={},writerIndex={}" ,bodyLength,byteBuf.readerIndex(),byteBuf.writerIndex());
         byte[] bodyByte = new byte[bodyLength];
         byteBuf.readBytes(bodyByte);
         T response = null;

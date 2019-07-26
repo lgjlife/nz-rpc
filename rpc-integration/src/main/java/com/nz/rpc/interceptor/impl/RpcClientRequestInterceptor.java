@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -26,6 +27,8 @@ import java.util.concurrent.CompletableFuture;
 public class RpcClientRequestInterceptor implements Interceptor {
 
     private UidProducer uidProducer ;
+
+    private AtomicLong requestId = new AtomicLong(0);
 
     private ClientMessageHandler handler;
 
@@ -99,7 +102,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
 
         }
         RpcRequest  request = new RpcRequest();
-        request.setRequestId(uidProducer.getUid());
+        request.setRequestId(requestId.getAndIncrement());//(uidProducer.getUid());
         request.setInterfaceName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
         request.setParameterTypes(classes);

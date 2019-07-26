@@ -45,7 +45,7 @@ public class JavassitProxyCreate implements ProxyCreate {
             public Object invoke(Object proxy, Method method, Method method1, Object[] args) throws Throwable {
                 //method 被代理类的方法
                 //method1代理类的方法　使用这个方法
-                System.out.println("==================");
+
                 Object result =  (T)rpcInvoker.invoke(proxy,method1,args);
                 return  result;
 
