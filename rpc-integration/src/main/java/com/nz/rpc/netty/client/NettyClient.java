@@ -113,6 +113,7 @@ public class NettyClient {
                 @Override
                 public void operationComplete(ChannelFuture channelFuture) throws Exception {
                     Channel channel = channelFuture.channel();
+                    //log.info("connectingServer = " + connectingServer);
                     if(channel.isActive()){
                         log.debug("Server[{}] connect success",channel);
                         connectingServer.remove(key);
@@ -120,8 +121,8 @@ public class NettyClient {
                         return;
                     }else {
                         log.warn("Connecting to Serere [{}:{}] fail!!,Try reconect!!",host,port);
-                        connectingServer.remove(key);
                         Thread.sleep(reConnectIntervalTimeMs);
+                        connectingServer.remove(key);
                         connect(host, port);
                     }
                 }
