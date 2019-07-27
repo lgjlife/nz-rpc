@@ -20,26 +20,33 @@ public class ServerChannelInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        log.info("与客户端[{}]建立连接",ctx.channel().remoteAddress());
+
+        if(log.isInfoEnabled()){
+            log.info("与客户端[{}]建立连接",ctx.channel().remoteAddress());
+        }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        log.info("与客户端[{}]断开连接",ctx.channel().remoteAddress());
+        if(log.isInfoEnabled()){
+            log.info("与客户端[{}]断开连接",ctx.channel().remoteAddress());
+        }
         ctx.channel().close();
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if(log.isDebugEnabled()){
+        /*if(log.isDebugEnabled()){
             log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
             log.debug("接收到客户端消息:"+msg);
-        }
+        }*/
         NettyMessage nettyMessage =  (NettyMessage)  msg;
         if((nettyMessage!=null) && (nettyMessage.getHeader().getType() == MessageType.APP_REQUEST_TYPE.getValue())){
 
-            ServerMessageHandler.getInstance().submit(ctx,(RpcRequest)nettyMessage.getBody());
+            RpcRequest rpcRequest = (RpcRequest)nettyMessage.getBody();
+
+            ServerMessageHandler.getInstance().submit(ctx,rpcRequest);
         }
 
         super.channelRead(ctx, msg);

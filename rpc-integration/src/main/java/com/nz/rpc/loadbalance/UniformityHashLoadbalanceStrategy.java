@@ -29,7 +29,7 @@ public class UniformityHashLoadbalanceStrategy  implements  LoadbalanceStrategy{
             }
         }
 
-        System.out.println(sortedMap);
+        // System.out.println(sortedMap);
         Integer requestHashcCode = caculHash((String)object);
 
 
@@ -45,7 +45,7 @@ public class UniformityHashLoadbalanceStrategy  implements  LoadbalanceStrategy{
 
         ////　打印测试数据
 
-        new PrintResult(sortedMap,requestHashcCode).print();
+       // new PrintResult(sortedMap,requestHashcCode).print();
 
         /////
 

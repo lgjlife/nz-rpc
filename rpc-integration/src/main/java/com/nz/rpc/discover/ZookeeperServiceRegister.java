@@ -41,13 +41,18 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
      */
     @Override
     public void registerService() throws BeansException {
+        if(log.isDebugEnabled()){
+            log.debug("ServiceRegistry setApplicationContext..");
+        }
 
-        log.debug("ServiceRegistry setApplicationContext..");
         this.providerDiscover();
 
         if(NettyContext.getLocalServiceImplMap() != null){
             NettyContext.getLocalServiceImplMap().forEach((interfaceName,implNames)->{
-                log.debug("注册接口 {}", interfaceName);
+                if(log.isDebugEnabled()){
+                    log.debug("注册接口 {}", interfaceName);
+                }
+
                 implNames.forEach((implName)->{
                     registerConfig1(interfaceName,implName);
                 });
@@ -87,7 +92,10 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
             config.setMethods(methodNames);
 
             String configStr = JSON.toJSONString(config);
-            log.debug("configStr = {}",configStr);
+            if(log.isDebugEnabled()){
+                log.debug("configStr = {}",configStr);
+            }
+
 
             ZkCreateConfig zkCreateConfig = ZkCreateConfig
                     .builder()
@@ -97,7 +105,10 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
             zkCli.createPath(zkCreateConfig);
 
         } catch (Exception ex) {
-            log.error("注册服务失败 {}",ex);
+            if(log.isErrorEnabled()){
+                log.error("注册服务失败 {}",ex);
+            }
+
         }
     }
 
@@ -123,11 +134,17 @@ public class ZookeeperServiceRegister extends  AbstractServiceDiscover {
                     deletePath = deletePath + "/" + properties.getNhost()+":"+properties.getNport();
 
                     if(zkCli.checkExists(deletePath)){
-                        log.debug("deletePath[{}] exists",deletePath);
+                        if(log.isDebugEnabled()){
+                            log.debug("deletePath[{}] exists",deletePath);
+                        }
+
                         zkCli.deleteNodeAndChildren(deletePath);
                         return;
                     }
-                    log.warn("deletePath[{}] not exists",deletePath);
+                    if(log.isWarnEnabled()){
+                        log.warn("deletePath[{}] not exists",deletePath);
+                    }
+
 
                 });
             }

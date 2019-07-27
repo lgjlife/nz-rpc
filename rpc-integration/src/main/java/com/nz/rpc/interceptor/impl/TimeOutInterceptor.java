@@ -107,7 +107,10 @@ public class TimeOutInterceptor implements Interceptor {
         }
 
         public void print(){
-            log.debug("THis Request method[{}] avr time is [{}]ms,Max time is [{}]",method,avr.get()/1000,max.get()/1000);
+            if(log.isDebugEnabled()){
+                log.debug("THis Request method[{}] avr time is [{}]ms,Max time is [{}]",method,avr.get()/1000,max.get()/1000);
+            }
+
         }
 
         /**

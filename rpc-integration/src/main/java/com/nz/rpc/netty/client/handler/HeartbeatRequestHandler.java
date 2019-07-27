@@ -38,7 +38,10 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
         NettyMessage message = (NettyMessage)msg;
         if((message.getHeader() != null)
            &&(message.getHeader().getType() == MessageType.HEARTBEAT_RESPONSE_TYPE.getValue())){
-            log.debug("接收到[{}]的心跳响应消息",getAddress(ctx));
+
+          if (log.isDebugEnabled()){
+              log.debug("接收到[{}]的心跳响应消息",getAddress(ctx));
+          }
           //  timeOutCount.put(getAddress(ctx),0);
 
         }
@@ -52,7 +55,9 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.debug("HeartbeatRequestHandler exceptionCaught");
+        if (log.isDebugEnabled()){
+            log.debug("HeartbeatRequestHandler exceptionCaught");
+        }
         super.exceptionCaught(ctx, cause);
     }
 
@@ -78,7 +83,9 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
 
 
             if (event.state()== IdleState.READER_IDLE){
-                log.warn("channel[{}]连接超时,关闭channel!" ,ctx.channel());
+               if(log.isWarnEnabled()){
+                   log.warn("channel[{}]连接超时,关闭channel!" ,ctx.channel());
+               }
                 NettyContext.getNettyClient().connect(ctx.channel().remoteAddress());
                 ChannelFuture channelFuture = ctx.channel().close();
                 channelFuture.addListener(new GenericFutureListener<Future<? super Void>>() {
@@ -86,13 +93,17 @@ public class HeartbeatRequestHandler extends ChannelInboundHandlerAdapter {
                     public void operationComplete(Future<? super Void> future) throws Exception {
                         Channel channel  = channelFuture.channel();
 
-                        log.debug("channel[{}]状态[{}]",channel.remoteAddress(),channel.isActive());
+                        if(log.isDebugEnabled()){
+                            log.debug("channel[{}]状态[{}]",channel.remoteAddress(),channel.isActive());
+                        }
                     }
                 });
 
             }
             else if (event.state()== IdleState.WRITER_IDLE){
-                log.debug("写空闲事件发生，向[{}]发送心跳数据",ctx.channel().remoteAddress());
+                if(log.isDebugEnabled()){
+                    log.debug("写空闲事件发生，向[{}]发送心跳数据",ctx.channel().remoteAddress());
+                }
                 NettyMessage nettyMessage = buildHeartbeatMessage();
                 ctx.channel().writeAndFlush(nettyMessage);
             }

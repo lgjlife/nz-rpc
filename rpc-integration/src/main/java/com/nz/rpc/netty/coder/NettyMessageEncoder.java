@@ -15,13 +15,13 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, NettyMessage nettyMessage, List<Object> out) throws Exception {
 
-        log.debug("+++++++++++++++++++++++encode  start +++++++++++++++++++++++");
+
         if( (nettyMessage == null) || (nettyMessage.getHeader() == null)){
 
             throw  new NullPointerException();
         }
         ByteBuf byteBuf =  Unpooled.buffer();// new PooledByteBufAllocator().directBuffer();//
-        log.info("NettyMessageEncoder 发送解析 ： nettyMessage = " + nettyMessage);
+      //  log.info("NettyMessageEncoder 发送解析 ： nettyMessage = " + nettyMessage);
      //   byteBuf.writeLong(nettyMessage.getHeader().getMagic());
         byteBuf.writeByte(nettyMessage.getHeader().getType());
         byteBuf.writeLong(nettyMessage.getHeader().getSessionID());
@@ -34,12 +34,12 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
         byteBuf =  MessageBodyUtil.encoder(nettyMessage.getBody(),byteBuf);
 
         //回写byteBuf总共长度
-        log.info("数据总长度="+byteBuf.readableBytes());
+
+     //   log.info("数据总长度="+byteBuf.readableBytes());
         byteBuf.setInt(9,byteBuf.readableBytes());
 
         out.add(byteBuf);
 
-        log.debug("==================encode end==================");
 
     }
 

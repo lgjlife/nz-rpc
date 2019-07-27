@@ -27,7 +27,10 @@ public class FailbackClusterFault implements ClusterFault {
 
         final String uid  =  UUID.randomUUID().toString();
 
-        log.error("Failback:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
+        if(log.isErrorEnabled()){
+            log.error("Failback:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
+        }
+
 
         ScheduledFuture<?>  future =  retryExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override

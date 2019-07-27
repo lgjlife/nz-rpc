@@ -53,7 +53,10 @@ public class ClusterFaultToleranceInterceptor implements Interceptor {
             result = invocation.executeNext();
         }
         catch(Exception ex){
-            log.error("Cluster is Fault!!!" + ex.getMessage());
+            if(log.isErrorEnabled()){
+                log.error("Cluster is Fault!!!" + ex.getMessage());
+            }
+
 
             clusterFaultHandler.handle(invocation,ex);
 

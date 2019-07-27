@@ -9,6 +9,7 @@ import com.nz.rpc.msg.RpcRequest;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
+import com.nz.rpc.time.TimeUtil;
 import com.nz.rpc.uid.UidProducer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +53,7 @@ public class RpcClientRequestInterceptor implements Interceptor {
         NettyMessage nettyMessage = buildNettyMessage(request);
 
         long id = ((RpcRequest)nettyMessage.getBody()).getRequestId();
-
+        TimeUtil.start("RpcClientRequestInterceptor intercept", id);
         handler.sendRequest(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST),
                 invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT),
                 nettyMessage);
@@ -68,6 +69,8 @@ public class RpcClientRequestInterceptor implements Interceptor {
             log.info("同步请求");
 
             result = handler.getServerResponseResult( invocation,id);
+
+            TimeUtil.endAndPrint("RpcClientRequestInterceptor intercept", id);
             if(log.isInfoEnabled()){
                 log.info("request result =[{}]",result);
             }

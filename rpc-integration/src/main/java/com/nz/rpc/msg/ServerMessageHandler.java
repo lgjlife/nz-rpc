@@ -5,6 +5,7 @@ import com.nz.rpc.netty.NettyContext;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
+import com.nz.rpc.time.TimeUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +51,7 @@ public class ServerMessageHandler {
     */
     public   void submit(ChannelHandlerContext ctx,RpcRequest request){
         Future<?> future = executorService.submit(new RequestHandler(ctx,request));
-        log.debug("executorService = {}",executorService.toString());
+        //log.debug("executorService = {}",executorService.toString());
     }
 
 
@@ -74,6 +75,8 @@ public class ServerMessageHandler {
         public void run() {
             NettyMessage nettyMessage  = null;
 
+
+
             try{
                 Object result = doInvoke(request);
                 nettyMessage =   buildNettyMessage(result,null);
@@ -83,6 +86,8 @@ public class ServerMessageHandler {
                 nettyMessage = buildNettyMessage(null,ex);
             }
             ctx.writeAndFlush(nettyMessage);
+
+            TimeUtil.endAndPrint("RequestHandler-run",request.getRequestId());
 
         }
 
@@ -140,7 +145,10 @@ public class ServerMessageHandler {
                 //异步调用
                 result =  ((CompletableFuture) result).get();
             }
-            log.debug("method [{}] done !result = [{}]",method,result);
+            if(log.isDebugEnabled()){
+                log.debug("method [{}] done !result = [{}]",method,result);
+            }
+
             return result;
         }
     }

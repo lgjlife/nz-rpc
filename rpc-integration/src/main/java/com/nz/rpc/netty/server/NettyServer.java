@@ -3,10 +3,8 @@ package com.nz.rpc.netty.server;
 import com.nz.rpc.netty.server.handler.ChildChannelHandler;
 import com.nz.rpc.properties.RpcProperties;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -55,6 +53,8 @@ public class NettyServer {
                     //.option(ChannelOption.TCP_NODELAY, false)
                     //.option(ChannelOption.SO_SNDBUF,1024*1024)
                     .option(ChannelOption.SO_RCVBUF,1024*1024)
+                    .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                    .option(ChannelOption.RCVBUF_ALLOCATOR,AdaptiveRecvByteBufAllocator.DEFAULT)
                     .childHandler(new ChildChannelHandler());
             //绑定端口，同步等待成功
             log.debug("Binding the port[{}].....",port);
@@ -69,7 +69,7 @@ public class NettyServer {
                         log.debug("Binding the port:[{}] successs,channel state [{}]",port,channel.isActive());
                     }
                     else {
-                        log.debug("Binding the port:[{}]fail,channel state [{}]",port,channel.isActive());
+                        log.error("Binding the port:[{}]fail,The port had been bind to other applicatiocn]",port);
                         System.exit(1);
                     }
 

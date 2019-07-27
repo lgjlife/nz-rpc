@@ -17,7 +17,9 @@ public class FailsafeClusterFault implements ClusterFault {
 
 
     public  Object doHandle(ClientInvocation invocation,Exception ex){
-        log.error("Failsave:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
+        if(log.isErrorEnabled()){
+            log.error("Failsave:Request[{}] error,ex = [{}]",invocation.getMethod(),ex.getMessage());
+        }
 
         return null;
     }

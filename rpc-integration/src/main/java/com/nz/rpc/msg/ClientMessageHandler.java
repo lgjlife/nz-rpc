@@ -12,10 +12,8 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -41,7 +39,7 @@ public class ClientMessageHandler {
     private Map<Long,RequestLock> requestLock = new ConcurrentHashMap<>();
 
     //消息缓存列表
-    private Queue<Message> messagesCache = new ConcurrentLinkedQueue<>();
+ //   private Queue<Message> messagesCache = new ConcurrentLinkedQueue<>();
 
 
     public static ClientMessageHandler getInstance() {
@@ -101,11 +99,18 @@ public class ClientMessageHandler {
             if(flag){
                 //请求响应成功
                 RpcResponse response = resultMap.get(requestId);
-                log.debug("server response [{}]",response);
                 resultMap.remove(requestId);
+                if(log.isDebugEnabled()){
+                    log.debug("server response [{}]",response);
+                }
+
+
                 Exception ex;
                 if(( ex = response.getException()) != null){
-                    log.error("服务端执行请求出现错误!"+ex.getMessage());
+                    if(log.isErrorEnabled()){
+                        log.error("服务端执行请求出现错误!"+ex.getMessage());
+                    }
+
                     throw ex;
                 }
                 result = response.getResult();
@@ -113,7 +118,10 @@ public class ClientMessageHandler {
             }
             else {
                 //请求响应超时
-                log.error("server response time out,removeChannel and reconnect...");
+                if(log.isErrorEnabled()){
+                    log.error("server response time out,removeChannel and reconnect...");
+
+                }
 
                 String host = invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_HOST);
                 Integer port = Integer.valueOf(invocation.getAttachments().get(RpcClientConstans.NETTY_REQUEST_PORT));
@@ -131,6 +139,8 @@ public class ClientMessageHandler {
         }
         finally{
             lock.unlock();
+            requestLock.remove(requestId);
+
         }
         //requestLock.remove(id);
         return result;
@@ -151,7 +161,10 @@ public class ClientMessageHandler {
         if(future != null){
             //是异步请求
            /// CompletableFuture responseFuture = (CompletableFuture)response.getResult();
-            log.info("异步请求 response = "+response);
+            if(log.isInfoEnabled()){
+                log.info("异步请求 response = "+response);
+            }
+
             try{
                 future.complete(response.getResult());
                 ClientContext.removeCompletableFuture(requestId);
@@ -163,7 +176,11 @@ public class ClientMessageHandler {
         }
         else {
             //同步请求处理
-            log.info("同步请求 response = "+response);
+
+            if(log.isInfoEnabled()){
+                log.info("同步请求 response = "+response);
+            }
+
             ReentrantLock lock = requestLock.get(requestId).getLock();
             Condition condition = requestLock.get(requestId).getCondition();
             try{
@@ -211,42 +228,4 @@ public class ClientMessageHandler {
             this.nettyMessage = nettyMessage;
         }
     }
-    private class MessageSendTask implements Runnable{
-
-
-
-        @Override
-        public void run() {
-            while (true){
-
-                Message message =  messagesCache.poll();
-
-
-
-
-            }
-        }
-
-
-        public void sendMessage( Message message){
-            log.debug("sendRequest [{}]-[{}]-[{}]",message.getHost(),message.getPort(),message.getNettyMessage());
-
-            long id = ((RpcRequest)message.getNettyMessage().getBody()).getRequestId();
-
-            Channel channel = nettyClient.getChannel(message.getHost(),
-                    Integer.valueOf(message.getPort()));
-            if(channel == null){
-                log.debug("Server [{}]-[{}] unconnect!",message.getHost(),message.getPort());
-                //连接失败，放入
-                messagesCache.add(message);
-            }
-            else {
-                //发送消息
-                ChannelFuture future = channel.writeAndFlush(message.getNettyMessage());
-
-                requestLock.put(id,new RequestLock());
-            }
-        }
-    }
-
 }

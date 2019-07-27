@@ -23,13 +23,19 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("与服务端[{}]建立连接",ctx.channel().remoteAddress());
+        if(log.isInfoEnabled()){
+            log.info("Connect to server [{}] success!",ctx.channel().remoteAddress());
+        }
+
         ctx.fireChannelActive();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        log.info("与服务端[{}]断开连接",ctx.channel().remoteAddress());
+        if(log.isWarnEnabled()){
+            log.warn("Disconnect to server [{}]",ctx.channel().remoteAddress());
+        }
+
         ctx.channel().close();
         ctx.fireChannelInactive();
     }
@@ -37,7 +43,10 @@ public class ClientChannelInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //log.debug("ServerChannelInboundHandler channelRead　,remoteAddress[{}],",ctx.channel().remoteAddress());
-        log.debug("recv data from [{}]/r/n[{}]",ctx.channel().remoteAddress(),msg);
+        if (log.isDebugEnabled()){
+            log.debug("recv data from [{}]/r/n[{}]",ctx.channel().remoteAddress(),msg);
+        }
+
         NettyMessage  nettyMessage = (NettyMessage)msg;
         ClientMessageHandler clientMessageHandler = ClientMessageHandler.getInstance();
 

@@ -59,7 +59,11 @@ public  abstract  class AbstractServiceDiscover{
             providers.forEach((beanName,bean)->{
 
                 Class[] interfaces = bean.getClass().getInterfaces();
-                log.debug("{}:providers clz = {},Interfaces = {}",beanName,bean.getClass().getName(),interfaces);
+
+                if(log.isDebugEnabled()){
+                    log.debug("{}:providers clz = {},Interfaces = {}",beanName,bean.getClass().getName(),interfaces);
+
+                }
 
                 //存在多个接口实现类，使用linst存储的情况
                 for(Class inter:interfaces){
@@ -106,7 +110,10 @@ public  abstract  class AbstractServiceDiscover{
 
         for(Field serviceName:serviceNames){
             String className = serviceName.getType().getName();
-            log.debug("@RpcReference class："+className);
+            if(log.isDebugEnabled()){
+                log.debug("@RpcReference class："+className);
+            }
+
 
             try{
                 Class clazz = Class.forName(className);
@@ -125,15 +132,24 @@ public  abstract  class AbstractServiceDiscover{
 
                 for(Field field : fields){
                     if(field.getType().getName().equals(className)){
-                        log.debug("set bean to the controler field");
+                        if(log.isDebugEnabled()){
+                            log.debug("set bean to the controler field");
+                        }
+
                         field.setAccessible(true);
                         field.set(controllerBean,bean);
                     }
                 }
-                log.debug("create proxy object [{}] success ,bena={}",className,bean.getClass().getName());
+                if (log.isDebugEnabled()){
+                    log.debug("create proxy object [{}] success ,bena={}",className,bean.getClass().getName());
+                }
+
             }
             catch(Exception ex){
-                log.error("create proxy object[{}] fail:{}",className,ex);
+                if(log.isDebugEnabled()){
+                    log.error("create proxy object[{}] fail:{}",className,ex);
+                }
+
             }
 
         }

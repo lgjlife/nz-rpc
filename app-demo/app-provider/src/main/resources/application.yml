@@ -6,8 +6,8 @@ spring:
 # logger
 logging:
   level:
-    com: debug
-    com.nz.rpc.discover: debug
+    com: error
+    com.nz.rpc.time: debug
     org: error
     io: error
    # com.nz.rpc: debug

@@ -6,6 +6,7 @@ import com.nz.rpc.msg.RpcResponse;
 import com.nz.rpc.netty.message.Header;
 import com.nz.rpc.netty.message.MessageType;
 import com.nz.rpc.netty.message.NettyMessage;
+import com.nz.rpc.time.TimeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
@@ -25,12 +26,12 @@ public class NettyMessageDecode extends LengthFieldBasedFrameDecoder {
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
 
-        log.debug("×××××××××××××××××××××××decode  start×××××××××××××××××××××××");
-        log.info("maxCapacity = " + byteBuf.maxCapacity());
+       // log.debug("×××××××××××××××××××××××decode  start×××××××××××××××××××××××");
+       // log.info("maxCapacity = " + byteBuf.maxCapacity());
 
         if(byteBuf == null){
 
-            log.info("byteBuf is null!");
+       //     log.info("byteBuf is null!");
             return null;
         }
         log.debug("readerIndex={},writerIndex={},readableByte={}",
@@ -38,21 +39,25 @@ public class NettyMessageDecode extends LengthFieldBasedFrameDecoder {
         if(byteBuf.readableBytes() > (MessageIndex.lengthIndex+4)){
 
             int lengthIndex = byteBuf.readerIndex()+MessageIndex.lengthIndex;
-            log.info("lengthIndex = {}",lengthIndex);
+           // if(log.isDebugEnabled()){log.info("lengthIndex = {}",lengthIndex);
             int messageLength = byteBuf.getInt(lengthIndex);
-            log.debug("readerIndex={},writerIndex={},readableByte={},messageLength={}",
-                    byteBuf.readerIndex(),byteBuf.writerIndex(),byteBuf.readableBytes(),messageLength);
+          //  log.debug("readerIndex={},writerIndex={},readableByte={},messageLength={}",
+          //          byteBuf.readerIndex(),byteBuf.writerIndex(),byteBuf.readableBytes(),messageLength);
 
 
            if( byteBuf.readableBytes() < messageLength ){
 
-                log.debug("readableBytes is not enougth to be a data packege++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",byteBuf.readableBytes() );
+               if(log.isDebugEnabled()){
+                   log.debug("readableBytes is not enougth to be a data packege++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",byteBuf.readableBytes() );
+               }
                 return null;
             }
 
         }
         else {
-           log.debug("readableBytes is not enougth to be a data packege++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",byteBuf.readableBytes() );
+            if(log.isDebugEnabled()){
+                log.debug("readableBytes is not enougth to be a data packege++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",byteBuf.readableBytes() );
+            }
            return null;
         }
 
@@ -64,7 +69,9 @@ public class NettyMessageDecode extends LengthFieldBasedFrameDecoder {
         header.setSessionID(byteBuf.readLong());
         header.setLength(byteBuf.readInt());
 
-        log.info("本次接收的总长度为:[{}]byte",header.getLength());
+        if(log.isInfoEnabled()){
+            log.info("本次接收的总长度为:[{}]byte",header.getLength());
+        }
         header.setCrcCode(byteBuf.readInt());
 
         nettyMessage.setHeader(header);
@@ -72,6 +79,7 @@ public class NettyMessageDecode extends LengthFieldBasedFrameDecoder {
         //rpc请求body解析
         if(header.getType() == MessageType.APP_REQUEST_TYPE.getValue()){
             RpcRequest request =  MessageBodyUtil.decoder(byteBuf, RpcRequest.class);
+            TimeUtil.start("RequestHandler-run",request.getRequestId());
             nettyMessage.setBody(request);
         }
         //rpc响应body解析
@@ -80,11 +88,11 @@ public class NettyMessageDecode extends LengthFieldBasedFrameDecoder {
             nettyMessage.setBody(response);
         }
 
+        if(log.isInfoEnabled()){
+            log.info("nettyMessage = " + nettyMessage);
+        }
 
-        log.info("nettyMessage = " + nettyMessage);
-
-        log.debug("×××××××××××××××××××××××decode end×××××××××××××××××××××××");
-
+      //  ReferenceCountUtil.release(byteBuf);
         return nettyMessage;
     }
 

@@ -3,10 +3,8 @@ package com.nz.rpc.netty.client;
 import com.nz.rpc.netty.client.handler.NettyChannelHandler;
 import com.nz.rpc.properties.RpcProperties;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -57,6 +55,8 @@ public class NettyClient {
                 .option(ChannelOption.TCP_NODELAY, false)
                 .option(ChannelOption.SO_SNDBUF,1024*1024)
                 .option(ChannelOption.SO_RCVBUF,1024*1024)
+                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .option(ChannelOption.RCVBUF_ALLOCATOR, AdaptiveRecvByteBufAllocator.DEFAULT)
                 .handler(new NettyChannelHandler());
 
         shutdownHandler();
@@ -84,7 +84,7 @@ public class NettyClient {
 
         //如果和本应用的host&port一致，则拒绝执行连接
         if((rpcProperties.getNhost().equals(host)) && (rpcProperties.getNport() == port)){
-            log.warn("Cannot  connect to youself!");
+            log.warn("Netty cann't  connect to youself!");
             return;
         }
 
@@ -94,20 +94,28 @@ public class NettyClient {
             Channel channel = channelCache.get(key);
             //host&port正在连接状态
             if(connectingServer.contains(key)){
-                log.warn("Serere [{}:{}] is connecting",host,port);
+                if(log.isInfoEnabled()){
+                    log.warn("Serere [{}:{}] is connecting",host,port);
+                }
                 return;
 
             }
             else if(channel != null){
                 //host&port连接成功状态
-                log.debug("Channel state isActive= [{}],isOpen= [{}],isRegistered= [{}]",
-                        channel.isActive(),channel.isOpen(),channel.isRegistered());
+                if(log.isDebugEnabled()){
+                    log.debug("Channel state isActive= [{}],isOpen= [{}],isRegistered= [{}]",
+                            channel.isActive(),channel.isOpen(),channel.isRegistered());
+                }
                 if(channel.isActive()){
-                    log.debug("Channel[{}] has been active！Don't neet to connect!",channel);
+                    if(log.isDebugEnabled()){
+                        log.debug("Channel[{}] has been active！Don't neet to connect!",channel);
+                    }
                     return;
                 }
             }
-            log.debug("Connecting to Serere [{}:{}]",host,port);
+            if(log.isDebugEnabled()){
+                log.debug("Connecting to Serere [{}:{}]",host,port);
+            }
             connectingServer.add(key);
             bootstrap.connect(host, port).addListener(new GenericFutureListener<ChannelFuture>(){
                 @Override
@@ -115,12 +123,16 @@ public class NettyClient {
                     Channel channel = channelFuture.channel();
                     //log.info("connectingServer = " + connectingServer);
                     if(channel.isActive()){
-                        log.debug("Server[{}] connect success",channel);
+                        if(log.isDebugEnabled()){
+                            log.debug("Server[{}] connect success",channel);
+                        }
                         connectingServer.remove(key);
                         channelCache.put(key,channel);
                         return;
                     }else {
-                        log.warn("Connecting to Serere [{}:{}] fail!!,Try reconect!!",host,port);
+                        if(log.isWarnEnabled()){
+                            log.warn("Connecting to Serere [{}:{}] fail!!,Try reconect!!",host,port);
+                        }
                         Thread.sleep(reConnectIntervalTimeMs);
                         connectingServer.remove(key);
                         connect(host, port);
@@ -135,7 +147,9 @@ public class NettyClient {
 
     public Channel getChannel(String host,int port){
         Channel channel = channelCache.get(getKey(host,port));
-        log.debug("channelCache len =[{}]",channelCache.size());
+        if(log.isDebugEnabled()){
+            log.debug("channelCache len =[{}]",channelCache.size());
+        }
 
         if(channel == null){
             this.connect(host,port);
@@ -197,7 +211,9 @@ public class NettyClient {
 
                     @Override
                     public void run() {
-                        log.info("系统Netty-Client正在关闭应用！");
+                        if(log.isInfoEnabled()){
+                            log.info("系统Netty-Client正在关闭应用！");
+                        }
                         group.shutdownGracefully();
                     }
                 });

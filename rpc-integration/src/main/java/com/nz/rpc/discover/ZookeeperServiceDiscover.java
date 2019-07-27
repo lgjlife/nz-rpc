@@ -42,6 +42,9 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
     @Override
     public void queryService() {
 
+        if(log.isDebugEnabled()){
+
+        }
         log.debug("Query the server info from the zookeeper!");
         List<String> interfacePaths =  zkCli.getChildren(ZookeeperPath.rootPath);
         for(String interfacePath:interfacePaths){
@@ -61,12 +64,18 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
                 for(String providersConfig:providersConfigs){
                     ProviderConfig registryConfig = JSON.parseObject(providersConfig, ProviderConfig.class);
-                    log.debug("The server registryConfig = " + registryConfig );
+                    if(log.isDebugEnabled()){
+                        log.debug("The server registryConfig = " + registryConfig );
+                    }
+
                     ProviderConfigContainer.putConfig(registryConfig);
                 }
             });
         }
-        log.info("ConfigMap = "+ProviderConfigContainer.getConfigMap());
+        if(log.isDebugEnabled()){
+            log.info("ConfigMap = "+ProviderConfigContainer.getConfigMap());
+        }
+
         connectServer(ProviderConfigContainer.getConfigMap());
     }
 
@@ -85,9 +94,12 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
         configMap.forEach((key,config)->{
 
-            log.info("config = " + config);
+            if(log.isDebugEnabled()){
+                log.info("config = " + config);
+            }
+
             if(config == null){
-                log.info("config = null");
+                log.debug("config = null");
             }
             else {
                 nettyClient.connect(config.getHost(),config.getPort());
@@ -101,23 +113,31 @@ public class ZookeeperServiceDiscover extends  AbstractServiceDiscover{
 
         @Override
         public void addHandler(ChildData data) {
-
-            log.debug("ListenerEventHandlerImpl　addHandler");
+            if(log.isDebugEnabled()){
+                log.debug("ListenerEventHandlerImpl　addHandler");
+            }
             queryService();
         }
 
         @Override
         public void removeHandler(ChildData data) {
-            log.debug("ListenerEventHandlerImpl　removeHandler");
-
+            if(log.isDebugEnabled()){
+                log.debug("ListenerEventHandlerImpl　removeHandler");
+            }
             String removePath = data.getPath();
-            log.debug("removePath = " + removePath);
+            if(log.isDebugEnabled()){
+                log.debug("removePath = " + removePath);
+            }
+
             queryService();
         }
 
         @Override
         public void updateHandler(ChildData data) {
-            log.debug("ListenerEventHandlerImpl　updateHandler");
+            if(log.isDebugEnabled()){
+                log.debug("ListenerEventHandlerImpl　updateHandler");
+
+            }
 
             queryService();
         }
